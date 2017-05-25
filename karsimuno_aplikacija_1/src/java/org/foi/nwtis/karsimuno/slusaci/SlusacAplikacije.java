@@ -6,6 +6,7 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
+import org.foi.nwtis.karsimuno.dretve.ServerDretva;
 import org.foi.nwtis.karsimuno.dretve.PozadinskaDretva;
 import org.foi.nwtis.karsimuno.konfiguracije.Konfiguracija;
 import org.foi.nwtis.karsimuno.konfiguracije.KonfiguracijaApstraktna;
@@ -58,6 +59,11 @@ public class SlusacAplikacije implements ServletContextListener {
 
         PozadinskaDretva pd = new PozadinskaDretva(konf);
         pd.start();
+        
+        ServerDretva ss = new ServerDretva();
+//        ss.pokreniServer();
+ss.start();
+       
     }
 
     public static ServletContext getContext() {

@@ -62,7 +62,7 @@ public class PozadinskaDretva extends Thread {
             long trenutnoVrijeme = System.currentTimeMillis();
             System.out.println("Pozdrav iz pozadinske dretvee!");
 
-            preuzmiPodatkeZaUredjaje();
+//            preuzmiPodatkeZaUredjaje(); //TODO upali pozadinsku dretvu
 
             try {
                 long vrijemeZavršetka = System.currentTimeMillis();

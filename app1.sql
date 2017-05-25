@@ -38,3 +38,11 @@ INSERT INTO uredaji (id,naziv,latitude,longitude) VALUES
  (112,'Gradska dvorana - velika',46.317221,16.360760),
  (113,'Gradska dvorana - mala',46.317221,16.360760),
  (121,'Motiènjak/Aquacity - jezero', 46.307885,16.390317);
+
+CREATE TABLE korisnici ( 
+  id INT not null primary key
+        GENERATED ALWAYS AS IDENTITY
+        (START WITH 1, INCREMENT BY 1), 
+  korisnicko_ime VARCHAR(255),
+  lozinka VARCHAR(255) not null
+)
