@@ -1,9 +1,6 @@
 package org.foi.nwtis.karsimuno;
 
 import org.foi.nwtis.karsimuno.dretve.ServerDretva;
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
 import java.net.Socket;
 import java.sql.Connection;
@@ -44,12 +41,8 @@ public class ObradaSocketNaredbi {
      * @return Vraća status obavljanja naredbe koji se onda šalje korisniku
      */
     public String izvrsiNaredbu() {
-        ucitajAdminDatoteku();
-        if (administratori == null) {
-            return "ERROR 00; Problem kod ucitavanja admin datoteke.";
-        }
 
-        String statusPrava = provjeriAdminPrava();
+        String statusPrava = provjeriKorisnika();
         if (!"OK;".equals(statusPrava)) {
             return statusPrava;
         }
@@ -69,38 +62,14 @@ public class ObradaSocketNaredbi {
     }
 
     /**
-     * Učitava datoteku s podacima o login podacima administratorima
-     */
-    void ucitajAdminDatoteku() {
-        String line;
-        String fileName = konf.dajPostavku("adminDatoteka");
-
-        try {
-            FileReader fileReader = new FileReader(fileName);
-
-            try (BufferedReader bufferedReader = new BufferedReader(fileReader)) {
-                administratori = new HashMap<>();
-                while ((line = bufferedReader.readLine()) != null) {
-                    String[] dio = line.split(";");
-                    administratori.put(dio[0], dio[1]);
-                }
-            }
-        } catch (FileNotFoundException ex) {
-            System.out.println("Ne mogu otvoriti datoteku '" + fileName + "'");
-        } catch (IOException ex) {
-            System.out.println("Greška kod čitanja datoteke '" + fileName + "'");
-        }
-    }
-
-    /**
      * TODO: Kreirati tablicu korisnici (id, korisnik, lozinka) i prema njoj
      * provjeriti korisnika
      */
-    String provjeriAdminPrava() {
+    String provjeriKorisnika() {
 
         BP_Konfiguracija BP_Konf = null;
-        BP_Konf = (BP_Konfiguracija) SlusacAplikacije.getContext().getAttribute("BP_Konf");
-        
+        BP_Konf = (BP_Konfiguracija) SlusacAplikacije.getContext().getAttribute("BP_Konfig");
+
         String prava = "";
         String sql;
         ResultSet rs = null;
@@ -108,12 +77,12 @@ public class ObradaSocketNaredbi {
         Connection conn = null;
         try {
             Class.forName(BP_Konf.getDriverDatabase());
-            conn = DriverManager.getConnection(BP_Konf.getUserDatabase(), BP_Konf.getUserUsername(), BP_Konf.getUserPassword());
+            conn = DriverManager.getConnection(BP_Konf.getServerDatabase() + BP_Konf.getUserDatabase(), BP_Konf.getUserUsername(), BP_Konf.getUserPassword());
 
-            sql = "SELECT count(*) FROM korisnici WHERE korisnicko_ime = ? AND lozinka = ?";
+            sql = "SELECT * FROM korisnici WHERE korisnicko_ime = ? AND lozinka = ?";
             stmt = conn.prepareStatement(sql);
-            stmt.setString(0, naredbe.get("korisnik"));
-            stmt.setString(1, naredbe.get("lozinka"));
+            stmt.setString(1, naredbe.get("korisnik"));
+            stmt.setString(2, naredbe.get("lozinka"));
             rs = stmt.executeQuery();
 
             if (rs.next()) {
@@ -137,54 +106,50 @@ public class ObradaSocketNaredbi {
             } catch (SQLException ex) {
             }
         }
-        
         return prava;
     }
-
-    /**
-     * TODO: – potpuno prekida preuzimanje meteoroloških podataka i preuzimanje
-     * komandi. I završava rad. Vraća OK 10; ako nije bio u postupku prekida,
-     * odnosno ERR 12; ako je bio u postupku prekida.
-     */
+    
     synchronized String ugasiServer() {
-        ServerDretva.zavrsiRadServera = true;
-        try {
-            ServerDretva.ss.close();
-        } catch (IOException ex) {
-            Logger.getLogger(ObradaSocketNaredbi.class.getName()).log(Level.SEVERE, null, ex);
+
+        if (!ServerDretva.zavrsiRadServera) {
+            ServerDretva.zavrsiRadServera = true;
+
+            try {
+                ServerDretva.ss.close();
+            } catch (IOException ex) {
+                Logger.getLogger(ObradaSocketNaredbi.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            return "STOP";
+        } else {
+            return "ERR 12; Server je vec u postuku prekida";
         }
-        return "STOP";
     }
 
-    /**
-     * TODO: – privremeno prekida preuzimanje meteoroloških sljedećeg ciklusa (i
-     * dalje može preuzimati komande). Vraća OK 10; ako nije bio u pauzi,
-     * odnosno ERR 10; ako je bio u pauzi
-     *
-     * @return
-     */
     synchronized String pauzirajServer() {
-        if (ServerDretva.pauzirajServer == false) {
-            ServerDretva.pauzirajServer = true;
-            return "OK;";
+        if (PozadinskaDretva.preskociCiklus == false) {
+            PozadinskaDretva.preskociCiklus = true;
+            return "OK 10;";
         }
-        return "ERROR 01; Server je vec u stanju pause.";
+        return "ERROR 10; Server je vec u stanju pause.";
     }
 
-    /**
-     * TODO: – nastavlja s preuzimanjem meteoroloških podataka od sljedećeg
-     * ciklusa. Vraća OK 10; ako je bio u pauzi, odnosno ERR 11; ako nije bio u
-     * pauzi.
-     */
     synchronized String pokreniServer() {
-        if (ServerDretva.pauzirajServer == true) {
-            ServerDretva.pauzirajServer = false;
-            return "OK;";
+        if (PozadinskaDretva.preskociCiklus == true) {
+            PozadinskaDretva.preskociCiklus = false;
+            return "OK 10;";
         }
-        return "ERROR 02; Server je vec pokrenut.";
+        return "ERROR 11; Server je vec pokrenut.";
     }
 
     private String vratiStatus() {
-        return "";
+        String dd = "14";
+
+        if (PozadinskaDretva.preskociCiklus == true) {
+            dd = "13";
+        }
+        if (ServerDretva.zavrsiRadServera == true) {
+            dd = "15";
+        }
+        return "OK " + dd + ";";
     }
 }

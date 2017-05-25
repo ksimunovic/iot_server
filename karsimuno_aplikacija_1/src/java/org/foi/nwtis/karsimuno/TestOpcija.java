@@ -27,7 +27,7 @@ public class TestOpcija {
         StringBuilder sb = new StringBuilder();
         sb.append(String.join(" ", args));
 
-        String sintaksa = "^USER ([^\\s]+); PASSWD ([^\\s]+); (PAUSE|STOP|START|STAT);$";
+        String sintaksa = "^USER ([^\\s]+); PASSWD ([^\\s]+); (PAUSE|STOP|START|STATUS);$";
 
         pattern = Pattern.compile(sintaksa);
         m = pattern.matcher(sb);

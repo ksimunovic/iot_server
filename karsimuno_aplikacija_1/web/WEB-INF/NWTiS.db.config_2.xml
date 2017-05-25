@@ -3,7 +3,7 @@
 <properties>
     <comment>NWTIS konfiguracija - JavaDB</comment>
     <entry key="port">4123</entry>
-    <entry key="maksBrojRadnihDretvi">3</entry>
+    <entry key="maksBrojRadnihDretvi">1</entry>
     <entry key="server.database">jdbc:derby://localhost:1527/</entry>
     <entry key="admin.username">nwtis_g2</entry>
     <entry key="admin.password">g2_nwtis</entry>
@@ -15,6 +15,6 @@
     <entry key="driver.database.mysql">com.mysql.jdbc.Driver</entry>
     <entry key="driver.database.derby">org.apache.derby.jdbc.ClientDriver</entry>
     <entry key="driver.database.postgresql">org.postgresql.Driver</entry>
-    <entry key="intervalDretveZaMeteoPodatke">100</entry>
+    <entry key="intervalDretveZaMeteoPodatke">10</entry>
     <entry key="apikey">5d9999aedf0f764ceb1fb1f291bbf093</entry>
 </properties>

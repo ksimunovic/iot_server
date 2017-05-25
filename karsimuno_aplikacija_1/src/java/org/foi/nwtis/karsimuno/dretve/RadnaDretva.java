@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package org.foi.nwtis.karsimuno.dretve;
 
 import java.io.IOException;
@@ -18,9 +13,9 @@ import org.foi.nwtis.karsimuno.TestOpcija;
 
 /**
  *
- * @author Administrator
+ * @author Karlo
  */
-public class RadnaDretva extends Thread {
+class RadnaDretva extends Thread {
 
     Socket socket;
     long startTime = 0;
@@ -63,13 +58,12 @@ public class RadnaDretva extends Thread {
                 }
                 sb.append((char) znak);
             }
+            
             System.err.println("Primljena naredba: " + sb + " s adrese: " + adresaZahtjeva);
-
             obradiNaredbu(sb);
-            odgovor = "AAAAAAAAAA RADIIM!";
 
         } catch (IOException ex) {
-//            ServerSustava.ukloniAktivnuDretvu(this.getName());
+            ServerDretva.ukloniAktivnuDretvu(this.getName());
             Logger.getLogger(RadnaDretva.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             zatvoriVezuSaServeromIEvidentiraj();
@@ -94,7 +88,7 @@ public class RadnaDretva extends Thread {
 
             if ("STOP".equals(odgovor)) {
                 cekajKrajServera = true;
-                odgovor = "";
+                odgovor = "OK 10;";
             }
         }
 
@@ -109,12 +103,10 @@ public class RadnaDretva extends Thread {
             ObradaKlijenta obradaKlijenta = new ObradaKlijenta(socket, naredbe);
             odgovor = obradaKlijenta.izvrsiNaredbu();
         }
-        
+
         if (odgovor.isEmpty()) {
-            odgovor = "ERROR 01; Server je u stanju pauze, ne prihvaca naredbe.";
-        } else {
-//            evidencija.postaviZadnjuDretvu(ServerSustava.brojDretvi);
-        }
+            odgovor = "ERROR 12; Server je u postupku prekida.";
+        } 
     }
 
     /**
@@ -123,16 +115,6 @@ public class RadnaDretva extends Thread {
      */
     private void zatvoriVezuSaServeromIEvidentiraj() {
 
-//        if (cekajKrajServera) {
-//            while (ServerSustava.statusZavrsetkaServera.isEmpty() || odgovor.isEmpty()) {
-//                try {
-//                    sleep(1);
-//                } catch (InterruptedException ex) {
-//                    Logger.getLogger(RadnaDretva.class.getName()).log(Level.SEVERE, null, ex);
-//                }
-//                odgovor = ServerSustava.statusZavrsetkaServera;
-//            }
-//        }
         try {
             if (os != null && socket != null && !socket.isClosed()) {
                 os.write(odgovor.getBytes());
@@ -147,9 +129,8 @@ public class RadnaDretva extends Thread {
             if (socket != null) {
                 socket.close();
             }
-
-//            evidencija.dodajUkupnoVrijeme(System.currentTimeMillis() - startTime);
-//            ServerSustava.ukloniAktivnuDretvu(this.getName());
+            
+            ServerDretva.ukloniAktivnuDretvu(this.getName());
         } catch (IOException ex) {
             Logger.getLogger(RadnaDretva.class.getName()).log(Level.SEVERE, null, ex);
         }

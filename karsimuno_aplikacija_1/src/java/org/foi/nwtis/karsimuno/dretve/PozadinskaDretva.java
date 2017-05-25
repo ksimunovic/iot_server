@@ -28,14 +28,14 @@ import org.foi.nwtis.karsimuno.slusaci.SlusacAplikacije;
  */
 public class PozadinskaDretva extends Thread {
 
-    OWMKlijent owmk;
+    private OWMKlijent owmk;
     private final String apikey;
-    private final Konfiguracija konf;
     private final BP_Konfiguracija BP_Konf;
     private final int intervalDretveZaMeteoPodatke;
 
+    public static boolean preskociCiklus = false;
+
     public PozadinskaDretva(Konfiguracija konf) {
-        this.konf = konf;
         intervalDretveZaMeteoPodatke = Integer.parseInt(konf.dajPostavku("intervalDretveZaMeteoPodatke")) * 1000;
         this.apikey = konf.dajPostavku("apikey");
         BP_Konf = (BP_Konfiguracija) SlusacAplikacije.getContext().getAttribute("BP_Konfig");
@@ -54,7 +54,6 @@ public class PozadinskaDretva extends Thread {
     @Override
     public void run() {
         super.run();
-
         owmk = new OWMKlijent(apikey);
 
         int iter = 0;//XXX: temp
@@ -62,7 +61,10 @@ public class PozadinskaDretva extends Thread {
             long trenutnoVrijeme = System.currentTimeMillis();
             System.out.println("Pozdrav iz pozadinske dretvee!");
 
-//            preuzmiPodatkeZaUredjaje(); //TODO upali pozadinsku dretvu
+            if (!preskociCiklus) {
+                preuzmiPodatkeZaUredjaje(); //TODO upali pozadinsku dretvu
+            }
+            preskociCiklus = false;
 
             try {
                 long vrijemeZavršetka = System.currentTimeMillis();

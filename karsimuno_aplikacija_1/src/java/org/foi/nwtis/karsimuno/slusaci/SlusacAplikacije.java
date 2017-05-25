@@ -25,15 +25,25 @@ public class SlusacAplikacije implements ServletContextListener {
     public static ServletContext context = null;
     BP_Konfiguracija BP_Konfig;
     Konfiguracija konf;
+    PozadinskaDretva pd;
+    ServerDretva ss;
 
     @Override
     public void contextInitialized(ServletContextEvent sce) {
         context = sce.getServletContext();
         ucitajKonfiguraciju();
+
     }
 
     @Override
     public void contextDestroyed(ServletContextEvent sce) {
+
+        if (pd != null) {
+            pd.interrupt();
+        }
+        if (ss != null) {
+            ss.interrupt();
+        }
     }
 
     /**
@@ -57,13 +67,12 @@ public class SlusacAplikacije implements ServletContextListener {
             Logger.getLogger(SlusacAplikacije.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        PozadinskaDretva pd = new PozadinskaDretva(konf);
-        pd.start();
-        
-        ServerDretva ss = new ServerDretva();
-//        ss.pokreniServer();
-ss.start();
-       
+        pd = new PozadinskaDretva(konf);
+//        pd.start(); //TODO: pokreni dretvu
+
+        ss = new ServerDretva();
+        ss.start();
+
     }
 
     public static ServletContext getContext() {

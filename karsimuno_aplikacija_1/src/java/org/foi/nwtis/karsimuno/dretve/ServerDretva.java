@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.HashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.foi.nwtis.karsimuno.konfiguracije.Konfiguracija;
 import org.foi.nwtis.karsimuno.slusaci.SlusacAplikacije;
 
@@ -15,7 +17,6 @@ import org.foi.nwtis.karsimuno.slusaci.SlusacAplikacije;
  */
 public class ServerDretva extends Thread {
 
-    RezervnaDretva rd;
     public static ServerSocket ss;
     public static short brojDretvi = 0;
     public static Konfiguracija konf;
@@ -36,6 +37,13 @@ public class ServerDretva extends Thread {
     @Override
     public void interrupt() {
         super.interrupt();
+        try {
+            if (ss != null) {
+                ss.close();
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(ServerDretva.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     @Override
@@ -47,6 +55,7 @@ public class ServerDretva extends Thread {
     @Override
     public synchronized void start() {
         super.start();
+        setName("ServerDretva");
     }
 
     /**
@@ -56,29 +65,18 @@ public class ServerDretva extends Thread {
     public void pokreniServer() {
         try {
             konf = (Konfiguracija) SlusacAplikacije.getContext().getAttribute("Ostatak_Konf");
-
             int port = Integer.parseInt(konf.dajPostavku("port"));
-            int maxDretvi = Integer.parseInt(konf.dajPostavku("maksBrojRadnihDretvi"));
 
             ss = new ServerSocket(port);
 
             while (!zavrsiRadServera) {
-                System.out.println("CEKAM KONEKCIJU");
+                System.out.println("ČEKAM KONEKCIJU");
                 Socket socket = ss.accept();
 
                 RadnaDretva radnaDretva = new RadnaDretva(socket);
                 String nazivDretve = "karsimuno-" + (brojDretvi);
                 inkrementirajBrojDretvi();
-
-                if (aktivneDretve.size() >= maxDretvi) {
-                    System.out.println("Nemam mjesta za novu radnu dretvu, pokrećem rezervnu!");
-                    synchronized (rd) {
-                        rd.postaviSocket(socket);
-                        rd.notify();
-                    }
-                    continue;
-                }
-
+                
                 aktivneDretve.put(nazivDretve, System.currentTimeMillis());
 
                 radnaDretva.setName(nazivDretve);
@@ -87,12 +85,7 @@ public class ServerDretva extends Thread {
                 System.out.println("Pokrećem dretvu " + nazivDretve + ", a ukupno je " + aktivneDretve.size() + " aktivnih dretvi");
             }
         } catch (IOException ex) {
-
-            // javi RezervnojDretvi da završi rad
-//            synchronized (rd) {
-//                rd.postaviSocket(null);
-//                rd.notify();
-//            }
+            System.out.println("GASIIIIIM");
         }
     }
 }

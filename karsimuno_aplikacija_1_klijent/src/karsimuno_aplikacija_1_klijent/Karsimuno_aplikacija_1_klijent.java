@@ -23,12 +23,16 @@ public class Karsimuno_aplikacija_1_klijent {
     Socket socket = null;
     InputStream is = null;
     OutputStream os = null;
+    static String zahtjev = "";
 
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        // TODO code application logic here
+//        zahtjev = "USER korisnik; PASSWD lozinka; START;";
+//        zahtjev = "USER korisnik; PASSWD lozinka; PAUSE;";
+//        zahtjev = "USER korisnik; PASSWD lozinka; STATUS;";
+        zahtjev = "USER korisnik; PASSWD lozinka; STOP;";
 
         Karsimuno_aplikacija_1_klijent t = new Karsimuno_aplikacija_1_klijent();
         t.go();
@@ -36,20 +40,14 @@ public class Karsimuno_aplikacija_1_klijent {
 
     public void go() {
         opcijePokretanja = new HashMap<>();
-        opcijePokretanja.put("server", "localhost");
         opcijePokretanja.put("port", "4123");
         try {
-            socket = new Socket(opcijePokretanja.get("server"), Integer.parseInt(opcijePokretanja.get("port")));
-
+            socket = new Socket("localhost", Integer.parseInt(opcijePokretanja.get("port")));
             is = socket.getInputStream();
             os = socket.getOutputStream();
         } catch (IOException ex) {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, null, ex);
         }
-
-        String zahtjev
-                = "USER " + opcijePokretanja.get("korisnik") + "; "
-                + "PASSWD " + opcijePokretanja.get("lozinka") + "; PAUSE;";
 
         try {
             os.write(zahtjev.getBytes());
