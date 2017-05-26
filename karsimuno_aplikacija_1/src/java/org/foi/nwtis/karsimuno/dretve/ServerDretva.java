@@ -41,6 +41,7 @@ public class ServerDretva extends Thread {
             if (ss != null) {
                 ss.close();
             }
+            zavrsiRadServera = true;
         } catch (IOException ex) {
             Logger.getLogger(ServerDretva.class.getName()).log(Level.SEVERE, null, ex);
         }

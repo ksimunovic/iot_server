@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jax-ws xmlns="http://www.netbeans.org/ns/jax-ws/1">
-  <services/>
+  <services>
+    <service name="MeteoSOAP">
+      <implementation-class>org.foi.nwtis.karsimuno.ws.MeteoSOAP</implementation-class>
+    </service>
+  </services>
   <clients>
     <client name="IoT_Master">
       <wsdl-url>http://nwtis.foi.hr:8080/DZ3_Master/IoT_Master?wsdl</wsdl-url>
@@ -35,4 +39,5 @@
       </wsimport-options>
     </client>
   </clients>
+  <jsr109>false</jsr109>
 </jax-ws>

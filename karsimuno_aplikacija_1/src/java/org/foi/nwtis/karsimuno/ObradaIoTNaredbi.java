@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.foi.nwtis.dkermek.ws.serveri.Lokacija;
+import org.foi.nwtis.dkermek.ws.serveri.StatusUredjaja;
 import org.foi.nwtis.dkermek.ws.serveri.Uredjaj;
 import org.foi.nwtis.karsimuno.dretve.PozadinskaDretva;
 import org.foi.nwtis.karsimuno.konfiguracije.bp.BP_Konfiguracija;
@@ -32,14 +33,14 @@ public class ObradaIoTNaredbi {
         switch (naredbe.get("naredba")) {
             case "ADD":
                 return dodajUredjaj();
-//            case "WORK":
-//                return aktivirajUredjaj();
-//            case "WAIT":
-//                return blokirajUredjaj();
-//            case "REMOVE":
-//                return brisiUredjaj();
-//            case "STATUS":
-//                return statusUredjaja();
+            case "WORK":
+                return aktivirajUredjaj();
+            case "WAIT":
+                return blokirajUredjaj();
+            case "REMOVE":
+                return brisiUredjaj();
+            case "STATUS":
+                return statusUredjaja();
 
         }
         throw new IllegalArgumentException();
@@ -102,19 +103,13 @@ public class ObradaIoTNaredbi {
         return uredjaj;
     }
 
-    /**
-     * – dodaje IoT uređaj u grupu. Vraća OK 10; ako ne postoji, odnosno ERR 30;
-     * ako postoji.
-     *
-     */
     private String dodajUredjaj() {
         Uredjaj u = nadjiUredjaj(null, naredbe.get("naziv"));
-
         if (u == null) {
             return "ERR 30; Uredjaj ne postoji u bazi.";
         }
 
-        //TODO: Statusom provjerit postoji li uređaj u grupi?
+        //TODO: Statusom provjerit postoji li uređaj u grupi ili ostaje ovako?
         if (dodajUredjajGrupi(naredbe.get("korisnik"), naredbe.get("lozinka"), u)) {
             return "OK 10;";
         } else {
@@ -126,6 +121,82 @@ public class ObradaIoTNaredbi {
         org.foi.nwtis.dkermek.ws.serveri.IoTMaster_Service service = new org.foi.nwtis.dkermek.ws.serveri.IoTMaster_Service();
         org.foi.nwtis.dkermek.ws.serveri.IoTMaster port = service.getIoTMasterPort();
         return port.dodajUredjajGrupi(korisnickoIme, korisnickaLozinka, iotUredjaj);
+    }
+
+    /**
+     * IoT d{1-6} WORK; – aktivira IoT uređaj. Vraća OK 10; ako nije bio
+     * aktivan, odnosno ERR 31; ako je bio aktivan.
+     */
+    private String aktivirajUredjaj() {
+        //TODO: mora ici provjera statusom
+        StatusUredjaja su = dajStatusUredjajaGrupe(naredbe.get("korisnik"), naredbe.get("lozinka"), Integer.parseInt(naredbe.get("iot")));
+
+        if (su != null && su.equals(StatusUredjaja.AKTIVAN)) {
+            return "ERR 31; Uredjaj je vec bio aktivan.";
+        } else {
+            aktivirajUredjajGrupe(naredbe.get("korisnik"), naredbe.get("lozinka"), Integer.parseInt(naredbe.get("iot")));
+            return "OK 10;";
+        }
+    }
+
+    private static boolean aktivirajUredjajGrupe(java.lang.String korisnickoIme, java.lang.String korisnickaLozinka, int idUredjaj) {
+        org.foi.nwtis.dkermek.ws.serveri.IoTMaster_Service service = new org.foi.nwtis.dkermek.ws.serveri.IoTMaster_Service();
+        org.foi.nwtis.dkermek.ws.serveri.IoTMaster port = service.getIoTMasterPort();
+        return port.aktivirajUredjajGrupe(korisnickoIme, korisnickaLozinka, idUredjaj);
+    }
+
+    private String blokirajUredjaj() {
+        StatusUredjaja su = dajStatusUredjajaGrupe(naredbe.get("korisnik"), naredbe.get("lozinka"), Integer.parseInt(naredbe.get("iot")));
+
+        //TODO(nedefinirano) ako je status NEPOSTOJI šta onda?
+        if (su != null && su.equals(StatusUredjaja.BLOKIRAN)) {
+            return "ERR 32; Uredjaj je vec bio blokiran.";
+        } else {
+            blokirajUredjajGrupe(naredbe.get("korisnik"), naredbe.get("lozinka"), Integer.parseInt(naredbe.get("iot")));
+            return "OK 10;";
+        }
+    }
+
+    private static boolean blokirajUredjajGrupe(java.lang.String korisnickoIme, java.lang.String korisnickaLozinka, int idUredjaj) {
+        org.foi.nwtis.dkermek.ws.serveri.IoTMaster_Service service = new org.foi.nwtis.dkermek.ws.serveri.IoTMaster_Service();
+        org.foi.nwtis.dkermek.ws.serveri.IoTMaster port = service.getIoTMasterPort();
+        return port.blokirajUredjajGrupe(korisnickoIme, korisnickaLozinka, idUredjaj);
+    }
+
+    /**
+     * err 33 ako ne postoji
+     */
+    private String brisiUredjaj() {
+        StatusUredjaja su = dajStatusUredjajaGrupe(naredbe.get("korisnik"), naredbe.get("lozinka"), Integer.parseInt(naredbe.get("iot")));
+
+        if (su != null && su.equals(StatusUredjaja.NEPOSTOJI)) {
+            return "ERR 33; Uredjaj ne postoji.";
+        } else {
+            obrisiUredjajGrupe(naredbe.get("korisnik"), naredbe.get("lozinka"), Integer.parseInt(naredbe.get("iot")));
+            return "OK 10;";
+        }
+    }
+
+    private static StatusUredjaja dajStatusUredjajaGrupe(java.lang.String korisnickoIme, java.lang.String korisnickaLozinka, int idUredjaj) {
+        org.foi.nwtis.dkermek.ws.serveri.IoTMaster_Service service = new org.foi.nwtis.dkermek.ws.serveri.IoTMaster_Service();
+        org.foi.nwtis.dkermek.ws.serveri.IoTMaster port = service.getIoTMasterPort();
+        return port.dajStatusUredjajaGrupe(korisnickoIme, korisnickaLozinka, idUredjaj);
+    }
+
+    private String statusUredjaja() {
+        StatusUredjaja su = dajStatusUredjajaGrupe(naredbe.get("korisnik"), naredbe.get("lozinka"), Integer.parseInt(naredbe.get("iot")));
+
+        if (su != null && su.equals(StatusUredjaja.AKTIVAN)) {
+            return "OK; 35;";
+        } else {
+            return "OK; 34;";
+        }
+    }
+
+    private static boolean obrisiUredjajGrupe(java.lang.String korisnickoIme, java.lang.String korisnickaLozinka, int idUredjaj) {
+        org.foi.nwtis.dkermek.ws.serveri.IoTMaster_Service service = new org.foi.nwtis.dkermek.ws.serveri.IoTMaster_Service();
+        org.foi.nwtis.dkermek.ws.serveri.IoTMaster port = service.getIoTMasterPort();
+        return port.obrisiUredjajGrupe(korisnickoIme, korisnickaLozinka, idUredjaj);
     }
 
 }

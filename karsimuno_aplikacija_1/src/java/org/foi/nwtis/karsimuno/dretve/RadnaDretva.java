@@ -105,6 +105,8 @@ class RadnaDretva extends Thread {
             odgovor = obradaIoTNaredbi.izvrsiNaredbu();
         }
 
+        
+        //TODO: Ako odgovor ne sadrži ERR onda ga šalji na mail
         if (odgovor.isEmpty()) {
             odgovor = "ERROR 12; Server je u postupku prekida.";
         }
