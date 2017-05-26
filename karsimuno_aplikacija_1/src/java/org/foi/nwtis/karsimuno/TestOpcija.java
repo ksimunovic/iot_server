@@ -82,7 +82,7 @@ public class TestOpcija {
         StringBuilder sb = new StringBuilder();
         sb.append(String.join(" ", args));
 
-        String sintaksa1 = "^USER ([^\\s]+); PASSWD ([^\\s]+); IoT (\\d{1,6}) (ADD \\\"([^\\s]+)\\\"|WORK|WAIT|REMOVE|STATUS);$";
+        String sintaksa1 = "^USER ([^\\s]+); PASSWD ([^\\s]+); IoT (\\d{1,6}) ((ADD) \"([^\\s]+)\"|WORK|WAIT|REMOVE|STATUS);$";
 
         pattern = Pattern.compile(sintaksa1);
         m = pattern.matcher(sb);
@@ -92,7 +92,8 @@ public class TestOpcija {
             opcijeKorisnika.put("iot", m.group(3));
             opcijeKorisnika.put("naredba", m.group(4));
             if (m.group(5) != null) {
-                opcijeKorisnika.put("naziv", m.group(5));
+                opcijeKorisnika.put("naredba", m.group(5));
+                opcijeKorisnika.put("naziv", m.group(6));
             }
             return opcijeKorisnika;
         }

@@ -32,7 +32,18 @@ public class Karsimuno_aplikacija_1_klijent {
 //        zahtjev = "USER korisnik; PASSWD lozinka; START;";
 //        zahtjev = "USER korisnik; PASSWD lozinka; PAUSE;";
 //        zahtjev = "USER korisnik; PASSWD lozinka; STATUS;";
-        zahtjev = "USER korisnik; PASSWD lozinka; STOP;";
+//        zahtjev = "USER korisnik; PASSWD lozinka; STOP;";
+
+//        zahtjev = "USER karsimuno; PASSWD aCXwp; IoT_Master START;";
+//        zahtjev = "USER karsimuno; PASSWD aCXwp; IoT_Master STOP;";
+//        zahtjev = "USER karsimuno; PASSWD aCXwp; IoT_Master WORK;";
+//        zahtjev = "USER karsimuno; PASSWD aCXwp; IoT_Master WAIT;";
+//        zahtjev = "USER karsimuno; PASSWD aCXwp; IoT_Master LOAD;";
+        zahtjev = "USER karsimuno; PASSWD aCXwp; IoT_Master CLEAR;";
+//        zahtjev = "USER karsimuno; PASSWD aCXwp; IoT_Master STATUS;";
+//        zahtjev = "USER karsimuno; PASSWD aCXwp; IoT_Master LIST;";
+
+        zahtjev = "USER karsimuno; PASSWD aCXwp; IoT 1 ADD \"pero\";";
 
         Karsimuno_aplikacija_1_klijent t = new Karsimuno_aplikacija_1_klijent();
         t.go();

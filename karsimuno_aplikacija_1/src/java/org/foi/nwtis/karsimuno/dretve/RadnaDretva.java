@@ -8,7 +8,8 @@ import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.foi.nwtis.karsimuno.ObradaSocketNaredbi;
-import org.foi.nwtis.karsimuno.ObradaKlijenta;
+import org.foi.nwtis.karsimuno.ObradaIoTMasterNaredbi;
+import org.foi.nwtis.karsimuno.ObradaIoTNaredbi;
 import org.foi.nwtis.karsimuno.TestOpcija;
 
 /**
@@ -58,7 +59,7 @@ class RadnaDretva extends Thread {
                 }
                 sb.append((char) znak);
             }
-            
+
             System.err.println("Primljena naredba: " + sb + " s adrese: " + adresaZahtjeva);
             obradiNaredbu(sb);
 
@@ -94,19 +95,19 @@ class RadnaDretva extends Thread {
 
         naredbe = provjeriNaredbe.IoTMasterNaredbe(args);
         if (naredbe != null && !ServerDretva.pauzirajServer) {
-            ObradaKlijenta obradaKlijenta = new ObradaKlijenta(socket, naredbe);
-            odgovor = obradaKlijenta.izvrsiNaredbu();
+            ObradaIoTMasterNaredbi obradaIoTMasterNaredbi = new ObradaIoTMasterNaredbi(socket, naredbe);
+            odgovor = obradaIoTMasterNaredbi.izvrsiNaredbu();
         }
 
         naredbe = provjeriNaredbe.IoTNaredbe(args);
         if (naredbe != null && !ServerDretva.pauzirajServer) {
-            ObradaKlijenta obradaKlijenta = new ObradaKlijenta(socket, naredbe);
-            odgovor = obradaKlijenta.izvrsiNaredbu();
+            ObradaIoTNaredbi obradaIoTNaredbi = new ObradaIoTNaredbi(naredbe);
+            odgovor = obradaIoTNaredbi.izvrsiNaredbu();
         }
 
         if (odgovor.isEmpty()) {
             odgovor = "ERROR 12; Server je u postupku prekida.";
-        } 
+        }
     }
 
     /**
@@ -114,7 +115,6 @@ class RadnaDretva extends Thread {
      * da se server zaustavi pa tek onda zatvara socket i pripadajuće tokove
      */
     private void zatvoriVezuSaServeromIEvidentiraj() {
-
         try {
             if (os != null && socket != null && !socket.isClosed()) {
                 os.write(odgovor.getBytes());
@@ -129,12 +129,11 @@ class RadnaDretva extends Thread {
             if (socket != null) {
                 socket.close();
             }
-            
+
             ServerDretva.ukloniAktivnuDretvu(this.getName());
         } catch (IOException ex) {
             Logger.getLogger(RadnaDretva.class.getName()).log(Level.SEVERE, null, ex);
         }
-
     }
 
     @Override
