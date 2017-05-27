@@ -1,0 +1,33 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html">
+    <h:head>
+        <title>Odabir uređaja</title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    </h:head>
+    <style>
+        .redak {
+            width: 75%;
+            margin: 0 auto;
+        }
+        
+    </style>
+    <h:body>
+        <div class="container">
+            <h2>Login</h2>
+            <h:form>
+                <h:outputLabel value="Korisničko ime:" class="col-lg-3 control-label" />
+                <h:inputText id="korisnickoIme" value="#{login.korisnickoIme}"/><br/>
+                <h:outputLabel value="Lozinka:" class="col-lg-3 control-label" />
+                <h:inputSecret id="lozinka" value="#{login.lozinka}"/><br/>
+                <h:commandButton value="Prijavi se" action="#{login.login()}" />
+            </h:form> 
+                #{login.error}
+              
+        </div>
+ 
+    </h:body>
+</html>
+

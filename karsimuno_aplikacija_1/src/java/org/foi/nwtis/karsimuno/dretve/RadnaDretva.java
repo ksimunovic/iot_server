@@ -7,10 +7,10 @@ import java.net.Socket;
 import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.foi.nwtis.karsimuno.ObradaSocketNaredbi;
-import org.foi.nwtis.karsimuno.ObradaIoTMasterNaredbi;
-import org.foi.nwtis.karsimuno.ObradaIoTNaredbi;
-import org.foi.nwtis.karsimuno.TestOpcija;
+import org.foi.nwtis.karsimuno.server.ObradaSocketNaredbi;
+import org.foi.nwtis.karsimuno.server.ObradaIoTMasterNaredbi;
+import org.foi.nwtis.karsimuno.server.ObradaIoTNaredbi;
+import org.foi.nwtis.karsimuno.server.TestOpcija;
 
 /**
  *

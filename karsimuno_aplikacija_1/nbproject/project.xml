@@ -3,6 +3,7 @@
     <type>org.netbeans.modules.web.project</type>
     <configuration>
         <buildExtensions xmlns="http://www.netbeans.org/ns/ant-build-extender/1">
+            <extension file="rest-build.xml" id="rest.5"/>
             <extension file="jaxws-build.xml" id="jaxws">
                 <dependency dependsOn="wsimport-client-generate" target="-pre-pre-compile"/>
             </extension>
@@ -45,6 +46,10 @@
                 </library>
                 <library dirs="200">
                     <file>${libs.javaee-api-7.0.classpath}</file>
+                    <path-in-war>WEB-INF/lib</path-in-war>
+                </library>
+                <library dirs="200">
+                    <file>${libs.primefaces.classpath}</file>
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
             </web-module-libraries>

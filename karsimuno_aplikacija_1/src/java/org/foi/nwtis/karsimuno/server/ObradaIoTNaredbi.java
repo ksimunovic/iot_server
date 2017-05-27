@@ -1,4 +1,4 @@
-package org.foi.nwtis.karsimuno;
+package org.foi.nwtis.karsimuno.server;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

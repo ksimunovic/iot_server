@@ -23,7 +23,7 @@
     </servlet>
     <servlet-mapping>
         <servlet-name>Faces Servlet</servlet-name>
-        <url-pattern>/faces/*</url-pattern>
+        <url-pattern>/</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>MeteoSOAP</servlet-name>
@@ -35,6 +35,15 @@
         </session-timeout>
     </session-config>
     <welcome-file-list>
-        <welcome-file>faces/index.xhtml</welcome-file>
+        <welcome-file>index.xhtml</welcome-file>
     </welcome-file-list>
+    <security-constraint>
+        <web-resource-collection>
+            <web-resource-name>securedapp</web-resource-name>
+            <url-pattern>/login.xhtml</url-pattern>
+        </web-resource-collection>
+        <user-data-constraint>
+            <transport-guarantee>CONFIDENTIAL</transport-guarantee>
+        </user-data-constraint>
+    </security-constraint>
 </web-app>

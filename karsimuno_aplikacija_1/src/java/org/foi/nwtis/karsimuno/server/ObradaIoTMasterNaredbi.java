@@ -1,4 +1,4 @@
-package org.foi.nwtis.karsimuno;
+package org.foi.nwtis.karsimuno.server;
 
 import java.util.List;
 import java.net.Socket;

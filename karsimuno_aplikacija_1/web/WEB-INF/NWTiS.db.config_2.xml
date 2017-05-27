@@ -17,4 +17,5 @@
     <entry key="driver.database.postgresql">org.postgresql.Driver</entry>
     <entry key="intervalDretveZaMeteoPodatke">10</entry>
     <entry key="apikey">5d9999aedf0f764ceb1fb1f291bbf093</entry>
+    <entry key="brojRedaka">2</entry>
 </properties>

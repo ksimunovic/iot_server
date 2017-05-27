@@ -1,0 +1,79 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <body>
+        <ui:composition template="./predlozak.xhtml">
+
+            <ui:define name="naslov">
+                NWTiS - Zadaća 4 - Promjene
+            </ui:define>
+
+            <ui:define name="top">
+                Pregled promejena IoT uređaja
+            </ui:define>
+
+            <ui:define name="left">
+                <h:link value="Početna" outcome="pocetna"/>
+                <h:link value="IoT" outcome="iot"/>
+                <h:link value="Dnevnik" outcome="dnevnik"/>
+            </ui:define>
+
+            <ui:define name="content">
+                <h:panelGrid columns="3">
+                    <h:form>
+                        <h:outputLabel for="id" value="Id:  "/>
+                        <h:inputText id="id" value="#{pregledPromjena.id}"/>
+                        <h:outputText value="" /><br/>
+
+                        <h:outputLabel for="naziv" value="Naziv: "/>
+                        <h:inputText id="naziv" value="#{pregledPromjena.naziv}"/>
+                        <h:outputText value="" /><br/>
+
+                        <h:commandButton value="Filtriraj" action="#{pregledPromjena.filtirajPromjene()}">
+                            <f:ajax execute="id naziv" render="promjeneTablica"/>
+                        </h:commandButton>
+                    </h:form>
+                </h:panelGrid>
+
+                <h:panelGroup id="promjeneTablica" layout="block">
+                    <p:dataTable var="p" value="#{pregledPromjena.promjene}" paginator="true" rows="10" >
+                        <p:column headerText="Id">
+                            <h:outputText value="#{p.id}" />
+                        </p:column>
+                        <p:column headerText="Pid">
+                            <h:outputText value="#{p.pid}" />
+                        </p:column>
+                        <p:column headerText="Naziv">
+                            <h:outputText value="#{p.naziv}" />
+                        </p:column>
+                        <p:column headerText="Latitude">
+                            <h:outputText value="#{p.latitude}" />
+                        </p:column>
+                        <p:column headerText="Longitude">
+                            <h:outputText value="#{p.longitude}" />
+                        </p:column>
+                        <p:column headerText="Vrijeme promjene">
+                            <h:outputText value="#{p.vrijemePromjene}" >
+                                <f:convertDateTime pattern="dd.MM.yyyy HH:mm:sss" />
+                            </h:outputText>
+                        </p:column>
+                        <p:column headerText="Vrijeme kreiranja">
+                            <h:outputText value="#{p.vrijemeKreiranja}" >
+                                <f:convertDateTime pattern="dd.MM.yyyy HH:mm:sss" />
+                            </h:outputText>
+                        </p:column>
+                        <p:column headerText="Status">
+                            <h:outputText value="#{p.status}" />
+                        </p:column>
+
+                    </p:dataTable>
+                </h:panelGroup>
+            </ui:define>
+
+        </ui:composition>
+    </body>
+</html>

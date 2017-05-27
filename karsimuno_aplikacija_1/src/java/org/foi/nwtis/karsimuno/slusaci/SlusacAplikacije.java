@@ -71,8 +71,7 @@ public class SlusacAplikacije implements ServletContextListener {
 //        pd.start(); //TODO: pokreni dretvu
 
         ss = new ServerDretva();
-        ss.start();
-
+//        ss.start(); //TODO: pokreni dretvu
     }
 
     public static ServletContext getContext() {
