@@ -7,84 +7,51 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core">
     <body>
         <ui:composition template="./predlozak.xhtml">
-
             <ui:define name="naslov">
-                NWTiS - Zadaća 4 - Dnevnik
+                Pregled Dnevnika - karsimuno_aplikacija_1
             </ui:define>
-
             <ui:define name="top">
-                Pregled dnevnika
+                Pregled Dnevnika - karsimuno_aplikacija_1
             </ui:define>
 
             <ui:define name="left">
-                <h:link value="Početna" outcome="pocetna"/>
-                <h:link value="IoT" outcome="iot"/>
-                <h:link value="Promjene" outcome="promjene"/>
+                <h:outputLink value="index.xhtml">Početna</h:outputLink>
+                <h:outputLink value="pregledKorisnika.xhtml">Korisnici</h:outputLink>
+                <h:outputLink value="pregledZahtjeva.xhtml">Zahtjevi</h:outputLink>
             </ui:define>
 
             <ui:define name="content">
-                <h:panelGrid columns="3">
-                    <h:form>
-                        <h:outputLabel for="korisnik" value="Korisnik: "/>
-                        <h:inputText id="korisnik" value="#{pregledDnevnika.korisnik}"/>
-                        <h:outputText value="" /><br/>
-
-                        <h:outputLabel for="ipAdresa" value="IP Adresa:"/>
-                        <h:inputText id="ipAdresa" value="#{pregledDnevnika.ipAdresa}"/>
-                        <h:outputText value="" /><br/>
-
-                        <h:outputLabel for="trajanje" value="Trajanje: "/>
-                        <h:inputText id="trajanje" value="#{pregledDnevnika.trajanje}"/>
-                        <h:outputText value="" /><br/>
-
-                        <h:outputLabel for="status" value="Status: "/>
-                        <h:inputText id="status" value="#{pregledDnevnika.status}"/>
-                        <h:outputText value="" /><br/>
-
-                        <p:outputLabel for="vrijemeOd" value="Vrijeme od:" />
-                        <p:calendar id="vrijemeOd" value="#{pregledDnevnika.vrijemeOd}"  pattern="dd.MM.yyyy HH:mm:ss" />
- 
-                        
-                        <p:outputLabel for="vrijemeDo" value="Vrijeme do:" />
-                        <p:calendar id="vrijemeDo" value="#{pregledDnevnika.vrijemeDo}"  pattern="dd.MM.yyyy HH:mm:ss" />
- 
-
-                        <h:commandButton value="Filtriraj" action="#{pregledDnevnika.filtirajDnevnik()}">
-                            <f:ajax execute="korisnik ipAdresa trajanje status vrijemeOd vrijemeDo" render="dnevnikTablica"/>
-                        </h:commandButton>
-                    </h:form>
-                </h:panelGrid>
-
-                <h:panelGroup id="dnevnikTablica" layout="block">
-                    <p:dataTable var="z" value="#{pregledDnevnika.dnevnickiZapisi}" paginator="false" rows="10" >
-                        <p:column headerText="Id">
-                            <h:outputText value="#{z.id}" />
-                        </p:column>
-                        <p:column headerText="Korisnik">
-                            <h:outputText value="#{z.korisnik}" />
-                        </p:column>
-                        <p:column headerText="URL">
-                            <h:outputText value="#{z.url}" />
-                        </p:column>
-                        <p:column headerText="IP Adresa">
-                            <h:outputText value="#{z.ipadresa}" />
-                        </p:column>
-                        <p:column headerText="Vrijeme">
-                            <h:outputText value="#{z.vrijeme}" >
-                                <f:convertDateTime pattern="dd.MM.yyyy HH:mm:sss" />
-                            </h:outputText>
-                        </p:column>
-                        <p:column headerText="Trajanje (ms)">
-                            <h:outputText value="#{z.trajanje}" />
-                        </p:column>
-                        <p:column headerText="Status">
-                            <h:outputText value="#{z.status}" />
-                        </p:column>
-
-                    </p:dataTable>
-                </h:panelGroup>
+                <p:dataTable var="d"  value="#{pregledDnevnika.dnevnickiZapisi}" >
+                    <p:column headerText="Id">
+                        <h:outputText value="#{d.id}" />
+                    </p:column>
+                    <p:column headerText="Korisnik">
+                        <h:outputText value="#{d.korisnik}" />
+                    </p:column>
+                    <p:column headerText="URL">
+                        <h:outputText value="#{d.url}" />
+                    </p:column>
+                    <p:column headerText="IP Adresa">
+                        <h:outputText value="#{d.ipadresa}" />
+                    </p:column>
+                    <p:column headerText="Vrijeme">
+                        <h:outputText value="#{d.vrijeme}" />
+                    </p:column>
+                    <p:column headerText="Trajanje">
+                        <h:outputText value="#{d.trajanje}" />
+                    </p:column>
+                    <p:column headerText="Status">
+                        <h:outputText value="#{d.status}" />
+                    </p:column>
+                </p:dataTable>
+                <h:form>
+                    <h:commandButton value="Prva" action="#{pregledDnevnika.prva()}"/>
+                    <h:commandButton value="Prethodna" action="#{pregledDnevnika.prethodna()}"/>
+                    <h:commandButton value="Sljedeća" action="#{pregledDnevnika.sljedeca()}"/>
+                    <h:commandButton value="Zadnja" action="#{pregledDnevnika.zadnja()}"/>
+                    <h:inputHidden value="#{pregledDnevnika.limitFrom}"/>
+                </h:form>
             </ui:define>
-
         </ui:composition>
     </body>
 </html>

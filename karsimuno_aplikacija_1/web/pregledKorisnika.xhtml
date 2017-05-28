@@ -18,15 +18,11 @@
             <ui:define name="left">
                 <h:outputLink value="index.xhtml">Početna</h:outputLink>
                 <h:outputLink value="pregledDnevnika.xhtml">Dnevnik</h:outputLink>
+                <h:outputLink value="pregledZahtjeva.xhtml">Zahtjevi</h:outputLink>
             </ui:define>
 
             <ui:define name="content">
-                <style>
-                    .errorMessage {
-                        color: red;
-                    }
-                </style>
-                <p:dataTable var="k" paginator="true" value="#{pregledKorisnika.korisnici}" rows="#{pregledKorisnika.brojRedova}" >
+                <p:dataTable var="k" value="#{pregledKorisnika.korisnici}" >
                     <p:column headerText="Id">
                         <h:outputText value="#{k.id}" />
                     </p:column>
@@ -37,6 +33,13 @@
                         <h:outputText value="#{k.lozinka}" />
                     </p:column>
                 </p:dataTable>
+                <h:form>
+                    <h:commandButton value="Prva" action="#{pregledKorisnika.prva()}"/>
+                    <h:commandButton value="Prethodna" action="#{pregledKorisnika.prethodna()}"/>
+                    <h:commandButton value="Sljedeća" action="#{pregledKorisnika.sljedeca()}"/>
+                    <h:commandButton value="Zadnja" action="#{pregledKorisnika.zadnja()}"/>
+                    <h:inputHidden value="#{pregledKorisnika.limitFrom}"/>
+                </h:form>
             </ui:define>
         </ui:composition>
     </body>

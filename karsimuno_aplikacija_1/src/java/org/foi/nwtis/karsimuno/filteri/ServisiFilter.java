@@ -9,6 +9,13 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -19,13 +26,15 @@ import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.ws.rs.core.Response;
+import org.foi.nwtis.karsimuno.BazaHelper;
 
 /**
  *
  * @author Administrator
  */
-@WebFilter(filterName = "FilterAplikacije", urlPatterns = {"/*"})
-public class FilterAplikacije implements Filter {
+@WebFilter(filterName = "ServisiFilter", urlPatterns = {"/*"})
+public class ServisiFilter implements Filter {
 
     private static final boolean debug = true;
     long startVrijeme;
@@ -35,27 +44,7 @@ public class FilterAplikacije implements Filter {
     // configured. 
     private FilterConfig filterConfig = null;
 
-    public FilterAplikacije() {
-    }
-
-    private void doBeforeProcessing(ServletRequest req, ServletResponse res)
-            throws IOException, ServletException {
-
-    }
-
-    private void doAfterProcessing(ServletRequest request, ServletResponse response)
-            throws IOException, ServletException {
-        if (debug) {
-            log("FilterAplikacije:DoAfterProcessing");
-        }
-
-        HttpServletRequest r = (HttpServletRequest) request;
-        long proteklo = System.currentTimeMillis() - startVrijeme;
-        if (r.getRequestURI().contains(".xhtml")) {
-            log("ZAPISUJEM U DNEVNIIK! " + proteklo);
-//        TODO: zapiši u dnevnik
-//            dnevnikFacade.create(new Dnevnik(null, "karsimuno", r.getRequestURI(), r.getRemoteAddr(), new Date(), (int) proteklo, (int) (proteklo % 10)));
-        }
+    public ServisiFilter() {
     }
 
     /**
@@ -73,42 +62,11 @@ public class FilterAplikacije implements Filter {
         startVrijeme = System.currentTimeMillis();
 
         if (debug) {
-            log("FilterAplikacije:doFilter()");
+            log("ServisiFilter:doFilter()");
         }
 
         doBeforeProcessing(req, res);
 
-        HttpServletRequest request = (HttpServletRequest) req;
-        HttpServletResponse response = (HttpServletResponse) res;
-
-        if (debug) {
-            log("FilterAplikacije:DoBeforeProcessing " + request.getServletPath());
-        }
-
-        String loginURI = request.getContextPath() + "/login.xhtml";
-        String putanja = request.getServletPath();
-        HttpSession session = request.getSession(false);
-        if (session == null) {
-            session = request.getSession(true);
-        }
-
-        if (!putanja.equals("/login.xhtml") && session.getAttribute("korisnik") == null) {
-            response.sendRedirect(loginURI);
-            return;
-        }
-
-        if (putanja.equals("/logout.xhtml") && session.getAttribute("korisnik") != null) {
-            session.removeAttribute("korisnik");
-            response.sendRedirect(loginURI);
-            return;
-        }
-
-        if (putanja.equals("/login.xhtml") && session.getAttribute("korisnik") != null) {
-            response.sendRedirect(request.getContextPath() + "/");
-            return;
-        }
-
-        request.setCharacterEncoding("UTF-8");
         Throwable problem = null;
         try {
             chain.doFilter(req, res);
@@ -132,6 +90,70 @@ public class FilterAplikacije implements Filter {
                 throw (IOException) problem;
             }
             sendProcessingError(problem, res);
+        }
+    }
+
+    private void doAfterProcessing(ServletRequest req, ServletResponse res)
+            throws IOException, ServletException {
+        if (debug) {
+            log("ServisiFilter:DoAfterProcessing");
+        }
+
+        HttpServletRequest request = (HttpServletRequest) req;
+        HttpServletResponse response = (HttpServletResponse) res;
+        String putanja = request.getServletPath();
+
+        if (putanja.contains("MeteoSOAP") || putanja.contains("webresources")) {
+            log("WEBSERVIS POZIIIIIV ------------------KRAJ-");
+            //DOWORK
+            zabiljeziPozivServisa(request, System.currentTimeMillis() - startVrijeme, response.getStatus());
+        }
+    }
+
+    private void zabiljeziPozivServisa(HttpServletRequest request, long vrijemeProteklo, int status) {
+        BazaHelper baza = new BazaHelper();
+//        ResultSet rs = null;
+        PreparedStatement stmt = null;
+        String korisnickoIme;
+
+        HttpSession session = request.getSession(false);
+        if (session == null || session.getAttribute("korisnik") == null) {
+            korisnickoIme = "gost";
+        } else {
+            korisnickoIme = (String) session.getAttribute("korisnik");
+        }
+
+//        String url = "";
+//        if (request.getHeader("SOAPAction") != null) {
+//            url = request.getHeader("SOAPAction");
+//        } else {
+//            url = request.getRequestURL().toString();
+//        }
+
+        try {
+            Connection conn = baza.spojiBazu();
+
+            String sql = "INSERT INTO DNEVNIK (korisnik, url, ipadresa, vrijeme, trajanje, status) VALUES (?, ?, ?, ?, ?, ?)";
+            stmt = conn.prepareStatement(sql);
+            stmt.setString(1, korisnickoIme);
+            stmt.setString(2, request.getRequestURL().toString());
+            stmt.setString(3, request.getRemoteAddr());
+            stmt.setTimestamp(4, new Timestamp(System.currentTimeMillis()));
+            stmt.setLong(5, vrijemeProteklo);
+            stmt.setInt(6, status);
+
+            stmt.executeUpdate();
+        } catch (SQLException | ClassNotFoundException ex) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            baza.otkvaciBazu();
+        }
+    }
+
+    private void doBeforeProcessing(ServletRequest request, ServletResponse response)
+            throws IOException, ServletException {
+        if (debug) {
+            log("ServisiFilter:DoBeforeProcessing");
         }
     }
 
@@ -164,7 +186,7 @@ public class FilterAplikacije implements Filter {
         this.filterConfig = filterConfig;
         if (filterConfig != null) {
             if (debug) {
-                log("FilterAplikacije:Initializing filter");
+                log("ServisiFilter:Initializing filter");
             }
         }
     }
@@ -175,9 +197,9 @@ public class FilterAplikacije implements Filter {
     @Override
     public String toString() {
         if (filterConfig == null) {
-            return ("FilterAplikacije()");
+            return ("ServisiFilter()");
         }
-        StringBuffer sb = new StringBuffer("FilterAplikacije(");
+        StringBuffer sb = new StringBuffer("ServisiFilter(");
         sb.append(filterConfig);
         sb.append(")");
         return (sb.toString());

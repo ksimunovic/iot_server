@@ -18,55 +18,57 @@ import javax.enterprise.context.RequestScoped;
 import javax.faces.bean.ManagedBean;
 import org.foi.nwtis.karsimuno.BazaHelper;
 import org.foi.nwtis.karsimuno.konfiguracije.Konfiguracija;
-import org.foi.nwtis.karsimuno.podaci.Korisnik;
+import org.foi.nwtis.karsimuno.podaci.Dnevnik;
 import org.foi.nwtis.karsimuno.slusaci.SlusacAplikacije;
 
 /**
  *
  * @author Administrator
  */
-@Named(value = "pregledKorisnika")
+@Named(value = "pregledDnevnika")
 @RequestScoped
-@ManagedBean(name = "pregledKorisnika")
-public class PregledKorisnika {
+@ManagedBean(name = "pregledDnevnika")
+public class PregledDnevnika {
 
-    private int brojRedova;
+    private static int brojRedova = 0;
     private BazaHelper baza;
-    private int ukupnoZapisa;
     private int limitFrom = 0;
+    private int ukupnoZapisa;
     private ResultSet rs = null;
     private Connection conn = null;
     private PreparedStatement stmt = null;
 
     /**
-     * Creates a new instance of PregledKorisnika
+     * Creates a new instance of PregledDnevnika
      */
-    public PregledKorisnika() {
+    public PregledDnevnika() {
     }
 
-    public List<Korisnik> getKorisnici() {
-        Konfiguracija konf = (Konfiguracija) SlusacAplikacije.getContext().getAttribute("Ostatak_Konf");
-        brojRedova = Integer.parseInt(konf.dajPostavku("brojRedaka"));
-        return dohvatiKorisnike();
+    public List<Dnevnik> getDnevnickiZapisi() {
+        if (brojRedova == 0) {
+            Konfiguracija konf = (Konfiguracija) SlusacAplikacije.getContext().getAttribute("Ostatak_Konf");
+            brojRedova = Integer.parseInt(konf.dajPostavku("brojRedaka"));
+        }
+        return dohvatiDnevnik();
     }
 
-    private List<Korisnik> dohvatiKorisnike() {
-        List<Korisnik> temp = new ArrayList();
+    private List<Dnevnik> dohvatiDnevnik() {
+        List<Dnevnik> temp = new ArrayList();
         baza = new BazaHelper();
-
         try {
             conn = baza.spojiBazu();
 
-            String sql = "SELECT * FROM korisnici";
+            String sql = "SELECT * FROM dnevnik";
+
             if (brojRedova != 0) {
                 sql += " LIMIT " + limitFrom + ", " + brojRedova;
             }
-            
+
             stmt = conn.prepareStatement(sql);
             rs = stmt.executeQuery();
 
             while (rs.next()) {
-                temp.add(new Korisnik(rs.getInt("id"), rs.getString("korisnicko_ime"), rs.getString("lozinka")));
+                temp.add(new Dnevnik(rs.getInt("id"), rs.getString("korisnik"), rs.getString("url"), rs.getString("ipadresa"), rs.getTimestamp("vrijeme"), rs.getInt("trajanje"), rs.getInt("status")));
             }
         } catch (SQLException | ClassNotFoundException ex) {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, null, ex);
@@ -119,7 +121,7 @@ public class PregledKorisnika {
         try {
             conn = baza.spojiBazu();
 
-            String sql = "SELECT count(*) FROM korisnici";
+            String sql = "SELECT count(*) FROM dnevnik";
             stmt = conn.prepareStatement(sql);
             rs = stmt.executeQuery();
 

@@ -4,12 +4,12 @@
     <comment>NWTIS konfiguracija - JavaDB</comment>
     <entry key="port">4123</entry>
     <entry key="maksBrojRadnihDretvi">1</entry>
-    <entry key="server.database">jdbc:derby://localhost:1527/</entry>
+    <entry key="server.database">jdbc:mysql://localhost:3306/</entry>
     <entry key="admin.username">nwtis_g2</entry>
     <entry key="admin.password">g2_nwtis</entry>
     <entry key="admin.database">nwtis_g2</entry>
-    <entry key="user.username">nwtis</entry>
-    <entry key="user.password">foi2017</entry>
+    <entry key="user.username">root</entry>
+    <entry key="user.password"></entry>
     <entry key="user.database">nwtis_karsimuno_bp_1</entry>
     <entry key="driver.database.odbc">sun.jdbc.odbc.JdbcOdbcDriver</entry>
     <entry key="driver.database.mysql">com.mysql.jdbc.Driver</entry>
