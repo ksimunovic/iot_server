@@ -37,7 +37,6 @@ public class SlusacAplikacije implements ServletContextListener {
 
     @Override
     public void contextDestroyed(ServletContextEvent sce) {
-
         if (pd != null) {
             pd.interrupt();
         }
@@ -68,10 +67,10 @@ public class SlusacAplikacije implements ServletContextListener {
         }
 
         pd = new PozadinskaDretva(konf);
-//        pd.start(); //TODO: pokreni dretvu
+//        pd.start(); //FIXME: pozadinska dretva
 
         ss = new ServerDretva();
-//        ss.start(); //TODO: pokreni dretvu
+//        ss.start(); //FIXME: server dretva
     }
 
     public static ServletContext getContext() {

@@ -35,7 +35,7 @@ import org.foi.nwtis.karsimuno.BazaHelper;
  *
  * @author Administrator
  */
-@Path("/uredjaji")
+@Path("/uredjaji") //FIXME: uredjajiREST
 public class UredjajiRESTsResourceContainer {
 
     @Context

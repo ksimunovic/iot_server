@@ -4,9 +4,7 @@ import java.util.List;
 import java.net.Socket;
 import java.util.HashMap;
 import org.foi.nwtis.dkermek.ws.serveri.Uredjaj;
-import org.foi.nwtis.karsimuno.dretve.ServerDretva;
 import org.foi.nwtis.dkermek.ws.serveri.StatusKorisnika;
-import org.foi.nwtis.karsimuno.konfiguracije.Konfiguracija;
 import com.sun.xml.internal.ws.fault.ServerSOAPFaultException;
 
 /**

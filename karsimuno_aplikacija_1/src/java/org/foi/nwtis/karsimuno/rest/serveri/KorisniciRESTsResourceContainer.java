@@ -23,7 +23,7 @@ import org.foi.nwtis.karsimuno.BazaHelper;
  *
  * @author Karlo
  */
-@Path("/korisnici")
+@Path("/korisnici") //FIXME: korisniciREST
 public class KorisniciRESTsResourceContainer {
 
     @Context

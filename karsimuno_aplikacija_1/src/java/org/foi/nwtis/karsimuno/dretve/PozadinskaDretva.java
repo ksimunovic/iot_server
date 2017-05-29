@@ -56,13 +56,13 @@ public class PozadinskaDretva extends Thread {
         super.run();
         owmk = new OWMKlijent(apikey);
 
-        int iter = 0;//XXX: temp
+        int iter = 0;//XXX: temp -> Složiti sistem isključivanja pozadinske dretve kada se gasi i server
         while (iter < 10) {//XXX: temp
             long trenutnoVrijeme = System.currentTimeMillis();
             System.out.println("Pozdrav iz pozadinske dretvee!");
 
             if (!preskociCiklus) {
-                preuzmiPodatkeZaUredjaje(); //TODO upali pozadinsku dretvu
+                preuzmiPodatkeZaUredjaje();
             }
             preskociCiklus = false;
 

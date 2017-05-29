@@ -3,18 +3,11 @@ package org.foi.nwtis.karsimuno.server;
 import org.foi.nwtis.karsimuno.dretve.ServerDretva;
 import java.io.IOException;
 import java.net.Socket;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.foi.nwtis.karsimuno.dretve.PozadinskaDretva;
 import org.foi.nwtis.karsimuno.konfiguracije.Konfiguracija;
-import org.foi.nwtis.karsimuno.konfiguracije.bp.BP_Konfiguracija;
-import org.foi.nwtis.karsimuno.slusaci.SlusacAplikacije;
 
 /**
  * Klasa kojom server obrađuje naredbu administratora, kreirana radi bolje
@@ -42,11 +35,6 @@ public class ObradaSocketNaredbi {
      */
     public String izvrsiNaredbu() {
 
-        String statusPrava = provjeriKorisnika();
-        if (!"OK;".equals(statusPrava)) {
-            return statusPrava;
-        }
-
         switch (naredbe.get("naredba")) {
             case "PAUSE":
                 return pauzirajServer();
@@ -61,54 +49,6 @@ public class ObradaSocketNaredbi {
         }
     }
 
-    /**
-     * TODO: Kreirati tablicu korisnici (id, korisnik, lozinka) i prema njoj
-     * provjeriti korisnika
-     */
-    String provjeriKorisnika() {
-
-        BP_Konfiguracija BP_Konf = null;
-        BP_Konf = (BP_Konfiguracija) SlusacAplikacije.getContext().getAttribute("BP_Konfig");
-
-        String prava = "";
-        String sql;
-        ResultSet rs = null;
-        PreparedStatement stmt = null;
-        Connection conn = null;
-        try {
-            Class.forName(BP_Konf.getDriverDatabase());
-            conn = DriverManager.getConnection(BP_Konf.getServerDatabase() + BP_Konf.getUserDatabase(), BP_Konf.getUserUsername(), BP_Konf.getUserPassword());
-
-            sql = "SELECT * FROM korisnici WHERE korisnicko_ime = ? AND lozinka = ?";
-            stmt = conn.prepareStatement(sql);
-            stmt.setString(1, naredbe.get("korisnik"));
-            stmt.setString(2, naredbe.get("lozinka"));
-            rs = stmt.executeQuery();
-
-            if (rs.next()) {
-                prava = "OK;";
-            } else {
-                prava = "ERROR 10; Ne postoji takav korisnik.";
-            }
-        } catch (SQLException | ClassNotFoundException ex) {
-            Logger.getLogger(PozadinskaDretva.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
-            try {
-                if (conn != null) {
-                    conn.close();
-                }
-                if (stmt != null) {
-                    stmt.close();
-                }
-                if (rs != null) {
-                    rs.close();
-                }
-            } catch (SQLException ex) {
-            }
-        }
-        return prava;
-    }
-    
     synchronized String ugasiServer() {
 
         if (!ServerDretva.zavrsiRadServera) {

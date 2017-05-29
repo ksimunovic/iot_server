@@ -94,6 +94,7 @@ public class TestOpcija {
             if (m.group(5) != null) {
                 opcijeKorisnika.put("naredba", m.group(5));
                 opcijeKorisnika.put("naziv", m.group(6));
+                opcijeKorisnika.put("adresa", m.group(7));
             }
             return opcijeKorisnika;
         }

@@ -128,7 +128,6 @@ public class ObradaIoTNaredbi {
      * aktivan, odnosno ERR 31; ako je bio aktivan.
      */
     private String aktivirajUredjaj() {
-        //TODO: mora ici provjera statusom
         StatusUredjaja su = dajStatusUredjajaGrupe(naredbe.get("korisnik"), naredbe.get("lozinka"), Integer.parseInt(naredbe.get("iot")));
 
         if (su != null && su.equals(StatusUredjaja.AKTIVAN)) {

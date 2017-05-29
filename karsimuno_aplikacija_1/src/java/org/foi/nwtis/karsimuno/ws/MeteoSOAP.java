@@ -33,13 +33,11 @@ import org.foi.nwtis.karsimuno.rest.klijenti.GMRESTHelper;
 import org.foi.nwtis.karsimuno.rest.klijenti.OWMKlijent;
 import org.foi.nwtis.karsimuno.slusaci.SlusacAplikacije;
 
-
-//TODO DAjSve test s longovima
 /**
  *
  * @author Karlo
  */
-@WebService(serviceName = "MeteoSOAP")
+//@WebService(serviceName = "MeteoSOAP") //FIXME: SOAP
 public class MeteoSOAP {
 
     private ResultSet rs = null;
