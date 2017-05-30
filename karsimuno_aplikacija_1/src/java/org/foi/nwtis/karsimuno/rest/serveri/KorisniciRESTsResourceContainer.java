@@ -62,6 +62,8 @@ public class KorisniciRESTsResourceContainer {
                 JsonObjectBuilder job = Json.createObjectBuilder();
                 job.add("id", rs.getInt("id"));
                 job.add("korisnicko_ime", rs.getString("korisnicko_ime"));
+                job.add("prezime", rs.getString("prezime"));
+                job.add("email", rs.getString("email"));
                 jab.add(job);
             }
         } catch (SQLException | ClassNotFoundException ex) {
@@ -79,30 +81,4 @@ public class KorisniciRESTsResourceContainer {
     public KorisniciRESTResource getKorisniciRESTResource(@PathParam("korisnickoIme") String korisnickoIme) {
         return KorisniciRESTResource.getInstance(korisnickoIme);
     }
-
-    /*  private void spojiBazu() throws SQLException, ClassNotFoundException {
-        BP_Konfiguracija BP_Konf = (BP_Konfiguracija) SlusacAplikacije.getContext().getAttribute("BP_Konfig");
-
-        String database = BP_Konf.getServerDatabase() + BP_Konf.getUserDatabase();
-        String user = BP_Konf.getUserUsername();
-        String pass = BP_Konf.getUserPassword();
-
-        Class.forName(BP_Konf.getDriverDatabase());
-        conn = DriverManager.getConnection(database, user, pass);
-    }
-
-    private void otkvaciBazu() {
-        try {
-            if (conn != null) {
-                conn.close();
-            }
-            if (stmt != null) {
-                stmt.close();
-            }
-            if (rs != null) {
-                rs.close();
-            }
-        } catch (SQLException ex) {
-        }
-    }*/
 }

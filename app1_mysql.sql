@@ -52,3 +52,13 @@ CREATE TABLE dnevnik (
   status int NOT NULL DEFAULT 0,
   primary key (id)
 );
+
+
+CREATE TABLE `korisnici` (
+  `id` int(11) NOT NULL auto_increment,
+  `korisnicko_ime` varchar(255) DEFAULT NULL,
+  `lozinka` varchar(255) NOT NULL,
+  `prezime` varchar(255) DEFAULT "",
+  `email` varchar(255) DEFAULT "",
+  primary key (id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;

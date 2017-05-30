@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+    <comment>NWTIS konfiguracija - JavaDB</comment>
+    <entry key="port">4123</entry>
+    <entry key="maksBrojRadnihDretvi">1</entry>
+    <entry key="server.database">jdbc:mysql://localhost:3306/</entry>
+    <entry key="admin.username">nwtis_g2</entry>
+    <entry key="admin.password">g2_nwtis</entry>
+    <entry key="admin.database">nwtis_g2</entry>
+    <entry key="user.username">root</entry>
+    <entry key="user.password"></entry>
+    <entry key="user.database">nwtis_karsimuno_bp_1</entry>
+    <entry key="driver.database.odbc">sun.jdbc.odbc.JdbcOdbcDriver</entry>
+    <entry key="driver.database.mysql">com.mysql.jdbc.Driver</entry>
+    <entry key="driver.database.derby">org.apache.derby.jdbc.ClientDriver</entry>
+    <entry key="driver.database.postgresql">org.postgresql.Driver</entry>
+    <entry key="intervalDretveZaMeteoPodatke">10</entry>
+    <entry key="apikey">5d9999aedf0f764ceb1fb1f291bbf093</entry>
+    <entry key="brojRedaka">2</entry>
+    <entry key="mail.server">localhost</entry>
+    <entry key="mail.port">143</entry>
+    <entry key="mail.subject">NWTiS poruka</entry>
+    <entry key="mail.sender">karsimuno@nwtis.foi.hr</entry>
+    <entry key="mail.receiver">awwrrqhh@sharklasers.com</entry>
+    <entry key="mail.timeSecThread">10</entry>
+    <entry key="mail.usernameThread">servis@nwtis.nastava.foi.hr</entry>
+    <entry key="mail.passwordThread">123456</entry>
+    <entry key="mail.folderNWTiS">NWTiS_Poruke</entry>
+    <entry key="mqtt.numMessages">7</entry>
+</properties>

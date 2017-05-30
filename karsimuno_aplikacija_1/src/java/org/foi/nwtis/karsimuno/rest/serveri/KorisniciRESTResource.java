@@ -72,6 +72,8 @@ public class KorisniciRESTResource {
                 job.add("id", rs.getInt("id"));
                 job.add("korisnicko_ime", rs.getString("korisnicko_ime"));
                 job.add("lozinka", rs.getString("lozinka"));
+                job.add("prezime", rs.getString("prezime"));
+                job.add("email", rs.getString("email"));
             }
         } catch (SQLException | ClassNotFoundException ex) {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, null, ex);
@@ -99,10 +101,12 @@ public class KorisniciRESTResource {
         try {
             conn = baza.spojiBazu();
 
-            String sql = "INSERT INTO korisnici (korisnicko_ime, lozinka) VALUES (?, ?)";
+            String sql = "INSERT INTO korisnici (korisnicko_ime, lozinka, prezime, email) VALUES (?, ?, ?, ?)";
             stmt = conn.prepareStatement(sql);
             stmt.setString(1, jo.getString("korisnicko_ime"));
             stmt.setString(2, jo.getString("lozinka"));
+            stmt.setString(3, jo.getString("prezime"));
+            stmt.setString(4, jo.getString("email"));
 
             if (stmt.executeUpdate() == 1) {
                 job = Json.createObjectBuilder();
@@ -141,11 +145,13 @@ public class KorisniciRESTResource {
         try {
             conn = baza.spojiBazu();
 
-            String sql = "UPDATE korisnici SET lozinka = ?, korisnicko_ime = ? WHERE korisnicko_ime = ?";
+            String sql = "UPDATE korisnici SET lozinka = ?, korisnicko_ime = ?, prezime = ?, email = ? WHERE korisnicko_ime = ?";
             stmt = conn.prepareStatement(sql);
             stmt.setString(1, jo.getString("lozinka"));
             stmt.setString(2, jo.getString("korisnicko_ime"));
-            stmt.setString(3, korisnickoIme);
+            stmt.setString(3, jo.getString("prezime"));
+            stmt.setString(4, jo.getString("email"));
+            stmt.setString(5, korisnickoIme);
 
             if (stmt.executeUpdate() == 1) {
                 job = Json.createObjectBuilder();
