@@ -8,29 +8,19 @@ package org.foi.nwtis.karsimuno.zrna;
 import javax.inject.Named;
 import java.io.Serializable;
 import java.io.StringReader;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.enterprise.context.RequestScoped;
-import javax.faces.bean.ManagedBean;
 import javax.json.Json;
 import javax.json.JsonArray;
-import javax.json.JsonObject;
 import javax.json.JsonReader;
 import javax.json.JsonValue;
-import javax.ws.rs.client.Client;
-import javax.ws.rs.client.ClientBuilder;
-import javax.ws.rs.client.WebTarget;
-import javax.ws.rs.core.MediaType;
-import org.foi.nwtis.karsimuno.podaci.MeteoPodaci;
+import javax.xml.ws.WebServiceRef;
 import org.foi.nwtis.karsimuno.podaci.Uredjaj;
-import org.foi.nwtis.karsimuno.rest.klijenti.GMRESTHelper;
-import org.foi.nwtis.karsimuno.rest.klijenti.OWMKlijent;
 import org.foi.nwtis.karsimuno.rest.klijenti.UredjajiRESTResource;
 import org.foi.nwtis.karsimuno.rest.klijenti.UredjajiRESTsResourceContainer;
+import org.foi.nwtis.karsimuno.ws.MeteoPodaci;
+import org.foi.nwtis.karsimuno.ws.MeteoSOAP_Service;
 
 /**
  *
@@ -38,8 +28,11 @@ import org.foi.nwtis.karsimuno.rest.klijenti.UredjajiRESTsResourceContainer;
  */
 @Named(value = "uredjajiPogled")
 @RequestScoped
-@ManagedBean(name = "uredjajiPogled")
+//@ManagedBean(name = "uredjajiPogled")
 public class UredjajiPogled implements Serializable {
+
+    @WebServiceRef(wsdlLocation = "WEB-INF/wsdl/localhost_8084/karsimuno_aplikacija_1/MeteoSOAP.wsdl")
+    private MeteoSOAP_Service service;
 
     private int errorCode = -1;
     private String adresa = "";
@@ -133,46 +126,39 @@ public class UredjajiPogled implements Serializable {
         ponovoUcitaj = true;
     }
 
-    public void dohvatiAdresu(Uredjaj u){
-        adresa = "alert('" + dohvatiAdresuGeolokacijom(u.latitude, u.longitude) + "');";
+    public void dohvatiAdresu(Uredjaj u) {
+        adresa = "alert('" + dajAdresuUredjaja(u.id) + "');";
         System.out.println("-----------" + adresa);
-
-    }
-
-    public String dohvatiAdresuGeolokacijom(Float latitude, Float longitude) {
-        Client client = ClientBuilder.newClient();
-
-        String adresa = latitude.toString() + "," + longitude.toString();
-        WebTarget webResource = client.target(GMRESTHelper.getGM_BASE_URI())
-                .path("maps/api/geocode/json");
-        try {
-            webResource = webResource.queryParam("latlng",
-                    URLEncoder.encode(adresa, "UTF-8"));
-        } catch (UnsupportedEncodingException ex) {
-            Logger.getLogger(getClass().getName()).log(Level.SEVERE, null, ex);
-        }
-        webResource = webResource.queryParam("sensor", "false");
-        String odgovor = webResource.request(MediaType.APPLICATION_JSON).get(String.class);
-
-        JsonReader reader = Json.createReader(new StringReader(odgovor));
-        JsonObject jo = reader.readObject();
-        JsonObject obj = jo.getJsonArray("results").getJsonObject(0);
-
-        return obj.getString("formatted_address");
     }
     
+    private String dajAdresuUredjaja(int id) {
+        // Note that the injected javax.xml.ws.Service reference as well as port objects are not thread safe.
+        // If the calling of port operations may lead to race condition some synchronization is required.
+        org.foi.nwtis.karsimuno.ws.MeteoSOAP port = service.getMeteoSOAPPort();
+        return port.dajAdresuUredjaja(id);
+    }
     
-    
-    public void dohvatiVazece(Uredjaj uredjaj){
-//        MeteoPodaci mp = null;
-        OWMKlijent owmk = new OWMKlijent("5d9999aedf0f764ceb1fb1f291bbf093"); //TODO složit učitavanje iz konfiga
-
-        meteoPodaci = owmk.getRealTimeWeather(uredjaj.latitude.toString(), uredjaj.longitude.toString());
-        
-//        int i = 0;
-//        System.out.println("test");
+    public void dohvatiVazece(Uredjaj uredjaj) {
+        meteoPodaci = dajVazeceMeteoPodatkeZaUredjaj(uredjaj.id);
     }
 
+    private MeteoPodaci dajVazeceMeteoPodatkeZaUredjaj(int id) {
+        // Note that the injected javax.xml.ws.Service reference as well as port objects are not thread safe.
+        // If the calling of port operations may lead to race condition some synchronization is required.
+        org.foi.nwtis.karsimuno.ws.MeteoSOAP port = service.getMeteoSOAPPort();
+        return port.dajVazeceMeteoPodatkeZaUredjaj(id);
+    }
+
+    public void dohvatiZadnje(Uredjaj uredjaj) {
+        //TODO: Testirati kad budem imao meteo podatke u bazi
+        meteoPodaci = dajZadnjeMeteoPodatkeZaUredjaj(uredjaj.id);
+    }
     
-    
+    private MeteoPodaci dajZadnjeMeteoPodatkeZaUredjaj(int id) {
+        // Note that the injected javax.xml.ws.Service reference as well as port objects are not thread safe.
+        // If the calling of port operations may lead to race condition some synchronization is required.
+        org.foi.nwtis.karsimuno.ws.MeteoSOAP port = service.getMeteoSOAPPort();
+        return port.dajZadnjeMeteoPodatkeZaUredjaj(id);
+    }
+
 }

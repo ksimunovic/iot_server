@@ -1,6 +1,5 @@
 package org.foi.nwtis.karsimuno.slusaci;
 
-import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.naming.Context;

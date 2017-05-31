@@ -24,7 +24,7 @@ public class OWMKlijent {
     Client client;
     String apiKey;
     OWMRESTHelper helper;
-    
+
     public OWMKlijent(String apiKey) {
         this.apiKey = apiKey;
         helper = new OWMRESTHelper(apiKey);
@@ -122,7 +122,11 @@ public class OWMKlijent {
             mp.setWindSpeedValue(new Double(jo.getJsonObject("wind").getJsonNumber("speed").doubleValue()).floatValue());
             mp.setWindSpeedName("");
 
-            mp.setWindDirectionValue(new Double(jo.getJsonObject("wind").getJsonNumber("deg").doubleValue()).floatValue());
+            if (jo.getJsonObject("wind").containsKey("deg")) {
+                mp.setWindDirectionValue(new Double(jo.getJsonObject("wind").getJsonNumber("deg").doubleValue()).floatValue());
+            } else {
+                mp.setWindDirectionValue(0.0f);
+            }
             mp.setWindDirectionCode("");
             mp.setWindDirectionName("");
 

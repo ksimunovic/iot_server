@@ -77,7 +77,7 @@ public class ServerDretva extends Thread {
                 RadnaDretva radnaDretva = new RadnaDretva(socket);
                 String nazivDretve = "karsimuno-" + (brojDretvi);
                 inkrementirajBrojDretvi();
-                
+
                 aktivneDretve.put(nazivDretve, System.currentTimeMillis());
 
                 radnaDretva.setName(nazivDretve);

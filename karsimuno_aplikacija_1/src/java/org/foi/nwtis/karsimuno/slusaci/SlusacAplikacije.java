@@ -70,7 +70,7 @@ public class SlusacAplikacije implements ServletContextListener {
 //        pd.start(); //FIXME: pozadinska dretva
 
         ss = new ServerDretva();
-//        ss.start(); //FIXME: server dretva
+        ss.start(); //FIXME: server dretva
     }
 
     public static ServletContext getContext() {

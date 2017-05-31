@@ -148,7 +148,7 @@ class RadnaDretva extends Thread {
         if (odgovor.isEmpty() && ServerDretva.zavrsiRadServera) {
             odgovor = "ERROR 12; Server je u postupku prekida.";
         } else if (odgovor.isEmpty()) {
-            odgovor = "ERROR 1000: Pogrešna komanda"; //TODO: staviti pravi broj errora
+            odgovor = "ERROR 1000: Pogresna komanda"; //TODO: staviti pravi broj errora
         }
 
         if (!odgovor.contains("ERR")) {
