@@ -27,7 +27,7 @@ import org.foi.nwtis.karsimuno.BazaHelper;
 @Named(value = "login")
 @RequestScoped
 @ManagedBean(name = "login")
-public class Login {
+public class Login_BRISI {
 
     private String korisnickoIme;
     private String lozinka;
@@ -36,7 +36,7 @@ public class Login {
     /**
      * Creates a new instance of Testni
      */
-    public Login() {
+    public Login_BRISI() {
     }
 
     public String getKorisnickoIme() {
@@ -75,7 +75,7 @@ public class Login {
                 HttpServletRequest origRequest = (HttpServletRequest) facesContext.getExternalContext().getRequest();
                 facesContext.getExternalContext().redirect(origRequest.getContextPath() + "/");
             } catch (IOException ex) {
-                Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(Login_BRISI.class.getName()).log(Level.SEVERE, null, ex);
             }
         } else {
             error = "greska";

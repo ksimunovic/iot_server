@@ -11,7 +11,6 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.logging.Level;
@@ -26,7 +25,6 @@ import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import javax.ws.rs.core.Response;
 import org.foi.nwtis.karsimuno.BazaHelper;
 
 /**
@@ -36,7 +34,7 @@ import org.foi.nwtis.karsimuno.BazaHelper;
 @WebFilter(filterName = "ServisiFilter", urlPatterns = {"/*"})
 public class ServisiFilter implements Filter {
 
-    private static final boolean debug = true;
+    private static final boolean debug = false;
     long startVrijeme;
 
     // The filter configuration object we are associated with.  If
@@ -104,8 +102,6 @@ public class ServisiFilter implements Filter {
         String putanja = request.getServletPath();
 
         if (putanja.contains("MeteoSOAP") || putanja.contains("webresources")) {
-            log("WEBSERVIS POZIIIIIV ------------------KRAJ-");
-            //DOWORK
             zabiljeziPozivServisa(request, System.currentTimeMillis() - startVrijeme, response.getStatus());
         }
     }
@@ -129,7 +125,6 @@ public class ServisiFilter implements Filter {
 //        } else {
 //            url = request.getRequestURL().toString();
 //        }
-
         try {
             Connection conn = baza.spojiBazu();
 

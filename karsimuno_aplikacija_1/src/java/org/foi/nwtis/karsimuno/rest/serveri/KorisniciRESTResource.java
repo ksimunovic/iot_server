@@ -86,13 +86,12 @@ public class KorisniciRESTResource {
     // dodavanje jednog korisnika (vraća 0 ako već postoji, 1 ako ne postoji te je dodan)
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.TEXT_PLAIN)
     public String postJson(String content) {
-        JsonObjectBuilder job = Json.createObjectBuilder();
-        job.add("status", 0);
+        Integer status = 0;
 
         if (postojiKorisnik(korisnickoIme) || content.isEmpty()) {
-            return job.build().toString();
+            return status.toString();
         }
 
         JsonReader reader = Json.createReader(new StringReader(content));
@@ -109,15 +108,20 @@ public class KorisniciRESTResource {
             stmt.setString(4, jo.getString("email"));
 
             if (stmt.executeUpdate() == 1) {
-                job = Json.createObjectBuilder();
-                job.add("status", 1);
+                status = 1;
+
+                sql = "INSERT INTO user_roles (korisnicko_ime, role_name) VALUE (?, 'client')";
+                stmt = conn.prepareStatement(sql);
+                stmt.setString(1, jo.getString("korisnicko_ime"));
+                stmt.executeUpdate();
             }
+
         } catch (SQLException | ClassNotFoundException ex) {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, null, ex);
         } finally {
             baza.otkvaciBazu();
         }
-        return job.build().toString();
+        return status.toString();
     }
 
     /**
@@ -129,14 +133,13 @@ public class KorisniciRESTResource {
     // ažuriranje jednog korisnika (vraća 0 ako ne postoji, 1 ako postoji te je ažuriran)
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.TEXT_PLAIN)
     public String putJson(String content) {
 
-        JsonObjectBuilder job = Json.createObjectBuilder();
-        job.add("status", 0);
+        Integer status = 0;
 
         if (!postojiKorisnik(korisnickoIme) || content.isEmpty()) {
-            return job.build().toString();
+            return status.toString();
         }
 
         JsonReader reader = Json.createReader(new StringReader(content));
@@ -154,15 +157,20 @@ public class KorisniciRESTResource {
             stmt.setString(5, korisnickoIme);
 
             if (stmt.executeUpdate() == 1) {
-                job = Json.createObjectBuilder();
-                job.add("status", 1);
+                status = 1;
+                
+                sql = "UPDATE user_roles SET korisnicko_ime = ? WHERE korisnicko_ime = ?";
+                stmt = conn.prepareStatement(sql);
+                stmt.setString(1, jo.getString("korisnicko_ime"));
+                stmt.setString(2, korisnickoIme);
+                stmt.executeUpdate();
             }
         } catch (SQLException | ClassNotFoundException ex) {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, null, ex);
         } finally {
             baza.otkvaciBazu();
         }
-        return job.build().toString();
+        return status.toString();
     }
 
     private boolean postojiKorisnik(String korisnickoIme) {

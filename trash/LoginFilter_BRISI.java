@@ -32,8 +32,8 @@ import org.foi.nwtis.karsimuno.BazaHelper;
  *
  * @author Administrator
  */
-@WebFilter(filterName = "FilterAplikacije", urlPatterns = {"/*"})
-public class LoginFilter implements Filter {
+//@WebFilter(filterName = "FilterAplikacije", urlPatterns = {"/*"})
+public class LoginFilter_BRISI implements Filter {
 
     private final boolean debug = true;
 
@@ -42,7 +42,7 @@ public class LoginFilter implements Filter {
     // configured. 
     private FilterConfig filterConfig = null;
 
-    public LoginFilter() {
+    public LoginFilter_BRISI() {
     }
 
     private void doBeforeProcessing(ServletRequest req, ServletResponse res)

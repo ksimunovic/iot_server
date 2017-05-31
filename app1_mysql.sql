@@ -62,3 +62,12 @@ CREATE TABLE `korisnici` (
   `email` varchar(255) DEFAULT "",
   primary key (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+CREATE TABLE `zahtjevi` (
+  `id` int(11) NOT NULL,
+  `korisnik` varchar(255) NOT NULL,
+  `naredba` varchar(255) NOT NULL,
+  `odgovor` VARCHAR(255) NOT NULL,
+  `vrijeme` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;

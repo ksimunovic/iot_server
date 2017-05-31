@@ -3,75 +3,49 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:p="http://primefaces.org/ui"
-      xmlns:f="http://xmlns.jcp.org/jsf/core">
+      xmlns:p="http://primefaces.org/ui">
     <body>
         <ui:composition template="./predlozak.xhtml">
 
             <ui:define name="naslov">
-                NWTiS - Zadaća 4 - Promjene
+                Pregled Zahtjeva - karsimuno_aplikacija_1
             </ui:define>
 
             <ui:define name="top">
-                Pregled promejena IoT uređaja
+                Pregled Zahtjeva - karsimuno_aplikacija_1
             </ui:define>
 
             <ui:define name="left">
                 <h:outputLink value="index.xhtml">Početna</h:outputLink>
                 <h:outputLink value="pregledKorisnika.xhtml">Korisnici</h:outputLink>
-                <h:outputLink value="pregledDnevnika.xhtml">Dnevnik</h:outputLink>
+                <h:outputLink value="pregledZahtjeva.xhtml">Dnevnik</h:outputLink>
             </ui:define>
 
             <ui:define name="content">
-                <h:panelGrid columns="3">
-                    <h:form>
-                        <h:outputLabel for="id" value="Id:  "/>
-                        <h:inputText id="id" value="#{pregledPromjena.id}"/>
-                        <h:outputText value="" /><br/>
-
-                        <h:outputLabel for="naziv" value="Naziv: "/>
-                        <h:inputText id="naziv" value="#{pregledPromjena.naziv}"/>
-                        <h:outputText value="" /><br/>
-
-                        <h:commandButton value="Filtriraj" action="#{pregledPromjena.filtirajPromjene()}">
-                            <f:ajax execute="id naziv" render="promjeneTablica"/>
-                        </h:commandButton>
-                    </h:form>
-                </h:panelGrid>
-
-                <h:panelGroup id="promjeneTablica" layout="block">
-                    <p:dataTable var="p" value="#{pregledPromjena.promjene}" paginator="true" rows="10" >
-                        <p:column headerText="Id">
-                            <h:outputText value="#{p.id}" />
-                        </p:column>
-                        <p:column headerText="Pid">
-                            <h:outputText value="#{p.pid}" />
-                        </p:column>
-                        <p:column headerText="Naziv">
-                            <h:outputText value="#{p.naziv}" />
-                        </p:column>
-                        <p:column headerText="Latitude">
-                            <h:outputText value="#{p.latitude}" />
-                        </p:column>
-                        <p:column headerText="Longitude">
-                            <h:outputText value="#{p.longitude}" />
-                        </p:column>
-                        <p:column headerText="Vrijeme promjene">
-                            <h:outputText value="#{p.vrijemePromjene}" >
-                                <f:convertDateTime pattern="dd.MM.yyyy HH:mm:sss" />
-                            </h:outputText>
-                        </p:column>
-                        <p:column headerText="Vrijeme kreiranja">
-                            <h:outputText value="#{p.vrijemeKreiranja}" >
-                                <f:convertDateTime pattern="dd.MM.yyyy HH:mm:sss" />
-                            </h:outputText>
-                        </p:column>
-                        <p:column headerText="Status">
-                            <h:outputText value="#{p.status}" />
-                        </p:column>
-
-                    </p:dataTable>
-                </h:panelGroup>
+                <p:dataTable var="z"  value="#{pregledZahtjeva.zahtjevi}" >
+                    <p:column headerText="Id">
+                        <h:outputText value="#{z.id}" />
+                    </p:column>
+                    <p:column headerText="Korisnik">
+                        <h:outputText value="#{z.korisnik}" />
+                    </p:column>
+                    <p:column headerText="Naredba">
+                        <h:outputText value="#{z.naredba}" />
+                    </p:column>
+                    <p:column headerText="Odgovor">
+                        <h:outputText value="#{z.odgovor}" />
+                    </p:column>
+                    <p:column headerText="Vrijeme">
+                        <h:outputText value="#{z.vrijeme}" />
+                    </p:column>
+                </p:dataTable>
+                <h:form>
+                    <h:commandButton value="Prva" action="#{pregledZahtjeva.prva()}"/>
+                    <h:commandButton value="Prethodna" action="#{pregledZahtjeva.prethodna()}"/>
+                    <h:commandButton value="Sljedeća" action="#{pregledZahtjeva.sljedeca()}"/>
+                    <h:commandButton value="Zadnja" action="#{pregledZahtjeva.zadnja()}"/>
+                    <h:inputHidden value="#{pregledZahtjeva.limitFrom}"/>
+                </h:form>
             </ui:define>
 
         </ui:composition>

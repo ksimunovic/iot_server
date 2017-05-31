@@ -21,6 +21,7 @@ import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+import org.foi.nwtis.karsimuno.BazaHelper;
 import org.foi.nwtis.karsimuno.konfiguracije.Konfiguracija;
 import org.foi.nwtis.karsimuno.konfiguracije.bp.BP_Konfiguracija;
 import org.foi.nwtis.karsimuno.server.ObradaSocketNaredbi;
@@ -84,7 +85,7 @@ class RadnaDretva extends Thread {
             ServerDretva.ukloniAktivnuDretvu(this.getName());
             Logger.getLogger(RadnaDretva.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
-            zatvoriVezuSaServeromIEvidentiraj();
+            zatvoriVezuSaServerom();
         }
     }
 
@@ -97,10 +98,12 @@ class RadnaDretva extends Thread {
     void obradiNaredbu(StringBuffer sb) {
         TestOpcija provjeriNaredbe = new TestOpcija();
         String[] args = new String[]{sb.toString()};
+        String korisnik = "nepoznat";
 
         odgovor = "";
         naredbe = provjeriNaredbe.serverSocketNaredbe(args);
         if (naredbe != null) {
+            korisnik = naredbe.get("korisnik");
             String statusPrava = provjeriKorisnika();
             if (!"OK;".equals(statusPrava)) {
                 odgovor = statusPrava;
@@ -118,6 +121,7 @@ class RadnaDretva extends Thread {
 
         naredbe = provjeriNaredbe.IoTMasterNaredbe(args);
         if (naredbe != null && !ServerDretva.pauzirajServer) {
+            korisnik = naredbe.get("korisnik");
             String statusPrava = provjeriKorisnika();
             if (!"OK;".equals(statusPrava)) {
                 odgovor = statusPrava;
@@ -130,6 +134,7 @@ class RadnaDretva extends Thread {
 
         naredbe = provjeriNaredbe.IoTNaredbe(args);
         if (naredbe != null && !ServerDretva.pauzirajServer) {
+            korisnik = naredbe.get("korisnik");
             String statusPrava = provjeriKorisnika();
             if (!"OK;".equals(statusPrava)) {
                 odgovor = statusPrava;
@@ -149,13 +154,15 @@ class RadnaDretva extends Thread {
         if (!odgovor.contains("ERR")) {
             posaljiMail();
         }
+
+        zabiljeziZahtjev(korisnik, sb.toString(), odgovor);
     }
 
     /**
      * Ako je ovo dretva koja je primila naredbu zaustavljanja servera onda čeka
      * da se server zaustavi pa tek onda zatvara socket i pripadajuće tokove
      */
-    private void zatvoriVezuSaServeromIEvidentiraj() {
+    private void zatvoriVezuSaServerom() {
         try {
             if (os != null && socket != null && !socket.isClosed()) {
                 os.write(odgovor.getBytes());
@@ -265,5 +272,28 @@ class RadnaDretva extends Thread {
             }
         }
         return prava;
+    }
+
+    private void zabiljeziZahtjev(String korisnik, String naredba, String odgovor) {
+        BazaHelper baza = new BazaHelper();
+        PreparedStatement stmt;
+        Connection conn;
+
+        try {
+            conn = baza.spojiBazu();
+
+            String sql = "INSERT INTO zahtjevi (korisnik, naredba, odgovor) VALUES (?, ?, ?)";
+            stmt = conn.prepareStatement(sql);
+            stmt.setString(1, korisnik);
+            stmt.setString(2, naredba);
+            stmt.setString(3, odgovor);
+
+            stmt.executeUpdate();
+
+        } catch (SQLException | ClassNotFoundException ex) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            baza.otkvaciBazu();
+        }
     }
 }

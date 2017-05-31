@@ -30,7 +30,7 @@ import org.foi.nwtis.karsimuno.rest.klijenti.GMKlijent;
 /**
  * REST Web Service
  *
- * @author Administrator
+ * @author Karlo
  */
 public class UredjajiRESTResource {
 
@@ -95,13 +95,12 @@ public class UredjajiRESTResource {
     // {"naziv":"testniUređaj","longitude":"45.0","latitude":"16.0"}
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.TEXT_PLAIN)
     public String postJson(String content) {
-        JsonObjectBuilder job = Json.createObjectBuilder();
-        job.add("status", 0);
+        Integer status = 0;
 
         if (postojiUredjaj(id) || content.isEmpty()) {
-            return job.build().toString();
+            return status.toString();
         }
 
         JsonReader reader = Json.createReader(new StringReader(content));
@@ -131,8 +130,7 @@ public class UredjajiRESTResource {
             stmt.setTimestamp(6, new Timestamp(System.currentTimeMillis()));
 
             if (stmt.executeUpdate() == 1) {
-                job = Json.createObjectBuilder();
-                job.add("status", "Uspjesno dodan uredjaj u bazu.");
+                status = 1;
             }
 
         } catch (SQLException | ClassNotFoundException ex) {
@@ -140,7 +138,7 @@ public class UredjajiRESTResource {
         } finally {
             baza.otkvaciBazu();
         }
-        return job.build().toString();
+        return status.toString();
     }
 
     /**
@@ -151,14 +149,12 @@ public class UredjajiRESTResource {
      */
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.TEXT_PLAIN)
     public String putJson(String content) {
-
-        JsonObjectBuilder job = Json.createObjectBuilder();
-        job.add("status", 0);
+Integer status = 0;
 
         if (!postojiUredjaj(id) || content.isEmpty()) {
-            return job.build().toString();
+            return status.toString();
         }
 
         JsonReader reader = Json.createReader(new StringReader(content));
@@ -185,15 +181,14 @@ public class UredjajiRESTResource {
             stmt.setString(5, id);
 
             if (stmt.executeUpdate() == 1) {
-                job = Json.createObjectBuilder();
-                job.add("status", 1);
+                status = 1;
             }
         } catch (SQLException | ClassNotFoundException ex) {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, null, ex);
         } finally {
             baza.otkvaciBazu();
         }
-        return job.build().toString();
+        return status.toString();
     }
 
     private boolean postojiUredjaj(String id) {
