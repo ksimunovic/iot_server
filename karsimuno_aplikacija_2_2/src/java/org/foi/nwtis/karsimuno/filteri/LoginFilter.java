@@ -23,7 +23,7 @@ import javax.servlet.http.HttpSession;
 @WebFilter(filterName = "FilterAplikacije", urlPatterns = {"/*"})
 public class LoginFilter implements Filter {
 
-    private final boolean debug = true;
+    private final boolean debug = false;
     private static final String[] GOST = new String[] {"/login.xhtml","/lokalizacija.xhtml","/registracija.xhtml"};
 
     // The filter configuration object we are associated with.  If

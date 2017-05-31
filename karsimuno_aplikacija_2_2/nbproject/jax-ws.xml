@@ -1,15 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jax-ws xmlns="http://www.netbeans.org/ns/jax-ws/1">
-  <services>
-    <service name="MeteoSOAP">
-      <implementation-class>org.foi.nwtis.karsimuno.ws.MeteoSOAP</implementation-class>
-    </service>
-  </services>
+  <services/>
   <clients>
-    <client name="IoT_Master">
-      <wsdl-url>http://nwtis.foi.hr:8080/DZ3_Master/IoT_Master?wsdl</wsdl-url>
-      <local-wsdl-file>nwtis.foi.hr_8080/DZ3_Master/IoT_Master.wsdl</local-wsdl-file>
-      <package-name>org.foi.nwtis.dkermek.ws.serveri</package-name>
+    <client name="MeteoSOAP">
+      <wsdl-url>http://localhost:8084/karsimuno_aplikacija_1/MeteoSOAP?wsdl</wsdl-url>
+      <local-wsdl-file>localhost_8084/karsimuno_aplikacija_1/MeteoSOAP.wsdl</local-wsdl-file>
+      <package-name>org.foi.nwtis.karsimuno.ws</package-name>
       <catalog-file>catalog.xml</catalog-file>
       <wsimport-options>
         <wsimport-option>
@@ -26,7 +22,7 @@
         </wsimport-option>
         <wsimport-option>
           <wsimport-option-name>wsdlLocation</wsimport-option-name>
-          <wsimport-option-value>http://nwtis.foi.hr:8080/DZ3_Master/IoT_Master?wsdl</wsimport-option-value>
+          <wsimport-option-value>http://localhost:8084/karsimuno_aplikacija_1/MeteoSOAP?wsdl</wsimport-option-value>
         </wsimport-option>
         <wsimport-option>
           <wsimport-option-name>xnocompile</wsimport-option-name>
@@ -39,5 +35,4 @@
       </wsimport-options>
     </client>
   </clients>
-  <jsr109>false</jsr109>
 </jax-ws>

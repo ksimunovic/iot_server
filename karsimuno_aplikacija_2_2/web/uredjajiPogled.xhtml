@@ -1,0 +1,132 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+    <f:view locale="#{lokalizacija.odabraniJezik}">
+        <h:head>
+            <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet"/>
+            <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+            <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+            <title>#{i18n.uredjajiPogled_title}</title>
+        </h:head>
+        <h:body>
+            <div class="container">
+                <div class="col-lg-10 horizontal">
+
+                    <h:form>
+                        <fieldset>
+                            <legend style="height: 60px;">#{i18n.uredjajiPogled_title}
+                                <h:outputLink style="float:right" value="index.xhtml">${i18n.link_index}</h:outputLink><br/>
+                                <h:outputLink style="float:right" value="lokalizacija.xhtml">${i18n.link_language}</h:outputLink><br/>
+                                <h:outputLink style="float:right" value="logout.xhtml">${i18n.link_logout}</h:outputLink><br/>
+                            </legend>
+
+                            <h:panelGroup style="#{uredjajiPogled.displayUpdateContainer}">
+                                <h:outputLabel value="Id:" class="col-lg-3 control-label" />
+                                <h:inputText id="id" value="#{uredjajiPogled.uredjaj.id}"/><br/>
+
+                                <h:outputLabel value="${i18n.uredjajiPogled_name}:" class="col-lg-3 control-label" />
+                                <h:inputText id="naziv" value="#{uredjajiPogled.uredjaj.naziv}"/><br/>
+
+                                <h:outputLabel value="${i18n.uredjajiPogled_latitude}:" class="col-lg-3 control-label" />
+                                <h:inputText id="latitude" value="#{uredjajiPogled.uredjaj.latitude}"/><br/>
+
+                                <h:outputLabel value="${i18n.uredjajiPogled_longitude}:" class="col-lg-3 control-label" />
+                                <h:inputText id="longitude" value="#{uredjajiPogled.uredjaj.longitude}"/><br/>
+
+                                <h:outputLabel value="${i18n.uredjajiPogled_status}:" class="col-lg-3 control-label" />
+                                <h:inputText id="status" value="#{uredjajiPogled.uredjaj.status}"/><br/>
+
+                                <h:commandButton value="${i18n.uredjajiPogled_submit}" action="#{uredjajiPogled.update()}" />
+                            </h:panelGroup>
+
+
+                            <br/>
+                        </fieldset>
+
+                        <br/>
+                        <h:outputText value="${i18n.register_error0}" rendered="#{uredjajiPogled.errorCode == 0}" />
+                        <h:outputText value="${i18n.register_error1}" rendered="#{uredjajiPogled.errorCode == 1}" />
+                        <h:outputText value="${i18n.register_error2}" rendered="#{uredjajiPogled.errorCode == 2}" />
+                        <p:dataTable var="u" value="#{uredjajiPogled.uredjaji}" >
+                            <p:column headerText="Id">
+                                <h:outputText value="#{u.id}" />
+                            </p:column>
+                            <p:column headerText="${i18n.uredjajiPogled_name}">
+                                <h:outputText value="#{u.naziv}" />
+                            </p:column>
+                            <p:column headerText="${i18n.uredjajiPogled_latitude}">
+                                <h:outputText value="#{u.latitude}" />
+                            </p:column>
+                            <p:column headerText="${i18n.uredjajiPogled_longitude}">
+                                <h:outputText value="#{u.longitude}" />
+                            </p:column>
+                            <p:column headerText="${i18n.uredjajiPogled_status}">
+                                <h:outputText value="#{u.status}" />
+                            </p:column>
+                            <p:column headerText="${i18n.uredjajiPogled_timeChanged}">
+                                <h:outputText value="#{u.vrijemePromjene}" />
+                            </p:column>
+                            <p:column headerText="${i18n.uredjajiPogled_timeCreated}">
+                                <h:outputText value="#{u.vrijemePromjene}" />
+                            </p:column>
+                            <p:column headerText="${i18n.uredjajiPogled_controls}">
+                                <h:commandButton value="${i18n.uredjajiPogled_edit}" action="#{uredjajiPogled.ucitajUredjaj(u)}"/>
+                                <h:commandButton value="${i18n.uredjajiPogled_address}" action="#{uredjajiPogled.dohvatiAdresu(u)}"/>
+                                <h:commandButton value="${i18n.uredjajiPogled_now}" action="#{uredjajiPogled.dohvatiVazece(u)}"/>
+                                <h:commandButton value="${i18n.uredjajiPogled_lastN}" action="#{uredjajiPogled.dohvatiZadnje(u)}"/>
+
+                            </p:column>
+                        </p:dataTable>
+                    </h:form>
+
+                    <br/><br/>
+                    <p:dataTable var="u" value="#{uredjajiPogled.meteoPodaci}" rendered="#{uredjajiPogled.meteoPodaci != null}" >
+                        <p:column headerText="${i18n.uredjajiPogled_clouds}">
+                            <h:outputText value="#{u.cloudsValue}" />
+                        </p:column>
+                        <p:column headerText="${i18n.uredjajiPogled_humidity}">
+                            <h:outputText value="#{u.humidityValue} #{u.humidityUnit}" />
+                        </p:column>
+                        <p:column headerText="${i18n.uredjajiPogled_pressure}">
+                            <h:outputText value="#{u.pressureValue} #{u.pressureUnit}" />
+                        </p:column>
+                        <p:column headerText="${i18n.uredjajiPogled_sunrise}">
+                            <h:outputText value="#{u.sunRise}" />
+                        </p:column>
+                        <p:column headerText="${i18n.uredjajiPogled_sunset}">
+                            <h:outputText value="#{u.sunSet}" />
+                        </p:column>
+                        <p:column headerText="${i18n.uredjajiPogled_temp}">
+                            <h:outputText value="#{u.temperatureValue} #{u.temperatureUnit}" />
+                        </p:column>
+                        <p:column headerText="${i18n.uredjajiPogled_tempMinMax}">
+                            <h:outputText value="#{u.temperatureMin}-#{u.temperatureMax} #{u.temperatureUnit}" />
+                        </p:column>
+                        <p:column headerText="${i18n.uredjajiPogled_weatherN}">
+                            <h:outputText value="#{u.weatherNumber}" />
+                        </p:column>
+                        <p:column headerText="${i18n.uredjajiPogled_weatherD}">
+                            <h:outputText value="#{u.weatherValue}" />
+                        </p:column>
+                        <p:column headerText="${i18n.uredjajiPogled_windSpeed}">
+                            <h:outputText value="#{u.windSpeedValue}" />
+                        </p:column>
+                        <p:column headerText="${i18n.uredjajiPogled_windDirection}">
+                            <h:outputText value="#{u.windDirectionValue}" /> 
+                        </p:column>
+                        <p:column headerText="${i18n.uredjajiPogled_lastEdit}">
+                            <h:outputText value="#{u.lastUpdate}" />
+                        </p:column>
+                    </p:dataTable>
+                </div>
+            </div>
+            <script>
+                #{uredjajiPogled.adresa}
+            </script>
+        </h:body>
+    </f:view>
+</html>
+

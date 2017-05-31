@@ -151,7 +151,7 @@ public class UredjajiRESTResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.TEXT_PLAIN)
     public String putJson(String content) {
-Integer status = 0;
+        Integer status = 0;
 
         if (!postojiUredjaj(id) || content.isEmpty()) {
             return status.toString();

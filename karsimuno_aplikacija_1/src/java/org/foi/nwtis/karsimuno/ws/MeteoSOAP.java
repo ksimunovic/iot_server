@@ -37,7 +37,7 @@ import org.foi.nwtis.karsimuno.slusaci.SlusacAplikacije;
  *
  * @author Karlo
  */
-//@WebService(serviceName = "MeteoSOAP") //FIXME: SOAP
+@WebService(serviceName = "MeteoSOAP") //FIXME: SOAP
 public class MeteoSOAP {
 
     private ResultSet rs = null;
