@@ -20,6 +20,7 @@
     <entry key="brojRedaka">5</entry>
     <entry key="mail.server">localhost</entry>
     <entry key="mail.port">143</entry>
+    <entry key="mail.numMessages">7</entry>
     <entry key="mail.subject">NWTiS poruka</entry>
     <entry key="mail.sender">karsimuno@nwtis.foi.hr</entry>
     <entry key="mail.receiver">awwrrqhh@sharklasers.com</entry>

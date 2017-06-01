@@ -91,7 +91,7 @@ public class LoginFilter implements Filter {
             return;
         }
 
-        if (Arrays.asList(GOST).contains(putanja) && session.getAttribute("korisnik") != null && putanja.contains(".xhtml")) {
+        if (Arrays.asList(GOST).contains(putanja) && !putanja.equals("/lokalizacija.xhtml") && session.getAttribute("korisnik") != null && putanja.contains(".xhtml")) {
             response.sendRedirect(request.getContextPath() + "/");
             return;
         }

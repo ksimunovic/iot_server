@@ -23,7 +23,8 @@
                                 <h:outputLink style="float:right" value="logout.xhtml">${i18n.link_logout}</h:outputLink><br/>
                             </legend>
 
-                            <h:panelGroup style="#{uredjajiPogled.displayUpdateContainer}">
+                            //TODO: FALI DODAVANJE UREDJAJA
+                            <h:panelGroup id="uredjaj"  style="#{uredjajiPogled.displayUpdateContainer}">
                                 <h:outputLabel value="Id:" class="col-lg-3 control-label" />
                                 <h:inputText id="id" value="#{uredjajiPogled.uredjaj.id}"/><br/>
 
@@ -39,18 +40,22 @@
                                 <h:outputLabel value="${i18n.uredjajiPogled_status}:" class="col-lg-3 control-label" />
                                 <h:inputText id="status" value="#{uredjajiPogled.uredjaj.status}"/><br/>
 
-                                <h:commandButton value="${i18n.uredjajiPogled_submit}" action="#{uredjajiPogled.update()}" />
+                                <h:commandButton value="${i18n.uredjajiPogled_submit}" action="#{uredjajiPogled.update()}" >
+                                    <f:ajax execute="uredjaj" render="uredjajiTablica @form"/>
+                                </h:commandButton>
                             </h:panelGroup>
-
 
                             <br/>
                         </fieldset>
 
                         <br/>
-                        <h:outputText value="${i18n.register_error0}" rendered="#{uredjajiPogled.errorCode == 0}" />
-                        <h:outputText value="${i18n.register_error1}" rendered="#{uredjajiPogled.errorCode == 1}" />
-                        <h:outputText value="${i18n.register_error2}" rendered="#{uredjajiPogled.errorCode == 2}" />
-                        <p:dataTable var="u" value="#{uredjajiPogled.uredjaji}" >
+                        <h:panelGroup id="error">
+                            <h:outputText value="${i18n.register_error0}" rendered="#{uredjajiPogled.errorCode == 0}" />
+                            <h:outputText value="${i18n.register_error1}" rendered="#{uredjajiPogled.errorCode == 1}" />
+                            <h:outputText value="${i18n.register_error2}" rendered="#{uredjajiPogled.errorCode == 2}" />
+                        </h:panelGroup>
+
+                        <p:dataTable id="uredjajiTablica" var="u" value="#{uredjajiPogled.uredjaji}" >
                             <p:column headerText="Id">
                                 <h:outputText value="#{u.id}" />
                             </p:column>
@@ -70,59 +75,70 @@
                                 <h:outputText value="#{u.vrijemePromjene}" />
                             </p:column>
                             <p:column headerText="${i18n.uredjajiPogled_timeCreated}">
-                                <h:outputText value="#{u.vrijemePromjene}" />
+                                <h:outputText value="#{u.vrijemeKreiranja}" />
                             </p:column>
                             <p:column headerText="${i18n.uredjajiPogled_controls}">
-                                <h:commandButton value="${i18n.uredjajiPogled_edit}" action="#{uredjajiPogled.ucitajUredjaj(u)}"/>
-                                <h:commandButton value="${i18n.uredjajiPogled_address}" action="#{uredjajiPogled.dohvatiAdresu(u)}"/>
-                                <h:commandButton value="${i18n.uredjajiPogled_now}" action="#{uredjajiPogled.dohvatiVazece(u)}"/>
-                                <h:commandButton value="${i18n.uredjajiPogled_lastN}" action="#{uredjajiPogled.dohvatiZadnje(u)}"/>
+                                <h:commandButton value="${i18n.uredjajiPogled_edit}" action="#{uredjajiPogled.ucitajUredjaj(u)}">
+                                    <f:ajax render="@form"/>
+                                </h:commandButton>
+                                <h:commandButton value="${i18n.uredjajiPogled_address}" action="#{uredjajiPogled.dohvatiAdresu(u)}">
+                                    <f:ajax render="@all"/>
+                                </h:commandButton>
+                                <h:commandButton value="${i18n.uredjajiPogled_now}" action="#{uredjajiPogled.dohvatiVazece(u)}">
+                                    <f:ajax render="prognozeTablica"/>
+                                </h:commandButton>
+                                <h:commandButton value="${i18n.uredjajiPogled_lastN}" action="#{uredjajiPogled.dohvatiZadnje(u)}">
+                                    <f:ajax render="prognozeTablica"/>
+                                </h:commandButton>
 
                             </p:column>
                         </p:dataTable>
                     </h:form>
 
                     <br/><br/>
-                    <p:dataTable var="u" value="#{uredjajiPogled.meteoPodaci}" rendered="#{uredjajiPogled.meteoPodaci != null}" >
-                        <p:column headerText="${i18n.uredjajiPogled_clouds}">
-                            <h:outputText value="#{u.cloudsValue}" />
-                        </p:column>
-                        <p:column headerText="${i18n.uredjajiPogled_humidity}">
-                            <h:outputText value="#{u.humidityValue} #{u.humidityUnit}" />
-                        </p:column>
-                        <p:column headerText="${i18n.uredjajiPogled_pressure}">
-                            <h:outputText value="#{u.pressureValue} #{u.pressureUnit}" />
-                        </p:column>
-                        <p:column headerText="${i18n.uredjajiPogled_sunrise}">
-                            <h:outputText value="#{u.sunRise}" />
-                        </p:column>
-                        <p:column headerText="${i18n.uredjajiPogled_sunset}">
-                            <h:outputText value="#{u.sunSet}" />
-                        </p:column>
-                        <p:column headerText="${i18n.uredjajiPogled_temp}">
-                            <h:outputText value="#{u.temperatureValue} #{u.temperatureUnit}" />
-                        </p:column>
-                        <p:column headerText="${i18n.uredjajiPogled_tempMinMax}">
-                            <h:outputText value="#{u.temperatureMin}-#{u.temperatureMax} #{u.temperatureUnit}" />
-                        </p:column>
-                        <p:column headerText="${i18n.uredjajiPogled_weatherN}">
-                            <h:outputText value="#{u.weatherNumber}" />
-                        </p:column>
-                        <p:column headerText="${i18n.uredjajiPogled_weatherD}">
-                            <h:outputText value="#{u.weatherValue}" />
-                        </p:column>
-                        <p:column headerText="${i18n.uredjajiPogled_windSpeed}">
-                            <h:outputText value="#{u.windSpeedValue}" />
-                        </p:column>
-                        <p:column headerText="${i18n.uredjajiPogled_windDirection}">
-                            <h:outputText value="#{u.windDirectionValue}" /> 
-                        </p:column>
-                        <p:column headerText="${i18n.uredjajiPogled_lastEdit}">
-                            <h:outputText value="#{u.lastUpdate}" />
-                        </p:column>
-                    </p:dataTable>
+                    <h:panelGroup id="prognozeTablica">
+                        <p:dataTable var="u" value="#{uredjajiPogled.meteoPodaci}" rendered="#{uredjajiPogled.meteoPodaci != null}" >
+                            <p:column headerText="${i18n.uredjajiPogled_clouds}">
+                                <h:outputText value="#{u.cloudsValue}" />
+                            </p:column>
+                            <p:column headerText="${i18n.uredjajiPogled_humidity}">
+                                <h:outputText value="#{u.humidityValue} #{u.humidityUnit}" />
+                            </p:column>
+                            <p:column headerText="${i18n.uredjajiPogled_pressure}">
+                                <h:outputText value="#{u.pressureValue} #{u.pressureUnit}" />
+                            </p:column>
+                            <p:column headerText="${i18n.uredjajiPogled_sunrise}">
+                                <h:outputText value="#{u.sunRise}" />
+                            </p:column>
+                            <p:column headerText="${i18n.uredjajiPogled_sunset}">
+                                <h:outputText value="#{u.sunSet}" />
+                            </p:column>
+                            <p:column headerText="${i18n.uredjajiPogled_temp}">
+                                <h:outputText value="#{u.temperatureValue} #{u.temperatureUnit}" />
+                            </p:column>
+                            <p:column headerText="${i18n.uredjajiPogled_tempMinMax}">
+                                <h:outputText value="#{u.temperatureMin}-#{u.temperatureMax} #{u.temperatureUnit}" />
+                            </p:column>
+                            <p:column headerText="${i18n.uredjajiPogled_weatherN}">
+                                <h:outputText value="#{u.weatherNumber}" />
+                            </p:column>
+                            <p:column headerText="${i18n.uredjajiPogled_weatherD}">
+                                <h:outputText value="#{u.weatherValue}" />
+                            </p:column>
+                            <p:column headerText="${i18n.uredjajiPogled_windSpeed}">
+                                <h:outputText value="#{u.windSpeedValue}" />
+                            </p:column>
+                            <p:column headerText="${i18n.uredjajiPogled_windDirection}">
+                                <h:outputText value="#{u.windDirectionValue}" /> 
+                            </p:column>
+                            <p:column headerText="${i18n.uredjajiPogled_lastEdit}">
+                                <h:outputText value="#{u.lastUpdate}" />
+                            </p:column>
+                        </p:dataTable>
+                    </h:panelGroup>
                 </div>
             </div>
+            <br/><br/>
             <script>
                 #{uredjajiPogled.adresa}
             </script>

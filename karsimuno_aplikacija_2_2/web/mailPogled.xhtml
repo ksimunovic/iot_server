@@ -1,0 +1,90 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <f:view locale="#{lokalizacija.odabraniJezik}">
+        <h:head>
+            <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet"/>
+            <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+            <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+            <title>${i18n.mailPogled_title}</title>
+        </h:head>
+        <style>
+            .mapaKontrole{
+                float: left;
+                margin-top: -3rem;
+                width: 50%;
+            }
+        </style>
+        <h:body>
+            <div class="container">
+                <div class="col-lg-10">
+                    <h:form>
+                        <legend style="height: 60px;">#{i18n.mailPogled_title}
+                            <h:outputLink style="float:right" value="index.xhtml">${i18n.link_index}</h:outputLink><br/>
+                            <h:outputLink style="float:right" value="lokalizacija.xhtml">${i18n.link_language}</h:outputLink><br/>
+                            <h:outputLink style="float:right" value="logout.xhtml">${i18n.link_logout}</h:outputLink><br/>
+                        </legend>
+                        <div class="mapaKontrole11">
+                        <div class="form-group">
+                            <h:outputLabel value="#{i18n.mailPogled_chooseFolder}" class="col-lg-3 control-label" />
+                            <div class="col-lg-6">
+                                <h:selectOneMenu value="#{mailPogled.odabranaMapa}">
+                                    <f:selectItems value="#{mailPogled.mape}" 
+                                                   var="mapa" 
+                                                   itemLabel="#{mapa.labela}" 
+                                                   itemValue="#{mapa.vrijednost}"/>
+                                </h:selectOneMenu>  
+                            </div>
+                        </div>
+
+                            <h:commandButton style="float: right;clear: left;margin-right: 20rem;" class="btn btn-danger" value="#{i18n.mailPogled_clean}" action="#{mailPogled.ocistiMapu()}"/>
+                            <h:commandButton style="float: right;clear: left;" class="btn btn-success" value="#{i18n.mailPogled_changeFolder}" action="#{mailPogled.promjenaMape()}"/>
+                        </div>
+                        <br/><br/><br/><br/>
+
+                        <div class="form-group">
+                            <h:outputLabel value="#{i18n.mailPogled_search}" class="col-lg-3 control-label" />
+                            <div class="col-lg-6">
+                                <h:inputText value="#{mailPogled.traziPoruke}" class="form-control"/>
+                            </div>
+                        </div>
+                        <h:commandButton style="float: right;margin-top: -15px;" class="btn btn-success" value="#{i18n.mailPogled_btnSearch}" action="#{mailPogled.traziPoruke()}"/><br/>
+                        <br/><br/>
+
+                        <h:dataTable value="#{mailPogled.poruke}" var="p" class="table table-striped">
+                            <h:column>
+                                <f:facet name="header">ID</f:facet>
+                                <h:outputText value="#{p.id}"/>
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header">#{i18n.mailPogled_sends}</f:facet>
+                                <h:outputText value="#{p.salje}"/>
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header">#{i18n.mailPogled_subject}</f:facet>
+                                <h:outputText value="#{p.predmet}"/>
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header">#{i18n.mailPogled_timeSent}</f:facet>
+                                <h:outputText value="#{p.vrijemeSlanja}"/>
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header">#{i18n.mailPogled_content}</f:facet>
+                                <h:outputText value="#{p.sadrzaj}"/>
+                            </h:column>
+                        </h:dataTable>
+
+                        <br/>
+                        #{i18n.mailPogled_total}: #{mailPogled.ukupnoPorukaMapa}<br/>
+                        <h:commandButton class="btn btn-success" value="#{i18n.mailPogled_previous}" action="#{mailPogled.prethodnePoruke()}" disabled="${mailPogled.onemoguciPrethodna}"/>
+                        <h:commandButton class="btn btn-success" style="float: right;" value="#{i18n.mailPogled_next}" action="#{mailPogled.sljedecePoruke()}" disabled="${mailPogled.onemoguciSljedeca}"/><br/>
+
+                    </h:form>
+                </div>
+            </div>
+        </h:body>
+    </f:view>
+</html>
+

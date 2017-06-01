@@ -171,14 +171,15 @@ public class UredjajiRESTResource {
 
         try {
             conn = baza.spojiBazu();
-            String sql = "UPDATE uredaji SET naziv = ?, latitude = ?, longitude = ?, vrijeme_promjene = ? WHERE id = ?";
+            String sql = "UPDATE uredaji SET naziv = ?, latitude = ?, longitude = ?, vrijeme_promjene = ?, status = ? WHERE id = ?";
 
             stmt = conn.prepareStatement(sql);
             stmt.setString(1, jo.getString("naziv"));
             stmt.setString(2, loc.getLatitude());
             stmt.setString(3, loc.getLongitude());
             stmt.setTimestamp(4, new Timestamp(System.currentTimeMillis()));
-            stmt.setString(5, id);
+            stmt.setInt(5, jo.getInt("status"));
+            stmt.setString(6, id);
 
             if (stmt.executeUpdate() == 1) {
                 status = 1;

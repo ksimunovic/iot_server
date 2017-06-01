@@ -128,7 +128,6 @@ public class UredjajiPogled implements Serializable {
 
     public void dohvatiAdresu(Uredjaj u) {
         adresa = "alert('" + dajAdresuUredjaja(u.id) + "');";
-        System.out.println("-----------" + adresa);
     }
     
     private String dajAdresuUredjaja(int id) {

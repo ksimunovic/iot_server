@@ -23,20 +23,22 @@
                             </legend>
 
                             <h:outputLabel value="${serverStatusPogled.prvaKomanda}" class="col-lg-5 control-label" />
-                            <h:selectOneMenu value="#{serverStatusPogled.prvaKomandaKraj}">
+                            <h:selectOneMenu id="prvaKomandaKraj" value="#{serverStatusPogled.prvaKomandaKraj}">
                                 <f:selectItem itemValue="PAUSE" itemLabel="PAUSE" />
                                 <f:selectItem itemValue="START" itemLabel="START" />
                                 <f:selectItem itemValue="STOP" itemLabel="STOP" />
                                 <f:selectItem itemValue="STATUS" itemLabel="STATUS" />
                             </h:selectOneMenu>
 
-                            <h:commandButton value="${i18n.serverStatusPogled_submit}" action="#{serverStatusPogled.posaljiPrvuKomandu()}" />
+                            <h:commandButton value="${i18n.serverStatusPogled_submit}" action="#{serverStatusPogled.posaljiPrvuKomandu()}" >
+                                <f:ajax execute="prvaKomandaKraj" render="prviOdgovor"/>
+                            </h:commandButton>
                             <br/>
-                            <h:outputLabel value="Odgovor: ${serverStatusPogled.prviOdgovor}" class="col-lg-5 control-label" />
+                            <h:outputLabel id="prviOdgovor" value="Odgovor: ${serverStatusPogled.prviOdgovor}" class="col-lg-5 control-label" />
 
                             <br/><br/><br/>
                             <h:outputLabel value="${serverStatusPogled.drugaKomanda}" class="col-lg-5 control-label" />
-                            <h:selectOneMenu value="#{serverStatusPogled.drugaKomandaKraj}">
+                            <h:selectOneMenu id="drugaKomandaKraj" value="#{serverStatusPogled.drugaKomandaKraj}">
                                 <f:selectItem itemValue="START" itemLabel="START" />
                                 <f:selectItem itemValue="STOP" itemLabel="STOP" />
                                 <f:selectItem itemValue="WORK" itemLabel="WORK" />
@@ -44,10 +46,12 @@
                                 <f:selectItem itemValue="STATUS" itemLabel="STATUS" />
                             </h:selectOneMenu>
 
-                            <h:commandButton value="${i18n.serverStatusPogled_submit}" action="#{serverStatusPogled.posaljiDruguKomandu()}" />
+                            <h:commandButton value="${i18n.serverStatusPogled_submit}" action="#{serverStatusPogled.posaljiDruguKomandu()}">
+                                <f:ajax execute="drugaKomandaKraj" render="drugiOdgovor"/>
+                            </h:commandButton>
 
                             <br/>
-                            <h:outputLabel value="Odgovor: ${serverStatusPogled.drugiOdgovor}" class="col-lg-5 control-label" />
+                            <h:outputLabel id="drugiOdgovor" value="Odgovor: ${serverStatusPogled.drugiOdgovor}" class="col-lg-5 control-label" />
                         </fieldset>
                     </h:form>
                 </div>

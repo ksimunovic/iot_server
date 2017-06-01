@@ -23,44 +23,46 @@
                             </legend>
 
                             <h:outputLabel value="${serverIoTPogled.prvaKomanda}" class="col-lg-5 control-label" />
-                            <h:selectOneMenu value="#{serverIoTPogled.prvaKomandaKraj}">
-                                <f:selectItem itemValue="LOAD" itemLabel="LOAD" />
+                            <h:selectOneMenu id="prvaKomandaKraj" value="#{serverIoTPogled.prvaKomandaKraj}">
+                                <f:selectItem itemValue="LOAD" itemLabel="LOAD" /> 
                                 <f:selectItem itemValue="CLEAR" itemLabel="CLEAR" />
                                 <f:selectItem itemValue="LIST" itemLabel="LIST" />
                             </h:selectOneMenu>
 
-                            <h:commandButton value="${i18n.serverStatusPogled_submit}" action="#{serverIoTPogled.posaljiPrvuKomandu()}" />
+                            <h:commandButton value="${i18n.serverStatusPogled_submit}" action="#{serverIoTPogled.posaljiPrvuKomandu()}" >
+                                <f:ajax execute="prvaKomandaKraj" render="prviOdgovor"/>
+                            </h:commandButton>
                             <br/>
-                            <h:outputLabel value="Odgovor: ${serverIoTPogled.prviOdgovor}" class="col-lg-5 control-label" />
+                            <h:outputLabel id="prviOdgovor" value="Odgovor: ${serverIoTPogled.prviOdgovor}" class="col-lg-5 control-label" />
 
                             <br/><br/><br/>
-
-
                             <h:outputLabel value="${serverIoTPogled.drugaKomanda}" class="col-lg-4 control-label" />
-                            <h:inputText value="#{serverIoTPogled.parametarPrvi}"/>
-                            <h:selectOneMenu value="#{serverIoTPogled.drugaKomandaKraj}">
+                            <h:inputText id="parametarPrvi" value="#{serverIoTPogled.parametarPrvi}"/>
+                            <h:selectOneMenu id="drugaKomandaKraj" value="#{serverIoTPogled.drugaKomandaKraj}">
                                 <f:selectItem itemValue="WORK" itemLabel="WORK" />
                                 <f:selectItem itemValue="WAIT" itemLabel="WAIT" />
                                 <f:selectItem itemValue="REMOVE" itemLabel="REMOVE" />
                                 <f:selectItem itemValue="STATUS" itemLabel="STATUS" />
                             </h:selectOneMenu>
-                            <h:commandButton value="${i18n.serverStatusPogled_submit}" action="#{serverIoTPogled.posaljiDruguKomandu()}" />
+                            <h:commandButton value="${i18n.serverStatusPogled_submit}" action="#{serverIoTPogled.posaljiDruguKomandu()}" >
+                                <f:ajax execute="parametarPrvi drugaKomandaKraj" render="drugiOdgovor"/>
+                            </h:commandButton>
                             <br/>
-                            <h:outputLabel value="Odgovor: ${serverIoTPogled.drugiOdgovor}" class="col-lg-5 control-label" />
-<br/> 
-<br/> 
-<br/> 
-                            <h:outputLabel value="${serverIoTPogled.trecaKomanda}" class="col-lg-4 control-label" />
-                            <h:inputText value="#{serverIoTPogled.parametarDrugi}"/>
-                            ADD
-                            <h:inputText value="#{serverIoTPogled.parametarTreci}"/>
-                            <h:inputText value="#{serverIoTPogled.parametarCetvrti}"/>
+                            <h:outputLabel id="drugiOdgovor" value="Odgovor: ${serverIoTPogled.drugiOdgovor}" class="col-lg-5 control-label" />
                             
-                            <h:commandButton value="${i18n.serverStatusPogled_submit}" action="#{serverIoTPogled.posaljiTrecuKomandu()}" />
+                            <br/><br/><br/> 
+                            <h:outputLabel value="${serverIoTPogled.trecaKomanda}" class="col-lg-4 control-label" />
+                            <h:inputText id="parametarDrugi" value="#{serverIoTPogled.parametarDrugi}"/>
+                            ADD
+                            <h:inputText id="parametarTreci" value="#{serverIoTPogled.parametarTreci}"/>
+                            <h:inputText id="parametarCetvrti" value="#{serverIoTPogled.parametarCetvrti}"/>
 
+                            <h:commandButton value="${i18n.serverStatusPogled_submit}" action="#{serverIoTPogled.posaljiTrecuKomandu()}"  >
+                                <f:ajax execute="parametarDrugi parametarTreci parametarCetvrti" render="treciOdgovor"/>
+                            </h:commandButton>
 
                             <br/>
-                            <h:outputLabel value="Odgovor: ${serverIoTPogled.treciOdgovor}" class="col-lg-5 control-label" />
+                            <h:outputLabel id="treciOdgovor" value="Odgovor: ${serverIoTPogled.treciOdgovor}" class="col-lg-5 control-label" />
                         </fieldset>
                     </h:form>
                 </div>

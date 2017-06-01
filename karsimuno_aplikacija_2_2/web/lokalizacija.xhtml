@@ -16,12 +16,9 @@
                     <fieldset>
                         <h:form class="horizontal">
                             <legend style="height: 60px;">#{i18n.index_naslov}
-                                <h:commandLink  style="float:right" value="#{i18n.index_saljiPoruku}" action="#{lokalizator.saljiPoruku}"/><br/>
-                                <h:commandLink  style="float:right" value="#{i18n.index_pregledPoruka}" action="#{lokalizator.pregledPoruka}"/><br/>
+                                <h:outputLink style="float:right" value="index.xhtml">${i18n.link_index}</h:outputLink><br/>
                             </legend>
-
                             <h:selectOneRadio value="#{lokalizacija.odabraniJezik}">
-
                                 <f:selectItems value="#{lokalizacija.izbornikJezika}" 
                                                var="jezik" 
                                                itemLabel="#{jezik.labela}" 
@@ -32,7 +29,6 @@
                             <div class="form-group">
                                 <div class="col-lg-offset-3 col-lg-10">
                                     <h:commandButton value="#{i18n.index_promjena}" action="#{lokalizacija.odaberiJezik}" class="btn btn-success"  />
-
                                 </div>
                             </div>
                         </h:form>
