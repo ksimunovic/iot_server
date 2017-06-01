@@ -1,0 +1,71 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+    <f:view locale="#{lokalizacija.odabraniJezik}">
+        <h:head>
+            <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet"/>
+            <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+            <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+            <title>#{i18n.serverIoTPogled_title}</title>
+        </h:head>
+        <h:body>
+            <div class="container">
+                <div class="col-lg-10 horizontal">
+                    <h:form>
+                        <fieldset>
+                            <legend style="height: 60px;">#{i18n.serverIoTPogled_title}
+                                <h:outputLink style="float:right" value="index.xhtml">${i18n.link_index}</h:outputLink><br/>
+                                <h:outputLink style="float:right" value="lokalizacija.xhtml">${i18n.link_language}</h:outputLink><br/>
+                                <h:outputLink style="float:right" value="logout.xhtml">${i18n.link_logout}</h:outputLink><br/>
+                            </legend>
+
+                            <h:outputLabel value="${serverIoTPogled.prvaKomanda}" class="col-lg-5 control-label" />
+                            <h:selectOneMenu value="#{serverIoTPogled.prvaKomandaKraj}">
+                                <f:selectItem itemValue="LOAD" itemLabel="LOAD" />
+                                <f:selectItem itemValue="CLEAR" itemLabel="CLEAR" />
+                                <f:selectItem itemValue="LIST" itemLabel="LIST" />
+                            </h:selectOneMenu>
+
+                            <h:commandButton value="${i18n.serverStatusPogled_submit}" action="#{serverIoTPogled.posaljiPrvuKomandu()}" />
+                            <br/>
+                            <h:outputLabel value="Odgovor: ${serverIoTPogled.prviOdgovor}" class="col-lg-5 control-label" />
+
+                            <br/><br/><br/>
+
+
+                            <h:outputLabel value="${serverIoTPogled.drugaKomanda}" class="col-lg-4 control-label" />
+                            <h:inputText value="#{serverIoTPogled.parametarPrvi}"/>
+                            <h:selectOneMenu value="#{serverIoTPogled.drugaKomandaKraj}">
+                                <f:selectItem itemValue="WORK" itemLabel="WORK" />
+                                <f:selectItem itemValue="WAIT" itemLabel="WAIT" />
+                                <f:selectItem itemValue="REMOVE" itemLabel="REMOVE" />
+                                <f:selectItem itemValue="STATUS" itemLabel="STATUS" />
+                            </h:selectOneMenu>
+                            <h:commandButton value="${i18n.serverStatusPogled_submit}" action="#{serverIoTPogled.posaljiDruguKomandu()}" />
+                            <br/>
+                            <h:outputLabel value="Odgovor: ${serverIoTPogled.drugiOdgovor}" class="col-lg-5 control-label" />
+<br/> 
+<br/> 
+<br/> 
+                            <h:outputLabel value="${serverIoTPogled.trecaKomanda}" class="col-lg-4 control-label" />
+                            <h:inputText value="#{serverIoTPogled.parametarDrugi}"/>
+                            ADD
+                            <h:inputText value="#{serverIoTPogled.parametarTreci}"/>
+                            <h:inputText value="#{serverIoTPogled.parametarCetvrti}"/>
+                            
+                            <h:commandButton value="${i18n.serverStatusPogled_submit}" action="#{serverIoTPogled.posaljiTrecuKomandu()}" />
+
+
+                            <br/>
+                            <h:outputLabel value="Odgovor: ${serverIoTPogled.treciOdgovor}" class="col-lg-5 control-label" />
+                        </fieldset>
+                    </h:form>
+                </div>
+            </div>
+        </h:body>
+    </f:view>
+</html>
+

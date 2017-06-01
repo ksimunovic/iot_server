@@ -24,7 +24,7 @@
                             <h:inputText id="korisnickoIme" value="#{login.korisnickoIme}"/><br/>
                             <h:outputLabel value="${i18n.login_password}:" class="col-lg-3 control-label" />
                             <h:inputSecret id="lozinka" value="#{login.lozinka}"/><br/>
-                            <h:commandButton value="${i18n.login_submit}" action="#{login.login()}" />
+                            <h:commandButton value="${i18n.login_submit}" action="#{login.login()}"  />
 
                             <br/>
                             <h:outputText value="${i18n.login_error}" rendered="#{login.error}" />

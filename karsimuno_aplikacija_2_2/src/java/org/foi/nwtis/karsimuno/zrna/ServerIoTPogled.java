@@ -12,23 +12,28 @@ import org.foi.nwtis.karsimuno.rest.klijenti.KorisniciRESTResource;
 
 /**
  *
- * @author Karlo
+ * @author Administrator
  */
-@Named(value = "serverStatusPogled")
+@Named(value = "serverIoTPogled")
 @RequestScoped
-public class ServerStatusPogled {
+public class ServerIoTPogled {
 
     private Korisnik korisnik = null;
     private String prvaKomandaKraj = "";
     private String drugaKomandaKraj = "";
     private String prviOdgovor = "";
     private String drugiOdgovor = "";
+    private String treciOdgovor = "";
+    private Integer parametarPrvi;
+    private Integer parametarDrugi;
+    private String parametarTreci;
+    private String parametarCetvrti;
     private KorisniciRESTResource korisniciResource;
 
     /**
-     * Creates a new instance of ServerStatusPogled
+     * Creates a new instance of ServerIoTPogled
      */
-    public ServerStatusPogled() {
+    public ServerIoTPogled() {
     }
 
     public Korisnik getKorisnik() {
@@ -52,7 +57,7 @@ public class ServerStatusPogled {
         if (korisnik == null) {
             getKorisnik();
         }
-        return "USER " + korisnik.korisnickoIme + "; PASSWD " + korisnik.lozinka + "; ";
+        return "USER " + korisnik.korisnickoIme + "; PASSWD " + korisnik.lozinka + "; IoT_Master ";
     }
 
     public String getPrvaKomandaKraj() {
@@ -75,7 +80,7 @@ public class ServerStatusPogled {
         if (korisnik == null) {
             getKorisnik();
         }
-        return "USER " + korisnik.korisnickoIme + "; PASSWD " + korisnik.lozinka + "; IoT_Master ";
+        return "USER " + korisnik.korisnickoIme + "; PASSWD " + korisnik.lozinka + "; IoT ";
     }
 
     public String getPrviOdgovor() {
@@ -84,6 +89,14 @@ public class ServerStatusPogled {
 
     public String getDrugiOdgovor() {
         return drugiOdgovor;
+    }
+
+    public Integer getParametarPrvi() {
+        return parametarPrvi;
+    }
+
+    public void setParametarPrvi(Integer parametarPrvi) {
+        this.parametarPrvi = parametarPrvi;
     }
 
     public void posaljiPrvuKomandu() {
@@ -102,10 +115,66 @@ public class ServerStatusPogled {
         ServletContext context = (ServletContext) facesContext.getExternalContext().getContext();
         Konfiguracija konf = (Konfiguracija) context.getAttribute("Ostatak_Konf");
 
-        String naredba = getDrugaKomanda() + drugaKomandaKraj + ";";
+        String naredba = getDrugaKomanda() + parametarPrvi + " " + drugaKomandaKraj + ";";
 
         ServerHelper server = new ServerHelper(Integer.parseInt(konf.dajPostavku("port")));
         drugiOdgovor = server.posaljiNaredbu(naredba);
     }
 
+    public String getTreciOdgovor() {
+        return treciOdgovor;
+    }
+
+    public void setTreciOdgovor(String treciOdgovor) {
+        this.treciOdgovor = treciOdgovor;
+    }
+
+    public Integer getParametarDrugi() {
+        return parametarDrugi;
+    }
+
+    public void setParametarDrugi(Integer parametarDrugi) {
+        this.parametarDrugi = parametarDrugi;
+    }
+
+    public String getParametarTreci() {
+        return parametarTreci;
+    }
+
+    public void setParametarTreci(String parametarTreci) {
+        this.parametarTreci = parametarTreci;
+    }
+
+    public String getParametarCetvrti() {
+        return parametarCetvrti;
+    }
+
+    public void setParametarCetvrti(String parametarCetvrti) {
+        this.parametarCetvrti = parametarCetvrti;
+    }
+
+    
+    
+    public String getTrecaKomanda() {
+        if (korisnik == null) {
+            getKorisnik();
+        }
+        return "USER " + korisnik.korisnickoIme + "; PASSWD " + korisnik.lozinka + "; IoT ";
+    }
+
+    public void posaljiTrecuKomandu() {
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        ServletContext context = (ServletContext) facesContext.getExternalContext().getContext();
+        Konfiguracija konf = (Konfiguracija) context.getAttribute("Ostatak_Konf");
+
+        String naredba = getTrecaKomanda() + parametarDrugi + " ADD \"" + parametarTreci + "\" \"" + parametarCetvrti + "\";";
+
+        ServerHelper server = new ServerHelper(Integer.parseInt(konf.dajPostavku("port")));
+        treciOdgovor = server.posaljiNaredbu(naredba);
+    }
+
+    /**
+     * Obavlja se slanjem pripadajuće komande USER korisnik; PASSWD lozinka; IoT
+     * d{1-6} ADD ″naziv″;
+     */
 }

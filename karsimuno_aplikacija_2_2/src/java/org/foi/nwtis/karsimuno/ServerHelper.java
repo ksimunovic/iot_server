@@ -30,7 +30,6 @@ public class ServerHelper {
         StringBuilder sb = null;
         openServerConnection();
         try {
-            socket = new Socket("localhost", port);
             is = socket.getInputStream();
             os = socket.getOutputStream();
         } catch (IOException ex) {

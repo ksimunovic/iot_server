@@ -4,7 +4,11 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.util.Arrays;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -15,103 +19,87 @@ import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import org.foi.nwtis.karsimuno.ejb.eb.Dnevnik;
+import org.foi.nwtis.karsimuno.ejb.sb.DnevnikFacade;
 
 /**
  *
  * @author Administrator
  */
-@WebFilter(filterName = "FilterAplikacije", urlPatterns = {"/*"})
-public class LoginFilter implements Filter {
+@WebFilter(filterName = "DnevnikFilter", urlPatterns = {"/*"})
+public class DnevnikFilter implements Filter {
 
-    private final boolean debug = false;
-    private static final String[] GOST = new String[] {"/login.xhtml","/lokalizacija.xhtml","/registracija.xhtml"};
+    DnevnikFacade dnevnikFacade = lookupDnevnikFacadeBean();
 
-    // The filter configuration object we are associated with.  If
-    // this value is null, this filter instance is not currently
-    // configured. 
+    private static final boolean debug = false;
+    long startVrijeme;
+
     private FilterConfig filterConfig = null;
 
-    public LoginFilter() {
+    public DnevnikFilter() {
     }
 
-    private void doBeforeProcessing(ServletRequest req, ServletResponse res)
+    private void doBeforeProcessing(ServletRequest request, ServletResponse response)
             throws IOException, ServletException {
+        if (debug) {
+            log("DnevnikFilter:DoBeforeProcessing");
+        }
     }
 
     private void doAfterProcessing(ServletRequest req, ServletResponse res)
             throws IOException, ServletException {
         if (debug) {
-            log("FilterAplikacije:DoAfterProcessing");
+            log("DnevnikFilter:DoAfterProcessing");
         }
+
+        HttpServletRequest request = (HttpServletRequest) req;
+        HttpServletResponse response = (HttpServletResponse) res;
+
+        zabiljeziUDnevnik(request, System.currentTimeMillis() - startVrijeme, response.getStatus());
+    }
+
+    private void zabiljeziUDnevnik(HttpServletRequest request, long vrijemeProteklo, int status) {
+        String korisnickoIme;
+
+        HttpSession session = request.getSession(false);
+        if (session == null || session.getAttribute("korisnik") == null) {
+            korisnickoIme = "gost";
+        } else {
+            korisnickoIme = (String) session.getAttribute("korisnik");
+        }
+
+        dnevnikFacade.create(new Dnevnik(null, korisnickoIme, request.getRequestURL().toString(), request.getRemoteAddr(), (int) vrijemeProteklo, status));
     }
 
     /**
      *
-     * @param req The servlet request we are processing
-     * @param res The servlet response we are creating
+     * @param request The servlet request we are processing
+     * @param response The servlet response we are creating
      * @param chain The filter chain we are processing
      *
      * @exception IOException if an input/output error occurs
      * @exception ServletException if a servlet error occurs
      */
-    @Override
-    public void doFilter(ServletRequest req, ServletResponse res,
+    public void doFilter(ServletRequest request, ServletResponse response,
             FilterChain chain)
             throws IOException, ServletException {
 
-        HttpServletRequest request = (HttpServletRequest) req;
-        HttpServletResponse response = (HttpServletResponse) res;
-
         if (debug) {
-            log("FilterAplikacije:doFilter()");
+            log("DnevnikFilter:doFilter()");
         }
 
-        doBeforeProcessing(req, res);
+        doBeforeProcessing(request, response);
 
-        if (debug) {
-            log("FilterAplikacije:DoBeforeProcessing " + request.getServletPath());
-        }
-
-        String loginURI = request.getContextPath() + "/login.xhtml";
-        String putanja = request.getServletPath();
-        HttpSession session = request.getSession(false);
-        if (session == null) {
-            session = request.getSession(true);
-        }
-        
-        if (!Arrays.asList(GOST).contains(putanja) && session.getAttribute("korisnik") == null && putanja.contains(".xhtml")) {
-            response.sendRedirect(loginURI);
-            return;
-        }
-
-        if (putanja.equals("/logout.xhtml") && session.getAttribute("korisnik") != null && putanja.contains(".xhtml")) {
-            session.removeAttribute("korisnik");
-            session.invalidate();
-            response.sendRedirect(loginURI);
-            return;
-        }
-
-        if (Arrays.asList(GOST).contains(putanja) && session.getAttribute("korisnik") != null && putanja.contains(".xhtml")) {
-            response.sendRedirect(request.getContextPath() + "/");
-            return;
-        }
-
-        request.setCharacterEncoding("UTF-8");
         Throwable problem = null;
         try {
-            chain.doFilter(req, res);
+            chain.doFilter(request, response);
         } catch (Throwable t) {
-            // If an exception is thrown somewhere down the filter chain,
-            // we still want to execute our after processing, and then
-            // rethrow the problem after that.
             problem = t;
             t.printStackTrace();
         }
 
-        doAfterProcessing(req, res);
+        doAfterProcessing(request, response);
 
-        // If there was a problem, we want to rethrow it if it is
-        // a known type, otherwise log it.
         if (problem != null) {
             if (problem instanceof ServletException) {
                 throw (ServletException) problem;
@@ -119,7 +107,7 @@ public class LoginFilter implements Filter {
             if (problem instanceof IOException) {
                 throw (IOException) problem;
             }
-            sendProcessingError(problem, res);
+            sendProcessingError(problem, response);
         }
     }
 
@@ -152,7 +140,7 @@ public class LoginFilter implements Filter {
         this.filterConfig = filterConfig;
         if (filterConfig != null) {
             if (debug) {
-                log("FilterAplikacije:Initializing filter");
+                log("DnevnikFilter:Initializing filter");
             }
         }
     }
@@ -163,9 +151,9 @@ public class LoginFilter implements Filter {
     @Override
     public String toString() {
         if (filterConfig == null) {
-            return ("FilterAplikacije()");
+            return ("DnevnikFilter()");
         }
-        StringBuffer sb = new StringBuffer("FilterAplikacije(");
+        StringBuffer sb = new StringBuffer("DnevnikFilter(");
         sb.append(filterConfig);
         sb.append(")");
         return (sb.toString());
@@ -181,6 +169,7 @@ public class LoginFilter implements Filter {
                 PrintWriter pw = new PrintWriter(ps);
                 pw.print("<html>\n<head>\n<title>Error</title>\n</head>\n<body>\n"); //NOI18N
 
+                // PENDING! Localize this for next official release
                 pw.print("<h1>The resource did not process correctly</h1>\n<pre>\n");
                 pw.print(stackTrace);
                 pw.print("</pre></body>\n</html>"); //NOI18N
@@ -217,4 +206,15 @@ public class LoginFilter implements Filter {
     public void log(String msg) {
         filterConfig.getServletContext().log(msg);
     }
+
+    private DnevnikFacade lookupDnevnikFacadeBean() {
+        try {
+            Context c = new InitialContext();
+            return (DnevnikFacade) c.lookup("java:global/karsimuno_aplikacija_2/karsimuno_aplikacija_2_1/DnevnikFacade!org.foi.nwtis.karsimuno.ejb.sb.DnevnikFacade");
+        } catch (NamingException ne) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", ne);
+            throw new RuntimeException(ne);
+        }
+    }
+
 }
