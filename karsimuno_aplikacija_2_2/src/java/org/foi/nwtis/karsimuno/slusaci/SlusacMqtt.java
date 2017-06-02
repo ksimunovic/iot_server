@@ -1,5 +1,5 @@
 /**
- * Licensed to the Apache Software Foundation (ASF) under one or more
+ * Licensed to the Apache Software under one or more
  * contributor license agreements.  See the NOTICE file distributed with
  * this work for additional information regarding copyright ownership.
  * The ASF licenses this file to You under the Apache License, Version 2.0
@@ -23,25 +23,25 @@ import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.jms.Connection;
 import javax.jms.ConnectionFactory;
 import javax.jms.Destination;
 import javax.jms.JMSException;
-import javax.jms.Message;
 import javax.jms.MessageProducer;
 import javax.jms.ObjectMessage;
 import javax.jms.Session;
-import javax.jms.TextMessage;
 import javax.json.Json;
 import javax.json.JsonObject;
 import javax.json.JsonReader;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
-import org.foi.nwtis.karsimuno.JMSPorukaMail;
+import org.foi.nwtis.karsimuno.JMSPorukaMqtt;
 import org.foi.nwtis.karsimuno.ejb.eb.Poruke;
 import org.foi.nwtis.karsimuno.ejb.sb.PorukeFacade;
 import org.fusesource.hawtbuf.Buffer;
@@ -62,24 +62,31 @@ class SlusacMqtt extends Thread {
     private CallbackConnection connection;
     private int slot;
     private int obradjenihPoruka;
-    private int brojPoruka;
+    private MQTT mqtt;
+    private long pocetakObrade = System.currentTimeMillis();
+    private List<String> tekstovi = new ArrayList<>();
+    final String destination = "/NWTiS/karsimuno";
 
     public SlusacMqtt(int slot) {
         this.slot = slot;
+        setName("SlusacMQTT");
     }
 
     @Override
     public void interrupt() {
         super.interrupt();
-        connection.kill(new Callback<Void>() {
-            @Override
-            public void onSuccess(Void t) {
-            }
 
-            @Override
-            public void onFailure(Throwable thrwbl) {
-            }
-        });
+        if (connection != null) {
+            connection.kill(new Callback<Void>() {
+                @Override
+                public void onSuccess(Void t) {
+                }
+
+                @Override
+                public void onFailure(Throwable thrwbl) {
+                }
+            });
+        }
     }
 
     @Override
@@ -90,9 +97,8 @@ class SlusacMqtt extends Thread {
         String password = "aCXwp";
         String host = "nwtis.foi.hr";
         int port = 61613;
-        final String destination = "/NWTiS/karsimuno";
 
-        MQTT mqtt = new MQTT();
+        mqtt = new MQTT();
         try {
             mqtt.setHost(host, port);
         } catch (URISyntaxException ex) {
@@ -103,7 +109,7 @@ class SlusacMqtt extends Thread {
 
         connection = mqtt.callbackConnection();
         connection.listener(new org.fusesource.mqtt.client.Listener() {
-            long count = 0;
+            int count = 0;
 
             @Override
             public void onConnected() {
@@ -145,31 +151,15 @@ class SlusacMqtt extends Thread {
                 porukeFacade.create(new Poruke(null, jo.getInt("IoT"), ts, jo.getString("tekst"), Integer.parseInt(jo.getString("status"))));
 
                 if (obradjenihPoruka >= slot) {
+                    try {
+                        JMSPorukaMqtt jmsPoruka = new JMSPorukaMqtt(count, pocetakObrade, System.currentTimeMillis(), obradjenihPoruka, tekstovi);
+                        sendJMSMessageToNWTiS_karsimuno_2(jmsPoruka);
+                    } catch (JMSException | NamingException ex) {
+                        Logger.getLogger(SlusacMqtt.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    pocetakObrade = System.currentTimeMillis();
                     obradjenihPoruka = 0;
-                    //TODO: poslati JMS poruku (naziv reda čekanja NWTiS_{korisnicko_ime}_2)
-
-//                    try {
-//                        JMSPoruka jmsPoruka = new JMSPoruka((brojPoruka + 1), pocetakObrade, zavrsetakObrade, brojProcitanihPoruka, brojNWTiSPoruka);
-//                        sendJMSMessageToNWTiS_karsimuno_2(jmsPoruka);
-//                    } catch (JMSException | NamingException ex) {
-//                        Logger.getLogger(SlusacMqtt.class.getName()).log(Level.SEVERE, null, ex);
-//                    }
-                    prebrojiPoruke();
-
-                    /**
-                     * treba poslati JMS poruku (naziv reda čekanja
-                     * NWTiS_{korisnicko_ime}_2) s podacima o rednom broju JMS
-                     * poruke koja se šalje COUNT?, vremenu početka i završetka
-                     * prikupljanja tog slota, broju obrađenih poruka, kolekciji
-                     * u koju se sprema atribut ″tekst″ primljenih MQTT poruke u
-                     * slotu. 
-                     * Poruka treba biti u obliku ObjectMessage, pri čemu
-                     * je naziv vlastite klase proizvoljan, a njena struktura
-                     * treba sadržavati potrebne podatke koji su prethodno
-                     * spomenuti. Red čekanja treba ima vlastiti brojač JMS
-                     * poruka.
-                     *
-                     */
+                    tekstovi = new ArrayList<>();
                 }
             }
         });
@@ -189,6 +179,7 @@ class SlusacMqtt extends Thread {
                         System.exit(-2);
                     }
                 });
+
             }
 
             @Override
@@ -225,7 +216,7 @@ class SlusacMqtt extends Thread {
         }
     }
 
-    private void sendJMSMessageToNWTiS_karsimuno_2(Object messageData) throws JMSException, NamingException {
+    synchronized private void sendJMSMessageToNWTiS_karsimuno_2(Object messageData) throws JMSException, NamingException {
         Context c = new InitialContext();
         ConnectionFactory cf = (ConnectionFactory) c.lookup("java:comp/DefaultJMSConnectionFactory");
         Connection conn = null;
@@ -254,7 +245,4 @@ class SlusacMqtt extends Thread {
         }
     }
 
-    public void prebrojiPoruke() {
-        brojPoruka = porukeFacade.count();
-    }
 }

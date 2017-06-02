@@ -8,27 +8,35 @@
             <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet"/>
             <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
             <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-            <title>#{i18n.index_naslov}</title>
+            <title>#{i18n.link_language}</title>
         </h:head>
+        <style>
+            table{
+                margin: 0 auto;
+            }
+            td {
+                display: block;
+            }
+        </style>
         <h:body>
             <div class="container">
                 <div class="col-lg-10">
                     <fieldset>
                         <h:form class="horizontal">
-                            <legend style="height: 60px;">#{i18n.index_naslov}
+                            <legend style="height: 60px;">#{i18n.link_language}
                                 <h:outputLink style="float:right" value="index.xhtml">${i18n.link_index}</h:outputLink><br/>
                             </legend>
                             <h:selectOneRadio value="#{lokalizacija.odabraniJezik}">
-                                <f:selectItems value="#{lokalizacija.izbornikJezika}" 
-                                               var="jezik" 
-                                               itemLabel="#{jezik.labela}" 
-                                               itemValue="#{jezik.vrijednost}"
-                                               />
+                                <f:selectItem itemValue="hr" itemLabel="#{i18n.jezik_croatian}"/>
+                                <f:selectItem itemValue="en" itemLabel="#{i18n.jezik_english}"/>
+                                <f:selectItem itemValue="de" itemLabel="#{i18n.jezik_deutsch}"/>
+                                <f:selectItem itemValue="es" itemLabel="#{i18n.jezik_spanish}"/>
+                                <f:selectItem itemValue="it" itemLabel="#{i18n.jezik_italian}"/>
                             </h:selectOneRadio>
                             <br/><br/>
-                            <div class="form-group">
+                            <div class="form-group" style="float: right;">
                                 <div class="col-lg-offset-3 col-lg-10">
-                                    <h:commandButton value="#{i18n.index_promjena}" action="#{lokalizacija.odaberiJezik}" class="btn btn-success"  />
+                                    <h:commandButton value="#{i18n.lokalizacija_change}" action="#{lokalizacija.odaberiJezik}" class="btn btn-success"  />
                                 </div>
                             </div>
                         </h:form>

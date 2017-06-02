@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package org.foi.nwtis.karsimuno.zrna;
 
 import javax.inject.Named;
@@ -28,8 +23,7 @@ import org.foi.nwtis.karsimuno.ws.MeteoSOAP_Service;
  */
 @Named(value = "uredjajiPogled")
 @RequestScoped
-//@ManagedBean(name = "uredjajiPogled")
-public class UredjajiPogled implements Serializable {
+public class UredjajiPogled {
 
     @WebServiceRef(wsdlLocation = "WEB-INF/wsdl/localhost_8084/karsimuno_aplikacija_1/MeteoSOAP.wsdl")
     private MeteoSOAP_Service service;
@@ -122,21 +116,31 @@ public class UredjajiPogled implements Serializable {
 
         String json = uredjaj.toJson();
         uredjajiResource = new UredjajiRESTResource(Integer.toString(uredjaj.id));
-        uredjajiResource.putJson(json);
+        if (uredjaj.id == 0) {
+            uredjajiResource.postJson(json);
+        } else {
+            uredjajiResource.putJson(json);
+        }
         ponovoUcitaj = true;
+        uredjaj = new Uredjaj();
     }
 
+    public void create(){
+        uredjaj = new Uredjaj();
+        displayUpdateContainer = "display: none";
+    }
+    
     public void dohvatiAdresu(Uredjaj u) {
         adresa = "alert('" + dajAdresuUredjaja(u.id) + "');";
     }
-    
+
     private String dajAdresuUredjaja(int id) {
         // Note that the injected javax.xml.ws.Service reference as well as port objects are not thread safe.
         // If the calling of port operations may lead to race condition some synchronization is required.
         org.foi.nwtis.karsimuno.ws.MeteoSOAP port = service.getMeteoSOAPPort();
         return port.dajAdresuUredjaja(id);
     }
-    
+
     public void dohvatiVazece(Uredjaj uredjaj) {
         meteoPodaci = dajVazeceMeteoPodatkeZaUredjaj(uredjaj.id);
     }
@@ -152,7 +156,7 @@ public class UredjajiPogled implements Serializable {
         //TODO: Testirati kad budem imao meteo podatke u bazi
         meteoPodaci = dajZadnjeMeteoPodatkeZaUredjaj(uredjaj.id);
     }
-    
+
     private MeteoPodaci dajZadnjeMeteoPodatkeZaUredjaj(int id) {
         // Note that the injected javax.xml.ws.Service reference as well as port objects are not thread safe.
         // If the calling of port operations may lead to race condition some synchronization is required.
