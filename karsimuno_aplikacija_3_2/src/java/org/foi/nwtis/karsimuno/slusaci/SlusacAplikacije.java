@@ -14,7 +14,6 @@ import org.foi.nwtis.karsimuno.konfiguracije.Konfiguracija;
 import org.foi.nwtis.karsimuno.konfiguracije.KonfiguracijaApstraktna;
 import org.foi.nwtis.karsimuno.konfiguracije.NeispravnaKonfiguracija;
 import org.foi.nwtis.karsimuno.konfiguracije.NemaKonfiguracije;
-import org.foi.nwtis.karsimuno.konfiguracije.bp.BP_Konfiguracija;
 
 /**
  * Web application lifecycle listener.
@@ -24,23 +23,19 @@ import org.foi.nwtis.karsimuno.konfiguracije.bp.BP_Konfiguracija;
 @WebListener
 public class SlusacAplikacije implements ServletContextListener {
 
+    SingletonSB singletonSB = lookupSingletonSBBean();
+
     public static ServletContext context = null;
-    private BP_Konfiguracija BP_Konfig;
     private Konfiguracija konf;
-    private SlusacMqtt mqtt;
 
     @Override
     public void contextInitialized(ServletContextEvent sce) {
         context = sce.getServletContext();
         ucitajKonfiguraciju();
-
-        mqtt = new SlusacMqtt(Integer.parseInt(konf.dajPostavku("mqtt.slot")));
-        mqtt.start(); //FIXME: pokreni mqtt dretvu
     }
 
     @Override
     public void contextDestroyed(ServletContextEvent sce) {
-        mqtt.interrupt();
     }
 
     /**
@@ -51,9 +46,6 @@ public class SlusacAplikacije implements ServletContextListener {
         String path = context.getRealPath("/WEB-INF") + java.io.File.separator;
         String datoteka = context.getInitParameter("konfiguracija");
 
-        BP_Konfig = new BP_Konfiguracija(path + datoteka);
-        context.setAttribute("BP_Konfig", BP_Konfig);
-
         konf = null;
         try {
             konf = KonfiguracijaApstraktna.preuzmiKonfiguraciju(path + datoteka);
@@ -61,7 +53,6 @@ public class SlusacAplikacije implements ServletContextListener {
 
             SingletonSB singletonSB = lookupSingletonSBBean();
             singletonSB.konf = konf;
-            singletonSB.BP_Konfig = BP_Konfig;
             singletonSB.start();
 
         } catch (NemaKonfiguracije | NeispravnaKonfiguracija ex) {
@@ -77,10 +68,11 @@ public class SlusacAplikacije implements ServletContextListener {
     private SingletonSB lookupSingletonSBBean() {
         try {
             Context c = new InitialContext();
-            return (SingletonSB) c.lookup("java:global/karsimuno_aplikacija_2/karsimuno_aplikacija_2_1/SingletonSB!org.foi.nwtis.karsimuno.ejb.sb.SingletonSB");
+            return (SingletonSB) c.lookup("java:global/karsimuno_aplikacija_3/karsimuno_aplikacija_3_1/SingletonSB!org.foi.nwtis.karsimuno.ejb.sb.SingletonSB");
         } catch (NamingException ne) {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", ne);
             throw new RuntimeException(ne);
         }
     }
+
 }
