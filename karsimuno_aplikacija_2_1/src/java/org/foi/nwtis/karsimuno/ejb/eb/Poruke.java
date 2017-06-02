@@ -1,6 +1,7 @@
 package org.foi.nwtis.karsimuno.ejb.eb;
 
 import java.io.Serializable;
+import java.sql.Timestamp;
 import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -63,9 +64,10 @@ public class Poruke implements Serializable {
         this.id = id;
     }
 
-    public Poruke(Integer id, int iot, String tekst, int status) {
+    public Poruke(Integer id, int iot, Timestamp vrijeme, String tekst, int status) {
         this.id = id;
         this.iot = iot;
+        this.vrijeme = vrijeme;
         this.tekst = tekst;
         this.status = status;
     }

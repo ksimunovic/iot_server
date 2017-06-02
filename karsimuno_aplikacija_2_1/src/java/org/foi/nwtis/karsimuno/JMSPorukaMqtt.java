@@ -8,7 +8,7 @@ import java.io.Serializable;
  *
  * @author Administrator
  */
-public class JMSPoruka implements Serializable {
+public class JMSPorukaMqtt implements Serializable {
 
     int redniBroj;
     long vrijemePocetka;
@@ -16,7 +16,7 @@ public class JMSPoruka implements Serializable {
     int brojProcitanihPoruka;
     int brojNWTiSPoruka;
 
-    public JMSPoruka(int redniBroj, long vrijemePocetka, long vrijemeZavrsetka, int brojProcitanihPoruka, int brojNWTiSPoruka) {
+    public JMSPorukaMqtt(int redniBroj, long vrijemePocetka, long vrijemeZavrsetka, int brojProcitanihPoruka, int brojNWTiSPoruka) {
         this.redniBroj = redniBroj;
         this.vrijemePocetka = vrijemePocetka;
         this.vrijemeZavrsetka = vrijemeZavrsetka;

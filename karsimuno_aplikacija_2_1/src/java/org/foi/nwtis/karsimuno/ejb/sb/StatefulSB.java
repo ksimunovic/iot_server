@@ -23,24 +23,7 @@ public class StatefulSB {
 
     @WebServiceRef(wsdlLocation = "META-INF/wsdl/nwtis.foi.hr_8080/DZ3_Master/IoT_Master.wsdl")
     private IoTMaster_Service service;
-
-    /**
-     * Autenticiranje korisnika obavlja se u Stateful SB, a nakon uspješnog
-     * autenticiranja registrira se za prijem MQTT poruka od IoT uređaja
-     * korisnikove grupe putem IoT_Master-a. Primljeni podaci iz poruka upisuju
-     * se u tablicu poruka u bazi podataka.
-     *
-     * Nakon prijema određenog broja MQTT poruka, tzv. slot, (konfiguracijom se
-     * određuje broj MQTT poruka u slotu) treba poslati JMS poruku (naziv reda
-     * čekanja NWTiS_{korisnicko_ime}_2) s podacima o rednom broju JMS poruke
-     * koja se šalje, vremenu početka i završetka prikupljanja tog slota, broju
-     * obrađenih poruka, kolekciji u koju se sprema atribut ″tekst″ primljenih
-     * MQTT poruke u slotu. Poruka treba biti u obliku ObjectMessage, pri čemu
-     * je naziv vlastite klase proizvoljan, a njena struktura treba sadržavati
-     * potrebne podatke koji su prethodno spomenuti. Red čekanja treba ima
-     * vlastiti brojač JMS poruka.
-     *
-     */
+    
     public boolean provjeriKorisnika(String korisnickoIme, String lozinka) {
         boolean autentificiran = false;
 
@@ -80,21 +63,21 @@ public class StatefulSB {
         if (!jo.entrySet().isEmpty()) {
             return false;
         }
-        
+
         JsonObjectBuilder job = Json.createObjectBuilder();
         job.add("korisnicko_ime", korisnickoIme);
         job.add("prezime", prezime);
         job.add("lozinka", lozinka);
         job.add("email", email);
         String payload = job.build().toString();
-        
+
         client = new KorisniciRESTResource(korisnickoIme);
         response = client.postJson(payload);
 
         jsonReader = Json.createReader(new StringReader(response));
         JsonObject object = jsonReader.readObject();
         jsonReader.close();
-        
+
         return !object.entrySet().isEmpty();
     }
 

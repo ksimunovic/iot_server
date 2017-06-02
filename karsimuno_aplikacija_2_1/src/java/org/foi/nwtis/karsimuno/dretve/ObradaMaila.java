@@ -27,7 +27,7 @@ import javax.mail.Store;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
-import org.foi.nwtis.karsimuno.JMSPoruka;
+import org.foi.nwtis.karsimuno.JMSPorukaMail;
 import org.foi.nwtis.karsimuno.konfiguracije.Konfiguracija;
 import org.foi.nwtis.karsimuno.ejb.sb.SingletonSB;
 
@@ -97,7 +97,7 @@ public class ObradaMaila extends Thread {
                     cekaj = 1;
                 }
 
-                JMSPoruka jmsPoruka = new JMSPoruka((brojPoruka+1), pocetakObrade, zavrsetakObrade, brojProcitanihPoruka, brojNWTiSPoruka);
+                JMSPorukaMail jmsPoruka = new JMSPorukaMail((brojPoruka+1), pocetakObrade, zavrsetakObrade, brojProcitanihPoruka, brojNWTiSPoruka);
                 sendJMSMessageToNWTiS_karsimuno_1(jmsPoruka);
                 prebrojiJmsPoruke();
 

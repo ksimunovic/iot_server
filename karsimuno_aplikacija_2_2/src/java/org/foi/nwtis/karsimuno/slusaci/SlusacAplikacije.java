@@ -24,22 +24,24 @@ import org.foi.nwtis.karsimuno.konfiguracije.bp.BP_Konfiguracija;
 @WebListener
 public class SlusacAplikacije implements ServletContextListener {
 
-    
-
     public static ServletContext context = null;
     private BP_Konfiguracija BP_Konfig;
     private Konfiguracija konf;
-//    private Properties postavke;
+    private SlusacMqtt mqtt;
 
     @Override
     public void contextInitialized(ServletContextEvent sce) {
         context = sce.getServletContext();
         ucitajKonfiguraciju();
 
+        mqtt = new SlusacMqtt(Integer.parseInt(konf.dajPostavku("mqtt.slot")));
+        mqtt.start(); //FIXME: pokreni mqtt dretvu
+
     }
 
     @Override
     public void contextDestroyed(ServletContextEvent sce) {
+        mqtt.interrupt();
     }
 
     /**
@@ -57,18 +59,17 @@ public class SlusacAplikacije implements ServletContextListener {
         try {
             konf = KonfiguracijaApstraktna.preuzmiKonfiguraciju(path + datoteka);
             context.setAttribute("Ostatak_Konf", konf);
-            
+
             SingletonSB singletonSB = lookupSingletonSBBean();
             singletonSB.konf = konf;
             singletonSB.BP_Konfig = BP_Konfig;
             singletonSB.start();
-            
+
         } catch (NemaKonfiguracije | NeispravnaKonfiguracija ex) {
             Logger.getLogger(SlusacAplikacije.class.getName()).log(Level.SEVERE, null, ex);
         }
         System.out.println("Učitana konfiguracija!");
     }
-    
 
     public static ServletContext getContext() {
         return context;

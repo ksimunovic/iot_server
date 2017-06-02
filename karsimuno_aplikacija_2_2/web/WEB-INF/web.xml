@@ -29,4 +29,16 @@
     <welcome-file-list>
         <welcome-file>index.xhtml</welcome-file>
     </welcome-file-list>
+    <resource-ref>
+        <res-ref-name>java:comp/DefaultJMSConnectionFactory</res-ref-name>
+        <res-type>javax.jms.ConnectionFactory</res-type>
+        <res-auth>Container</res-auth>
+        <res-sharing-scope>Shareable</res-sharing-scope>
+    </resource-ref>
+    <message-destination-ref>
+        <message-destination-ref-name>jms/NWTiS_karsimuno_2</message-destination-ref-name>
+        <message-destination-type>javax.jms.Queue</message-destination-type>
+        <message-destination-usage>Produces</message-destination-usage>
+        <message-destination-link>jms/NWTiS_karsimuno_2</message-destination-link>
+    </message-destination-ref>
 </web-app>

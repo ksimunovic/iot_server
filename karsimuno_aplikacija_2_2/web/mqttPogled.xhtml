@@ -9,45 +9,44 @@
             <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet"/>
             <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
             <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-            <title>#{i18n.korisniciPogled_title}</title>
+            <title>#{i18n.mqttPogled_title}</title>
         </h:head>
         <h:body>
             <div class="container">
                 <div class="col-lg-10">
-                    <legend style="height: 60px;">#{i18n.korisniciPogled_title}
+                    <legend style="height: 60px;">#{i18n.mqttPogled_title}
                         <h:outputLink style="float:right" value="index.xhtml">${i18n.link_index}</h:outputLink><br/>
                         <h:outputLink style="float:right" value="lokalizacija.xhtml">${i18n.link_language}</h:outputLink><br/>
                         <h:outputLink style="float:right" value="logout.xhtml">${i18n.link_logout}</h:outputLink><br/>
                     </legend>
-                    <p:dataTable var="d"  value="#{dnevnikPogled.dnevnickiZapisi}" >
+                    <h:form>
+                        <h:commandButton style="" class="btn btn-danger" value="#{i18n.mqttPogled_clearMessages}" action="#{mqttPogled.ocistiPoruke()}"/>
+                    </h:form>
+                    <br/><br/>
+
+                    <p:dataTable var="p"  value="#{mqttPogled.poruke}" >
                         <p:column headerText="Id">
-                            <h:outputText value="#{d.id}" />
+                            <h:outputText value="#{p.id}" />
                         </p:column>
-                        <p:column headerText="Korisnik">
-                            <h:outputText value="#{d.korisnik}" />
+                        <p:column headerText="IoT">
+                            <h:outputText value="#{p.iot}" />
                         </p:column>
-                        <p:column headerText="URL">
-                            <h:outputText value="#{d.url}" />
+                        <p:column headerText="#{i18n.mqttPogled_text}">
+                            <h:outputText value="#{p.tekst}" />
                         </p:column>
-                        <p:column headerText="IP Adresa">
-                            <h:outputText value="#{d.ipadresa}" />
+                        <p:column headerText="#{i18n.mqttPogled_time}">
+                            <h:outputText value="#{p.vrijeme}" />
                         </p:column>
-                        <p:column headerText="Vrijeme">
-                            <h:outputText value="#{d.vrijeme}" />
-                        </p:column>
-                        <p:column headerText="Trajanje">
-                            <h:outputText value="#{d.trajanje}" />
-                        </p:column>
-                        <p:column headerText="Status">
-                            <h:outputText value="#{d.status}" />
+                        <p:column headerText="#{i18n.mqttPogled_status}">
+                            <h:outputText value="#{p.status}" />
                         </p:column>
                     </p:dataTable>
                     <h:form>
-                        <h:commandButton value="#{i18n.paginator_first}" action="#{dnevnikPogled.prva()}"/>
-                        <h:commandButton value="#{i18n.paginator_previous}" action="#{dnevnikPogled.prethodna()}"/>
-                        <h:commandButton value="#{i18n.paginator_next}" action="#{dnevnikPogled.sljedeca()}"/>
-                        <h:commandButton value="#{i18n.paginator_last}" action="#{dnevnikPogled.zadnja()}"/>
-                        <h:inputHidden value="#{dnevnikPogled.limitFrom}"/>
+                        <h:commandButton value="#{i18n.paginator_first}" action="#{mqttPogled.prva()}"/>
+                        <h:commandButton value="#{i18n.paginator_previous}" action="#{mqttPogled.prethodna()}"/>
+                        <h:commandButton value="#{i18n.paginator_next}" action="#{mqttPogled.sljedeca()}"/>
+                        <h:commandButton value="#{i18n.paginator_last}" action="#{mqttPogled.zadnja()}"/>
+                        <h:inputHidden value="#{mqttPogled.limitFrom}"/>
                     </h:form>
                 </div>
             </div>
