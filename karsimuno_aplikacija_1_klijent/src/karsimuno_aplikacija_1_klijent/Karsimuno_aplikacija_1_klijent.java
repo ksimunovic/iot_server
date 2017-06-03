@@ -41,7 +41,7 @@ public class Karsimuno_aplikacija_1_klijent {
 //        zahtjev = "USER karsimuno; PASSWD aCXwp; IoT_Master LOAD;";
         zahtjev = "USER karsimuno; PASSWD aCXwp; IoT_Master CLEAR;";
 //        zahtjev = "USER karsimuno; PASSWD aCXwp; IoT_Master STATUS;";
-//        zahtjev = "USER karsimuno; PASSWD aCXwp; IoT_Master LIST;";
+        zahtjev = "USER karsimuno; PASSWD aCXwp; IoT_Master LIST;";
 
 //        zahtjev = "USER karsimuno; PASSWD aCXwp; IoT 1 ADD \"pero\" \"Mikuseva 10, Sesvete\";";
 //        zahtjev = "USER karsimuno; PASSWD aCXwp; IoT 129 WORK;";

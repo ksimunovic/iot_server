@@ -53,6 +53,7 @@ public class SlusacAplikacije implements ServletContextListener {
 
             SingletonSB singletonSB = lookupSingletonSBBean();
             singletonSB.konf = konf;
+            singletonSB.path = path;
             singletonSB.start();
 
         } catch (NemaKonfiguracije | NeispravnaKonfiguracija ex) {
