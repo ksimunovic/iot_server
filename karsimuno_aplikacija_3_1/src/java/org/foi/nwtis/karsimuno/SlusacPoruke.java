@@ -9,6 +9,6 @@ package org.foi.nwtis.karsimuno;
  *
  * @author Administrator
  */
-public interface SlusacPoruke2 {
+public interface SlusacPoruke {
     public void novaPoruka(Object message);
 }

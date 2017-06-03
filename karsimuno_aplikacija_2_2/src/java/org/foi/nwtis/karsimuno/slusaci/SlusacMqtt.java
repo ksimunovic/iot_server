@@ -41,7 +41,7 @@ import javax.json.JsonReader;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
-import org.foi.nwtis.karsimuno.JMSPorukaMqtt;
+import org.foi.nwtis.karsimuno.poruke.JMSPorukaMqtt;
 import org.foi.nwtis.karsimuno.ejb.eb.Poruke;
 import org.foi.nwtis.karsimuno.ejb.sb.PorukeFacade;
 import org.fusesource.hawtbuf.Buffer;

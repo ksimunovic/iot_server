@@ -1,0 +1,64 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <f:view>
+        <h:head>
+            <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet"/>
+            <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+            <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+            <title>Mail JMS Pogled</title>
+        </h:head>
+        <style>
+            input{
+                display:none;
+            }
+        </style>
+        <h:body>
+            <div class="container">
+                <div class="col-lg-10">
+                    <h:form>
+                        <legend style="height: 60px;">Mail JMS Pogled
+                            <h:outputLink style="float:right" value="mqttJmsPogled.xhtml">MQTT JMS pogled</h:outputLink><br/>
+                        </legend>
+                        <h:form>
+                            <h:commandButton value="" action="#{jmsPogled.updateView()}">
+                                <f:ajax render="@form"/>
+                            </h:commandButton>
+                            <h:commandButton value="" action="#{jmsPogled.clearMessages('mqtt')}">
+                                <f:ajax render="@form"/>
+                            </h:commandButton>
+                            <h:dataTable value="#{jmsPogled.mailPoruke}" var="p" class="table table-striped">
+                                <h:column>
+                                    <f:facet name="header">Redni broj</f:facet>
+                                    <h:outputText value="#{p.redniBroj}"/>
+                                </h:column>
+                                <h:column>
+                                    <f:facet name="header">Vrijeme početka</f:facet>
+                                    <h:outputText value="#{p.vrijemePocetka}"/>
+                                </h:column>
+                                <h:column>
+                                    <f:facet name="header">Vrijeme završetka</f:facet>
+                                    <h:outputText value="#{p.vrijemeZavrsetka}"/>
+                                </h:column>
+                                <h:column>
+                                    <f:facet name="header">Broj pročitanih poruka</f:facet>
+                                    <h:outputText value="#{p.brojProcitanihPoruka}"/>
+                                </h:column>
+                            </h:dataTable>
+                        </h:form>
+                        <br/>
+                </div>
+            </div>
+        </h:body>
+        <script>
+            if (window.WebSocket) {
+                var ws = new WebSocket("ws://localhost:8080/karsimuno_aplikacija_3_2/websocket");
+                ws.onmessage = function (event) {
+                    $('input[type="submit"]:first').click()
+                };
+            }
+        </script>
+    </f:view>
+</html>

@@ -15,12 +15,12 @@ import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.ejb.Singleton;
 import javax.ejb.LocalBean;
-import org.foi.nwtis.karsimuno.JMSPorukaMail;
-import org.foi.nwtis.karsimuno.JMSPorukaMqtt;
+import org.foi.nwtis.karsimuno.poruke.JMSPorukaMail;
+import org.foi.nwtis.karsimuno.poruke.JMSPorukaMqtt;
 import org.foi.nwtis.karsimuno.ejb.MailDrivenBean;
 import org.foi.nwtis.karsimuno.ejb.MqttDrivenBean;
 import org.foi.nwtis.karsimuno.konfiguracije.Konfiguracija;
-import org.foi.nwtis.karsimuno.SlusacPoruke2;
+import org.foi.nwtis.karsimuno.SlusacPoruke;
 
 /**
  *
@@ -30,12 +30,12 @@ import org.foi.nwtis.karsimuno.SlusacPoruke2;
 @LocalBean
 public class SingletonSB implements Serializable {
 
-    public List<JMSPorukaMqtt> spremnikMqtt;
-    public List<JMSPorukaMail> spremnikMail;
+    public List<JMSPorukaMqtt> spremnikMqtt = null;
+    public List<JMSPorukaMail> spremnikMail = null;
     public static Konfiguracija konf;
     public static String path;
     public static String evidDatoteka;
-    private static SlusacPoruke2  mqtt = null;
+    private static List<SlusacPoruke> slusaci = null;
 
     private static SingletonSB instance = null;
 
@@ -54,13 +54,22 @@ public class SingletonSB implements Serializable {
 
     public void dodajMqtt(JMSPorukaMqtt m) {
         if (spremnikMqtt == null) {
+            ucitajSpremnik();
+        }
+        if (spremnikMqtt == null) {
             spremnikMqtt = new ArrayList<>();
         }
         spremnikMqtt.add(m);
         spremiSpremnik();
-        
-        if(mqtt !=null){
-            mqtt.novaPoruka(m.toString());
+
+        if (slusaci == null) {
+            return;
+        }
+        for (SlusacPoruke s : slusaci) {
+            if (s != null) {
+                s.novaPoruka(m);
+                break;
+            }
         }
     }
 
@@ -118,19 +127,19 @@ public class SingletonSB implements Serializable {
                 Logger.getLogger(getClass().getName()).log(Level.SEVERE, null, ex);
             }
         }
-         System.out.println("Trenutno stanje spremnika: Mqtt - "+spremnikMqtt.size()+", Mail - "+spremnikMail.size());
+        System.out.println("Trenutno stanje spremnika: Mqtt - " + spremnikMqtt.size() + ", Mail - " + spremnikMail.size());
     }
 
     synchronized public void ucitajSpremnik() {
         String datoteka = evidDatoteka;
+        if (spremnikMqtt != null && spremnikMail != null) {
+            return;
+        }
         if (spremnikMqtt == null) {
             spremnikMqtt = new ArrayList<>();
         }
         if (spremnikMail == null) {
             spremnikMail = new ArrayList<>();
-        }
-        if(spremnikMqtt != null && spremnikMail != null){
-            return;
         }
 
         SingletonSB sb = null;
@@ -158,10 +167,22 @@ public class SingletonSB implements Serializable {
         }
         this.spremnikMqtt = sb.spremnikMqtt;
         this.spremnikMail = sb.spremnikMail;
+
+        System.out.println("Učitan prethodni spremnik -> mqtt:" + spremnikMqtt.size() + " i mail:" + spremnikMail.size());
     }
 
-    public void setMqtt(Object mqtt) {
-        SingletonSB.mqtt = (SlusacPoruke2) mqtt;
+    public void addSlusac(Object slusac) {
+        if (slusaci == null) {
+            slusaci = new ArrayList<>();
+        }
+        slusaci.add((SlusacPoruke) slusac);
     }
-    
+
+    public void removeSlusac(Object slusac) {
+        if (slusaci == null) {
+            return;
+        }
+        slusaci.remove((SlusacPoruke) slusac);
+    }
+
 }

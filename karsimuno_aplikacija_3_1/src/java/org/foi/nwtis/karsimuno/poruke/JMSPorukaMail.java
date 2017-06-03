@@ -1,7 +1,6 @@
-package org.foi.nwtis.karsimuno;
+package org.foi.nwtis.karsimuno.poruke;
 
 import java.io.Serializable;
-import java.util.List;
 
 /**
  * s podacima o rednom broju JMS poruke koja se šalje, vremenu početka i
@@ -9,19 +8,21 @@ import java.util.List;
  *
  * @author Administrator
  */
-public class JMSPorukaMqtt implements Serializable {
+public class JMSPorukaMail implements Serializable {
 
     int redniBroj;
     long vrijemePocetka;
     long vrijemeZavrsetka;
     int brojProcitanihPoruka;
-    List<String> tekstovi;
+    int brojNWTiSPoruka;
 
-    public JMSPorukaMqtt(int redniBroj, long vrijemePocetka, long vrijemeZavrsetka, int brojProcitanihPoruka, List<String> tekstovi) {
+    public JMSPorukaMail(int redniBroj, long vrijemePocetka, long vrijemeZavrsetka, int brojProcitanihPoruka, int brojNWTiSPoruka) {
         this.redniBroj = redniBroj;
         this.vrijemePocetka = vrijemePocetka;
         this.vrijemeZavrsetka = vrijemeZavrsetka;
         this.brojProcitanihPoruka = brojProcitanihPoruka;
-        this.tekstovi = tekstovi;
+        this.brojNWTiSPoruka = brojNWTiSPoruka;
     }
+    
+    
 }

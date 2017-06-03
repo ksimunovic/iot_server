@@ -8,7 +8,7 @@ import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.MessageListener;
 import javax.jms.ObjectMessage;
-import org.foi.nwtis.karsimuno.JMSPorukaMail;
+import org.foi.nwtis.karsimuno.poruke.JMSPorukaMail;
 import org.foi.nwtis.karsimuno.ejb.sb.SingletonSB;
 
 /**

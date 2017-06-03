@@ -27,7 +27,7 @@ import javax.mail.Store;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
-import org.foi.nwtis.karsimuno.JMSPorukaMail;
+import org.foi.nwtis.karsimuno.poruke.JMSPorukaMail;
 import org.foi.nwtis.karsimuno.konfiguracije.Konfiguracija;
 import org.foi.nwtis.karsimuno.ejb.sb.SingletonSB;
 
