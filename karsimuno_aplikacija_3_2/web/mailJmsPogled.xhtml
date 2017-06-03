@@ -10,45 +10,40 @@
             <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
             <title>Mail JMS Pogled</title>
         </h:head>
-        <style>
-            input{
-                display:none;
-            }
-        </style>
         <h:body>
             <div class="container">
                 <div class="col-lg-10">
+                    <legend style="height: 60px;">Mail JMS Pogled
+                        <h:outputLink style="float:right" value="mqttJmsPogled.xhtml">MQTT JMS pogled</h:outputLink><br/>
+                        <h:outputLink style="float:right" value="logout.xhtml">Odjava</h:outputLink><br/>
+                    </legend>
                     <h:form>
-                        <legend style="height: 60px;">Mail JMS Pogled
-                            <h:outputLink style="float:right" value="mqttJmsPogled.xhtml">MQTT JMS pogled</h:outputLink><br/>
-                        </legend>
-                        <h:form>
-                            <h:commandButton value="" action="#{jmsPogled.updateView()}">
-                                <f:ajax render="@form"/>
-                            </h:commandButton>
-                            <h:commandButton value="" action="#{jmsPogled.clearMessages('mqtt')}">
-                                <f:ajax render="@form"/>
-                            </h:commandButton>
-                            <h:dataTable value="#{jmsPogled.mailPoruke}" var="p" class="table table-striped">
-                                <h:column>
-                                    <f:facet name="header">Redni broj</f:facet>
-                                    <h:outputText value="#{p.redniBroj}"/>
-                                </h:column>
-                                <h:column>
-                                    <f:facet name="header">Vrijeme početka</f:facet>
-                                    <h:outputText value="#{p.vrijemePocetka}"/>
-                                </h:column>
-                                <h:column>
-                                    <f:facet name="header">Vrijeme završetka</f:facet>
-                                    <h:outputText value="#{p.vrijemeZavrsetka}"/>
-                                </h:column>
-                                <h:column>
-                                    <f:facet name="header">Broj pročitanih poruka</f:facet>
-                                    <h:outputText value="#{p.brojProcitanihPoruka}"/>
-                                </h:column>
-                            </h:dataTable>
-                        </h:form>
-                        <br/>
+                        <h:commandButton value="" action="#{jmsPogled.updateView()}">
+                            <f:ajax render="@form"/>
+                        </h:commandButton>
+                        <h:commandButton value="" action="#{jmsPogled.clearMessages('mqtt')}">
+                            <f:ajax render="@form"/>
+                        </h:commandButton>
+                        <h:dataTable value="#{jmsPogled.mailPoruke}" var="p" class="table table-striped">
+                            <h:column>
+                                <f:facet name="header">Redni broj</f:facet>
+                                <h:outputText value="#{p.redniBroj}"/>
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header">Vrijeme početka</f:facet>
+                                <h:outputText value="#{p.vrijemePocetka}"/>
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header">Vrijeme završetka</f:facet>
+                                <h:outputText value="#{p.vrijemeZavrsetka}"/>
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header">Broj pročitanih poruka</f:facet>
+                                <h:outputText value="#{p.brojProcitanihPoruka}"/>
+                            </h:column>
+                        </h:dataTable>
+                    </h:form>
+                    <br/>
                 </div>
             </div>
         </h:body>

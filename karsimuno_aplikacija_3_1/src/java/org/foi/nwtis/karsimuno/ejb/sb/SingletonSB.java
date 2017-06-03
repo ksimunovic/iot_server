@@ -91,6 +91,7 @@ public class SingletonSB implements Serializable {
 
     @PreDestroy
     public void destroy() {
+        spremiSpremnik();
     }
 
     synchronized public void spremiSpremnik() {

@@ -13,38 +13,38 @@
         <h:body>
             <div class="container">
                 <div class="col-lg-10">
+                    <legend style="height: 60px;">MQTT JMS Pogled
+                        <h:outputLink style="float:right" value="mailJmsPogled.xhtml">Mail JMS pogled</h:outputLink><br/>
+                        <h:outputLink style="float:right" value="logout.xhtml">Odjava</h:outputLink><br/>
+                    </legend>
                     <h:form>
-                        <legend style="height: 60px;">MQTT JMS Pogled
-                            <h:outputLink style="float:right" value="mailJmsPogled.xhtml">Mail JMS pogled</h:outputLink><br/>
-                        </legend>
-                        <h:form>
-                            <h:commandButton value="" action="#{jmsPogled.updateView()}" class="hidden">
-                                <f:ajax render="@form"/>
-                            </h:commandButton>
-                            <h:commandButton value="" action="#{jmsPogled.clearMessages('mqtt')}">
-                                <f:ajax render="@form"/>
-                            </h:commandButton>
-                            <h:dataTable value="#{jmsPogled.mqttPoruke}" var="p" class="table table-striped">
-                                <h:column>
-                                    <f:facet name="header">Redni broj</f:facet>
-                                    <h:outputText value="#{p.redniBroj}"/>
-                                </h:column>
-                                <h:column>
-                                    <f:facet name="header">Vrijeme početka</f:facet>
-                                    <h:outputText value="#{p.vrijemePocetka}"/>
-                                </h:column>
-                                <h:column>
-                                    <f:facet name="header">Vrijeme završetka</f:facet>
-                                    <h:outputText value="#{p.vrijemeZavrsetka}"/>
-                                </h:column>
-                                <h:column>
-                                    <f:facet name="header">Broj pročitanih poruka</f:facet>
-                                    <h:outputText value="#{p.brojProcitanihPoruka}"/>
-                                </h:column>
-                            </h:dataTable>
-                        </h:form>
-                        <br/>
+                        <h:commandButton value="" action="#{jmsPogled.updateView()}" class="hidden">
+                            <f:ajax render="@form"/>
+                        </h:commandButton>
+                        <h:commandButton value="" action="#{jmsPogled.clearMessages('mqtt')}">
+                            <f:ajax render="@form"/>
+                        </h:commandButton>
+                        <h:dataTable value="#{jmsPogled.mqttPoruke}" var="p" class="table table-striped">
+                            <h:column>
+                                <f:facet name="header">Redni broj</f:facet>
+                                <h:outputText value="#{p.redniBroj}"/>
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header">Vrijeme početka</f:facet>
+                                <h:outputText value="#{p.vrijemePocetka}"/>
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header">Vrijeme završetka</f:facet>
+                                <h:outputText value="#{p.vrijemeZavrsetka}"/>
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header">Broj pročitanih poruka</f:facet>
+                                <h:outputText value="#{p.brojProcitanihPoruka}"/>
+                            </h:column>
+                        </h:dataTable>
                     </h:form>
+                    <br/>
+
                 </div>
             </div>
         </h:body>
