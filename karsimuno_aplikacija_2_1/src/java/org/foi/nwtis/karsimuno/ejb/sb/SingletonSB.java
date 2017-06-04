@@ -1,15 +1,9 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package org.foi.nwtis.karsimuno.ejb.sb;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.ejb.Singleton;
 import javax.ejb.LocalBean;
-import javax.ejb.Startup;
 import org.foi.nwtis.karsimuno.dretve.ObradaMaila;
 import org.foi.nwtis.karsimuno.konfiguracije.Konfiguracija;
 import org.foi.nwtis.karsimuno.konfiguracije.bp.BP_Konfiguracija;
@@ -25,15 +19,15 @@ import org.foi.nwtis.karsimuno.konfiguracije.bp.BP_Konfiguracija;
  */
 @Singleton
 @LocalBean
-//@Startup
 public class SingletonSB {
 
     public static Konfiguracija konf;
     public static BP_Konfiguracija BP_Konfig;
     private ObradaMaila mail;
 
-    public void start() {}
-    
+    public void start() {
+    }
+
     @PostConstruct
     public void initialize() {
         System.out.println("POKREĆEM SINGLETON SB!");

@@ -20,7 +20,7 @@ import javax.servlet.http.HttpSession;
  *
  * @author Administrator
  */
-@WebFilter(filterName = "FilterAplikacije", urlPatterns = {"/*"})
+//@WebFilter(filterName = "FilterAplikacije", urlPatterns = {"/*"}) //FIXME: upali login app2
 public class LoginFilter implements Filter {
 
     private final boolean debug = false;

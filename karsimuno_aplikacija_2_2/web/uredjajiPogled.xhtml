@@ -15,6 +15,12 @@
         <h:body>
             <div class="container">
                 <div class="col-lg-10 horizontal">
+                    <style>
+                        #outerdiv {
+                            width: 100%; height: 50%; position: absolute; text-align: center;
+                        }
+                        #map {width: 70%; height: 100%; margin:0px auto; display:inline-block}
+                    </style>
 
                     <h:form>
                         <fieldset>
@@ -23,7 +29,6 @@
                                 <h:outputLink style="float:right" value="lokalizacija.xhtml">${i18n.link_language}</h:outputLink><br/>
                                 <h:outputLink style="float:right" value="logout.xhtml">${i18n.link_logout}</h:outputLink><br/>
                             </legend>
-
 
                             <h:panelGroup id="uredjaj">
                                 <div style="#{uredjajiPogled.displayUpdateContainer}">
@@ -43,12 +48,11 @@
                                 <h:outputLabel value="${i18n.uredjajiPogled_status}:" class="col-lg-3 control-label" />
                                 <h:inputText id="status" value="#{uredjajiPogled.uredjaj.status}"/><br/>
 
-
                                 <c:if test="#{uredjajiPogled.displayUpdateContainer == 'display: none'}">
                                     <h:commandButton value="${i18n.uredjajiPogled_create}" action="#{uredjajiPogled.update()}" >
                                         <f:ajax execute="uredjaj" render="uredjajiTablica @form"/>
                                     </h:commandButton>
-                                    
+
                                 </c:if>
                                 <c:if test="#{uredjajiPogled.displayUpdateContainer != 'display: none'}">
                                     <h:commandButton value="${i18n.uredjajiPogled_submit}" action="#{uredjajiPogled.update()}" >
@@ -153,7 +157,45 @@
                     </h:panelGroup>
                 </div>
             </div>
+            <br/>
+            <div id="outerdiv">
+                <div id="map"></div>
+            </div>
             <br/><br/>
+            <script>
+                var jsonData = #{uredjajiPogled.mapJson()};
+                function initMap() {
+                    var uluru = {lat: -25.363, lng: 131.044};
+                    var map = new google.maps.Map(document.getElementById('map'), {
+                        zoom: 9,
+                        center: jsonData[1]["pos"]
+                    });
+
+                    var contentString = 'aaaaaaaaaaaaa';
+
+                    var infowindow = new google.maps.InfoWindow({
+                        content: contentString
+                    });
+
+                    $.each(jsonData, function (key, value) {
+                        console.log(key + ": " + value);
+                        var marker = new google.maps.Marker({
+                            position: value.pos,
+                            map: map,
+                            title: value.naziv
+                        });
+                        marker.addListener('click', function () {
+                            infowindow.open(map, marker);
+                        });
+                    });
+
+
+                }
+                $(document).ready(function () {
+
+                });
+            </script>
+            <script async="true" defer="true" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAJkh22h8zx_6IVxDEkl38Mt7YBhnhFrhQ&amp;callback=initMap"/>
             <script>
                 #{uredjajiPogled.adresa}
             </script>

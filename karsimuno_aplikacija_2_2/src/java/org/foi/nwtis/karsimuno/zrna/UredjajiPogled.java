@@ -1,13 +1,14 @@
 package org.foi.nwtis.karsimuno.zrna;
 
 import javax.inject.Named;
-import java.io.Serializable;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
 import javax.enterprise.context.RequestScoped;
 import javax.json.Json;
 import javax.json.JsonArray;
+import javax.json.JsonArrayBuilder;
+import javax.json.JsonObjectBuilder;
 import javax.json.JsonReader;
 import javax.json.JsonValue;
 import javax.xml.ws.WebServiceRef;
@@ -125,11 +126,11 @@ public class UredjajiPogled {
         uredjaj = new Uredjaj();
     }
 
-    public void create(){
+    public void create() {
         uredjaj = new Uredjaj();
         displayUpdateContainer = "display: none";
     }
-    
+
     public void dohvatiAdresu(Uredjaj u) {
         adresa = "alert('" + dajAdresuUredjaja(u.id) + "');";
     }
@@ -162,6 +163,26 @@ public class UredjajiPogled {
         // If the calling of port operations may lead to race condition some synchronization is required.
         org.foi.nwtis.karsimuno.ws.MeteoSOAP port = service.getMeteoSOAPPort();
         return port.dajZadnjeMeteoPodatkeZaUredjaj(id);
+    }
+
+    public String mapJson() {
+        List<Uredjaj> temp = getUredjaji();
+
+        JsonArrayBuilder jab = Json.createArrayBuilder();
+
+        for (Uredjaj u : temp) {
+            JsonObjectBuilder job = Json.createObjectBuilder();
+            job.add("naziv", u.naziv);
+            
+            JsonObjectBuilder pos = Json.createObjectBuilder();
+            pos.add("lat", u.latitude);
+            pos.add("lng", u.longitude);
+            job.add("pos", pos);
+            
+            jab.add(job);
+        }
+
+        return jab.build().toString();
     }
 
 }
