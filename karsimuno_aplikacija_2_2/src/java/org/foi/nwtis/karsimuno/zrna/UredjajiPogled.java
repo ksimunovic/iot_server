@@ -31,6 +31,7 @@ public class UredjajiPogled {
 
     private int errorCode = -1;
     private String adresa = "";
+    private String jsonData = "''";
     private boolean ponovoUcitaj = false;
     private List<Uredjaj> uredjaji = null;
     private MeteoPodaci meteoPodaci = null;
@@ -108,29 +109,44 @@ public class UredjajiPogled {
         this.meteoPodaci = meteoPodaci;
     }
 
-    public void update() {
+    public void submit(String type) {
         errorCode = -1;
         if (uredjaj.naziv.isEmpty() || uredjaj.longitude.isNaN() || uredjaj.latitude.isNaN()) {
             errorCode = 0;
             return;
         }
 
+        if (type.equals("create")) {
+            for (Uredjaj u : uredjaji) {
+                if (u.id == uredjaj.id) {
+                    errorCode = 1;
+                    return;
+                }
+            }
+        }
+
         String json = uredjaj.toJson();
         uredjajiResource = new UredjajiRESTResource(Integer.toString(uredjaj.id));
-        if (uredjaj.id == 0) {
-            uredjajiResource.postJson(json);
-        } else {
+        if (type.equals("update")) {
             uredjajiResource.putJson(json);
+        } else {
+            uredjajiResource.postJson(json);
         }
         ponovoUcitaj = true;
         uredjaj = new Uredjaj();
     }
 
-    public void create() {
-        uredjaj = new Uredjaj();
-        displayUpdateContainer = "display: none";
-    }
-
+//    public void create() {
+//        if (uredjaj.id == -1) {
+//            update();
+//        } else {
+//            uredjaj = new Uredjaj();
+//            uredjaj.id = -1;
+//
+//        }
+//
+//        displayUpdateContainer = "display: none";
+//    }
     public void dohvatiAdresu(Uredjaj u) {
         adresa = "alert('" + dajAdresuUredjaja(u.id) + "');";
     }
@@ -165,7 +181,15 @@ public class UredjajiPogled {
         return port.dajZadnjeMeteoPodatkeZaUredjaj(id);
     }
 
-    public String mapJson() {
+    public String getJsonData() {
+        return jsonData;
+    }
+
+    public void setJsonData(String jsonData) {
+        this.jsonData = jsonData;
+    }
+
+    public void mapJson() {
         List<Uredjaj> temp = getUredjaji();
 
         JsonArrayBuilder jab = Json.createArrayBuilder();
@@ -173,16 +197,21 @@ public class UredjajiPogled {
         for (Uredjaj u : temp) {
             JsonObjectBuilder job = Json.createObjectBuilder();
             job.add("naziv", u.naziv);
-            
+            job.add("adresa", dajAdresuUredjaja(u.id));
+
+            MeteoPodaci mp = dajVazeceMeteoPodatkeZaUredjaj(u.id);
+            job.add("temp", mp.getTemperatureValue());
+            job.add("vlaga", mp.getHumidityValue());
+
             JsonObjectBuilder pos = Json.createObjectBuilder();
             pos.add("lat", u.latitude);
             pos.add("lng", u.longitude);
             job.add("pos", pos);
-            
+
             jab.add(job);
         }
 
-        return jab.build().toString();
+        jsonData = jab.build().toString();
     }
 
 }

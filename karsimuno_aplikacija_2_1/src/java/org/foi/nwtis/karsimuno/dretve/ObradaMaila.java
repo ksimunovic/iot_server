@@ -97,9 +97,9 @@ public class ObradaMaila extends Thread {
                     cekaj = 1;
                 }
 
-                JMSPorukaMail jmsPoruka = new JMSPorukaMail((brojPoruka+1), pocetakObrade, zavrsetakObrade, brojProcitanihPoruka, brojNWTiSPoruka);
+                JMSPorukaMail jmsPoruka = new JMSPorukaMail((brojPoruka++), pocetakObrade, zavrsetakObrade, brojProcitanihPoruka, brojNWTiSPoruka);
                 sendJMSMessageToNWTiS_karsimuno_1(jmsPoruka);
-                prebrojiJmsPoruke();
+//                brojPoruka = prebrojiJmsPoruke();
 
                 sleep(cekaj);
             } catch (InterruptedException | JMSException | MessagingException | NamingException ex) {

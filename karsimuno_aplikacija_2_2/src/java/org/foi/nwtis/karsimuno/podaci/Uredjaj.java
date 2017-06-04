@@ -2,7 +2,6 @@ package org.foi.nwtis.karsimuno.podaci;
 
 import java.io.StringReader;
 import java.sql.Timestamp;
-import java.util.Date;
 import javax.json.Json;
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;

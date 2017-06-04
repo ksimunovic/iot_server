@@ -16,9 +16,7 @@
             <div class="container">
                 <div class="col-lg-10 horizontal">
                     <style>
-                        #outerdiv {
-                            width: 100%; height: 50%; position: absolute; text-align: center;
-                        }
+                        #outerdiv {width: 100%; height: 50%; position: absolute; text-align: center;}
                         #map {width: 70%; height: 100%; margin:0px auto; display:inline-block}
                     </style>
 
@@ -31,7 +29,7 @@
                             </legend>
 
                             <h:panelGroup id="uredjaj">
-                                <div style="#{uredjajiPogled.displayUpdateContainer}">
+                                <div >
                                     <h:outputLabel value="Id:" class="col-lg-3 control-label" />
                                     <h:inputText id="id" value="#{uredjajiPogled.uredjaj.id}"/><br/>
                                 </div>
@@ -48,20 +46,13 @@
                                 <h:outputLabel value="${i18n.uredjajiPogled_status}:" class="col-lg-3 control-label" />
                                 <h:inputText id="status" value="#{uredjajiPogled.uredjaj.status}"/><br/>
 
-                                <c:if test="#{uredjajiPogled.displayUpdateContainer == 'display: none'}">
-                                    <h:commandButton value="${i18n.uredjajiPogled_create}" action="#{uredjajiPogled.update()}" >
-                                        <f:ajax execute="uredjaj" render="uredjajiTablica @form"/>
-                                    </h:commandButton>
+                                <h:commandButton value="${i18n.uredjajiPogled_create}" action="#{uredjajiPogled.submit('create')}" >
+                                    <f:ajax execute="uredjaj" render="uredjajiTablica @form"/>
+                                </h:commandButton>
 
-                                </c:if>
-                                <c:if test="#{uredjajiPogled.displayUpdateContainer != 'display: none'}">
-                                    <h:commandButton value="${i18n.uredjajiPogled_submit}" action="#{uredjajiPogled.update()}" >
-                                        <f:ajax execute="uredjaj" render="uredjajiTablica @form"/>
-                                    </h:commandButton>
-                                    <h:commandButton value="${i18n.uredjajiPogled_create}" action="#{uredjajiPogled.create()}" >
-                                        <f:ajax render="uredjajiTablica @form uredjaj"/>
-                                    </h:commandButton>
-                                </c:if>
+                                <h:commandButton value="${i18n.uredjajiPogled_submit}" action="#{uredjajiPogled.submit('update')}" >
+                                    <f:ajax execute="uredjaj" render="uredjajiTablica @form"/>
+                                </h:commandButton>
                             </h:panelGroup>
 
                             <br/>
@@ -69,9 +60,8 @@
 
                         <br/>
                         <h:panelGroup id="error">
-                            <h:outputText value="${i18n.register_error0}" rendered="#{uredjajiPogled.errorCode == 0}" />
-                            <h:outputText value="${i18n.register_error1}" rendered="#{uredjajiPogled.errorCode == 1}" />
-                            <h:outputText value="${i18n.register_error2}" rendered="#{uredjajiPogled.errorCode == 2}" />
+                            <h:outputText value="${i18n.uredjajiPogled_error0}" rendered="#{uredjajiPogled.errorCode == 0}" />
+                            <h:outputText value="${i18n.uredjajiPogled_error1}" rendered="#{uredjajiPogled.errorCode == 1}" />
                         </h:panelGroup>
 
                         <p:dataTable id="uredjajiTablica" var="u" value="#{uredjajiPogled.uredjaji}" >
@@ -101,7 +91,7 @@
                                     <f:ajax render="@form"/>
                                 </h:commandButton>
                                 <h:commandButton value="${i18n.uredjajiPogled_address}" action="#{uredjajiPogled.dohvatiAdresu(u)}">
-                                    <f:ajax render="@all"/>
+                                    <f:ajax render="adresaAlert"/>
                                 </h:commandButton>
                                 <h:commandButton value="${i18n.uredjajiPogled_now}" action="#{uredjajiPogled.dohvatiVazece(u)}">
                                     <f:ajax render="prognozeTablica"/>
@@ -109,7 +99,6 @@
                                 <h:commandButton value="${i18n.uredjajiPogled_lastN}" action="#{uredjajiPogled.dohvatiZadnje(u)}">
                                     <f:ajax render="prognozeTablica"/>
                                 </h:commandButton>
-
                             </p:column>
                         </p:dataTable>
                     </h:form>
@@ -161,44 +150,64 @@
             <div id="outerdiv">
                 <div id="map"></div>
             </div>
+            <h:form class="demoForma">
+                <h:commandButton class="hidden" action="#{uredjajiPogled.mapJson()}">
+                    <f:ajax render="@form"/>
+                </h:commandButton>
+                <script>
+                    var jsonData = #{uredjajiPogled.jsonData};
+                </script>
+            </h:form>
             <br/><br/>
             <script>
-                var jsonData = #{uredjajiPogled.mapJson()};
                 function initMap() {
-                    var uluru = {lat: -25.363, lng: 131.044};
+                    var infowindow = new google.maps.InfoWindow();
                     var map = new google.maps.Map(document.getElementById('map'), {
                         zoom: 9,
                         center: jsonData[1]["pos"]
                     });
-
-                    var contentString = 'aaaaaaaaaaaaa';
-
-                    var infowindow = new google.maps.InfoWindow({
-                        content: contentString
-                    });
-
+                    console.log(jsonData);
                     $.each(jsonData, function (key, value) {
-                        console.log(key + ": " + value);
+                        console.log(key);
                         var marker = new google.maps.Marker({
                             position: value.pos,
                             map: map,
                             title: value.naziv
                         });
                         marker.addListener('click', function () {
+                            infowindow.close();
+                            infowindow.setContent("<h5>" + value.naziv + "</h5><br/>Adresa: " + value.adresa + "<br/>Temperatura: " + Number((value.temp).toFixed(1)) + " °C<br/>Vlaga: " + value.vlaga + " %");
                             infowindow.open(map, marker);
                         });
                     });
-
-
                 }
                 $(document).ready(function () {
-
+                    $('.demoForma input').click();
+                    loadScript("https://maps.googleapis.com/maps/api/js?key=AIzaSyAJkh22h8zx_6IVxDEkl38Mt7YBhnhFrhQ&amp;callback=initMap", function () {
+                        cekajJsonData()
+                    });
                 });
+                function loadScript(src, callback) {
+                    var script = document.createElement("script");
+                    script.type = "text/javascript";
+                    if (callback)
+                        script.onload = callback;
+                    document.getElementsByTagName("head")[0].appendChild(script);
+                    script.src = src;
+                }
+                function cekajJsonData() {
+                    if (typeof jsonData[0] !== "undefined") {
+                        initMap();
+                    } else {
+                        setTimeout(cekajJsonData, 250);
+                    }
+                }
             </script>
-            <script async="true" defer="true" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAJkh22h8zx_6IVxDEkl38Mt7YBhnhFrhQ&amp;callback=initMap"/>
-            <script>
-                #{uredjajiPogled.adresa}
-            </script>
+            <h:panelGroup id="adresaAlert">
+                <script>
+                    #{uredjajiPogled.adresa}
+                </script>
+            </h:panelGroup>
         </h:body>
     </f:view>
 </html>
