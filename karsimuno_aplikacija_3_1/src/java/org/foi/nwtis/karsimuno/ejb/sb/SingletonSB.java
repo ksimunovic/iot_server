@@ -106,6 +106,8 @@ public class SingletonSB implements Serializable {
 
     @PreDestroy
     public void destroy() {
+        spremnikMail = SingletonSB.getInstance().spremnikMail;
+        spremnikMqtt = SingletonSB.getInstance().spremnikMqtt;
         spremiSpremnik();
     }
 

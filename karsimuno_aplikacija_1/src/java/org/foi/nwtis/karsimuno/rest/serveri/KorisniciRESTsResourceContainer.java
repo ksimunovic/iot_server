@@ -48,7 +48,7 @@ public class KorisniciRESTsResourceContainer {
      */
     // preuzimanje svih korisnika (vraća niz JSON korisnika, bez korisničke lozinke).
     @GET
-    @Produces(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     public String getJson() {
         JsonArrayBuilder jab = Json.createArrayBuilder();
         try {

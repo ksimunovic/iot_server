@@ -3,7 +3,6 @@ package org.foi.nwtis.karsimuno.dretve;
 import java.io.Serializable;
 import static java.lang.Thread.sleep;
 import java.util.ArrayList;
-import java.util.Enumeration;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -13,11 +12,6 @@ import javax.jms.Destination;
 import javax.jms.JMSException;
 import javax.jms.MessageProducer;
 import javax.jms.ObjectMessage;
-import javax.jms.Queue;
-import javax.jms.QueueBrowser;
-import javax.jms.QueueConnection;
-import javax.jms.QueueConnectionFactory;
-import javax.jms.QueueSession;
 import javax.mail.Flags;
 import javax.mail.Folder;
 import javax.mail.Message;
@@ -47,7 +41,6 @@ public class ObradaMaila extends Thread {
         prekidObrade = true;
     }
 
-    //TODO brojac jms poruka koji se inicijalno preuzima 
     @Override
     public void run() {
         super.run();
@@ -80,7 +73,7 @@ public class ObradaMaila extends Thread {
                     Message[] messages = folder.getMessages();
 
                     for (Message m : messages) {
-                        if (m.getSubject().equals(predmet) && !m.isSet(Flags.Flag.SEEN) && m.isMimeType("text/plain")) {
+                        if (m.getSubject().equals(predmet) /*&& !m.isSet(Flags.Flag.SEEN)*/ && m.isMimeType("text/plain")) {
                             prebaciuFolder(m, mapa);
                             brojProcitanihPoruka++;
                         }

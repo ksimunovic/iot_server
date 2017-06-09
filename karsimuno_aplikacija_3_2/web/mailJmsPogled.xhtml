@@ -21,7 +21,7 @@
                         <h:commandButton value="" action="#{jmsPogled.updateView()}" class="hidden">
                             <f:ajax render="@form"/>
                         </h:commandButton>
-                        <h:commandButton value="Očisti" action="#{jmsPogled.clearMessages('mqtt')}">
+                        <h:commandButton value="Očisti" action="#{jmsPogled.clearMessages('mail')}">
                             <f:ajax render="@form"/>
                         </h:commandButton>
                         <h:dataTable value="#{jmsPogled.mailPoruke}" var="p" class="table table-striped">
@@ -31,15 +31,23 @@
                             </h:column>
                             <h:column>
                                 <f:facet name="header">Vrijeme početka</f:facet>
-                                <h:outputText value="#{p.vrijemePocetka}"/>
+                                <h:outputText value="#{p.vrijemePocetka}">
+                                    <f:convertDateTime type="date" pattern="dd.MM.yyyy hh:mm:ss.zzz"/>
+                                </h:outputText>
                             </h:column>
                             <h:column>
                                 <f:facet name="header">Vrijeme završetka</f:facet>
-                                <h:outputText value="#{p.vrijemeZavrsetka}"/>
+                                <h:outputText value="#{p.vrijemeZavrsetka}">
+                                    <f:convertDateTime type="date" pattern="dd.MM.yyyy hh:mm:ss.zzz"/>
+                                </h:outputText>
                             </h:column>
                             <h:column>
                                 <f:facet name="header">Broj pročitanih poruka</f:facet>
                                 <h:outputText value="#{p.brojProcitanihPoruka}"/>
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header">Broj NWTiS poruka</f:facet>
+                                <h:outputText value="#{p.brojNWTiSPoruka}"/>
                             </h:column>
                         </h:dataTable>
                     </h:form>

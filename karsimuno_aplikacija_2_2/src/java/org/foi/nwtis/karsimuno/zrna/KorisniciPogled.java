@@ -111,7 +111,7 @@ public class KorisniciPogled {
             errorCode = 0;
             return;
         }
-        if (!korisnik.lozinka.equals(ponovljenaLozinka)) {
+        if (!korisnik.lozinka.isEmpty() && !korisnik.lozinka.equals(ponovljenaLozinka)) {
             errorCode = 1;
             return;
         }

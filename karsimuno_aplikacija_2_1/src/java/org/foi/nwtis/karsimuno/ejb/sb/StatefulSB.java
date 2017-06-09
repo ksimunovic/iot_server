@@ -4,7 +4,6 @@ import com.sun.xml.ws.fault.ServerSOAPFaultException;
 import java.io.StringReader;
 import javax.ejb.Stateful;
 import javax.ejb.LocalBean;
-import javax.enterprise.context.SessionScoped;
 import javax.json.Json;
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;

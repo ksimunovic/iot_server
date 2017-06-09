@@ -71,3 +71,28 @@ CREATE TABLE `zahtjevi` (
   `odgovor` VARCHAR(255) NOT NULL,
   `vrijeme` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+INSERT INTO `uredaji` (`id`, `naziv`, `latitude`, `longitude`, `status`) VALUES
+
+( 1,'FOI 1 - dvorana  1',46.307719,16.338094,0), 
+ ( 2,'FOI 1 - dvorana  2',46.307719,16.338094,0), 
+ ( 3,'FOI 1 - dvorana  3',46.307719,16.338094,0), 
+ ( 4,'FOI 1 - dvorana  4',46.307719,16.338094,0), 
+ (5,'FOI 1 - dvorana  5',46.307719,16.338094,0), 
+ (6,'FOI 1 - dvorana  6',46.307719,16.338094,0), 
+ (7,'FOI 1 - dvorana  7',46.307719,16.338094,0), 
+ (8,'FOI 1 - dvorana  8',46.307719,16.338094,0), 
+(9, 'Stud. dom - dvorana 1', 46.3091, 16.3481,0),
+(10, 'Stud. dom - dvorana 2', 46.3091, 16.3481,0),
+(11, 'Stud. dom - dvorana 3', 46.3091, 16.3481,0),
+(12, 'Stud. dom - dvorana 4', 46.3091, 16.3481,0),
+(13, 'Stud. dom - dvorana 5', 46.3091, 16.3481,0),
+(14, 'Stud. dom - dvorana 6', 46.3091, 16.3481,0),
+(15, 'Stud. dom - dvorana 7', 46.3091, 16.3481,0),
+ (16,'Stud. restoran - ulazna vrata',46.308388,16.347655,0),
+ (17,'Bus kolodvor - ulazna vrata',46.304423,16.334351,0),
+ (18,'Želj. kolodvor - ulazna vrata',46.305446,116.346335,0),
+(19, 'Gradska dvorana - velika', 46.3172, 16.3608,0),
+ (20,'Stari grad - muzej',46.310049,16.334130,0),
+(21, 'Motiènjak/Aquacity - jezero', 46.3079, 16.3903,0);

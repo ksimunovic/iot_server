@@ -24,7 +24,7 @@ public class BazaHelper {
     public Connection spojiBazu() throws SQLException, ClassNotFoundException {
         BP_Konfiguracija BP_Konf = (BP_Konfiguracija) SlusacAplikacije.getContext().getAttribute("BP_Konfig");
 
-        String database = BP_Konf.getServerDatabase() + BP_Konf.getUserDatabase();
+        String database = BP_Konf.getServerDatabase() + BP_Konf.getUserDatabase()+"?useUnicode=true&characterEncoding=utf-8";
         String user = BP_Konf.getUserUsername();
         String pass = BP_Konf.getUserPassword();
 

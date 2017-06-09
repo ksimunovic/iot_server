@@ -56,7 +56,7 @@ public class KorisniciRESTResource {
      */
     // preuzimanje jednog korisnika (vraća JSON korisnika, uključujući korisničku lozinku)
     @GET
-    @Produces(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     public String getJson() {
         JsonObjectBuilder job = Json.createObjectBuilder();
 
@@ -85,7 +85,7 @@ public class KorisniciRESTResource {
 
     // dodavanje jednog korisnika (vraća 0 ako već postoji, 1 ako ne postoji te je dodan)
     @POST
-    @Consumes(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @Produces(MediaType.TEXT_PLAIN)
     public String postJson(String content) {
         Integer status = 0;
@@ -132,7 +132,7 @@ public class KorisniciRESTResource {
      */
     // ažuriranje jednog korisnika (vraća 0 ako ne postoji, 1 ako postoji te je ažuriran)
     @PUT
-    @Consumes(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @Produces(MediaType.TEXT_PLAIN)
     public String putJson(String content) {
 
