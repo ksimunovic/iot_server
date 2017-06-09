@@ -28,8 +28,6 @@ public class ObradaIoTNaredbi {
     }
 
     public String izvrsiNaredbu() {
-
-        //TODO: Autentifikacija korisnika?!
         switch (naredbe.get("naredba")) {
             case "ADD":
                 return dodajUredjaj();
@@ -109,7 +107,7 @@ public class ObradaIoTNaredbi {
             return "ERR 30; Uredjaj ne postoji u bazi.";
         }
 
-        //TODO: Statusom provjerit postoji li uređaj u grupi ili ostaje ovako?
+        //XXX: Statusom provjerit postoji li uređaj u grupi ili ostaje ovako?
         if (dodajUredjajGrupi(naredbe.get("korisnik"), naredbe.get("lozinka"), u)) {
             return "OK 10;";
         } else {

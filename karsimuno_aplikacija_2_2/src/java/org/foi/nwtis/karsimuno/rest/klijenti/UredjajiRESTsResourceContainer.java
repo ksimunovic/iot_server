@@ -21,7 +21,7 @@ import javax.ws.rs.core.Response;
  *        client.close();
  * </pre>
  *
- * @author Administrator
+ * @author Karlo
  */
 public class UredjajiRESTsResourceContainer {
 

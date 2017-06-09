@@ -2,7 +2,7 @@ package org.foi.nwtis.karsimuno.podaci;
 
 /**
  *
- * @author Administrator
+ * @author Karlo
  */
 public class Korisnik {
     private int id;

@@ -22,7 +22,7 @@ import org.foi.nwtis.karsimuno.BazaHelper;
 /**
  * REST Web Service
  *
- * @author Administrator
+ * @author Karlo
  */
 public class KorisniciRESTResource {
 

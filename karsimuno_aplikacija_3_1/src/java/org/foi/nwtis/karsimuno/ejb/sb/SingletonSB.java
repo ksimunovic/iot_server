@@ -59,6 +59,7 @@ public class SingletonSB implements Serializable {
         if (spremnikMqtt == null) {
             spremnikMqtt = new ArrayList<>();
         }
+        
         spremnikMqtt.add(m);
         spremiSpremnik();
 
@@ -75,10 +76,24 @@ public class SingletonSB implements Serializable {
 
     public void dodajMail(JMSPorukaMail m) {
         if (spremnikMail == null) {
+            ucitajSpremnik();
+        }
+        if (spremnikMail == null) {
             spremnikMail = new ArrayList<>();
         }
+        
         spremnikMail.add(m);
         spremiSpremnik();
+        
+        if (slusaci == null) {
+            return;
+        }
+        for (SlusacPoruke s : slusaci) {
+            if (s != null) {
+                s.novaPoruka(m);
+                break;
+            }
+        }
     }
 
     @PostConstruct

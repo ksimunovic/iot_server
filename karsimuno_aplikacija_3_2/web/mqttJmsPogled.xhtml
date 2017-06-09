@@ -21,7 +21,7 @@
                         <h:commandButton value="" action="#{jmsPogled.updateView()}" class="hidden">
                             <f:ajax render="@form"/>
                         </h:commandButton>
-                        <h:commandButton value="" action="#{jmsPogled.clearMessages('mqtt')}">
+                        <h:commandButton value="Očisti" action="#{jmsPogled.clearMessages('mqtt')}">
                             <f:ajax render="@form"/>
                         </h:commandButton>
                         <h:dataTable value="#{jmsPogled.mqttPoruke}" var="p" class="table table-striped">

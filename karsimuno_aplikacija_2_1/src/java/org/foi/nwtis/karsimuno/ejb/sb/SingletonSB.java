@@ -15,7 +15,7 @@ import org.foi.nwtis.karsimuno.konfiguracije.bp.BP_Konfiguracija;
  * ime i lozinka definiraju se u konfiguracijskoj datoteci) pristiglu poštu.
  * Brisanje Singleton SB prekida dretvu i zaustavlja ju.
  *
- * @author Administrator
+ * @author Karlo
  */
 @Singleton
 @LocalBean
@@ -32,7 +32,7 @@ public class SingletonSB {
     public void initialize() {
         System.out.println("POKREĆEM SINGLETON SB!");
         mail = new ObradaMaila();
-//        mail.start(); //FIXME: mailObrada Dretva
+        mail.start(); //FIXME: mailObrada Dretva
     }
 
     @PreDestroy

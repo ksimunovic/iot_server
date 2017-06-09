@@ -17,13 +17,10 @@ import javax.json.JsonObjectBuilder;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.PathParam;
-import javax.ws.rs.POST;
-import javax.ws.rs.Consumes;
 import javax.ws.rs.Produces;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 import org.foi.nwtis.karsimuno.BazaHelper;
 
 // dodavanje jednog IoT uređaja (vraća 0 ako već postoji, 1 ako ne postoji te je dodan)
@@ -33,7 +30,7 @@ import org.foi.nwtis.karsimuno.BazaHelper;
 /**
  * REST Web Service
  *
- * @author Administrator
+ * @author Karlo
  */
 @Path("/uredjaji") //FIXME: uredjajiREST
 public class UredjajiRESTsResourceContainer {
@@ -86,20 +83,6 @@ public class UredjajiRESTsResourceContainer {
             baza.otkvaciBazu();
         }
         return jab.build().toString();
-    }
-
-    /**
-     * POST method for creating an instance of UredjajiRESTResource
-     *
-     * @param content representation for the new resource
-     * @return an HTTP response with content of the created resource
-     */
-    @POST
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response postJson(String content) {
-        //TODO
-        return Response.created(context.getAbsolutePath()).build();
     }
 
     /**

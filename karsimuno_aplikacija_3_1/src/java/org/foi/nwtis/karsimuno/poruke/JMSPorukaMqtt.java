@@ -10,7 +10,7 @@ import javax.json.JsonObjectBuilder;
  * s podacima o rednom broju JMS poruke koja se šalje, vremenu početka i
  * završetka rada iteracije dretve, broju pročitanih poruka, broju NWTiS poruka.
  *
- * @author Administrator
+ * @author Karlo
  */
 public class JMSPorukaMqtt implements Serializable {
 

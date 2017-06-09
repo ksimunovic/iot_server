@@ -22,8 +22,6 @@ public class ObradaIoTMasterNaredbi {
     }
 
     public String izvrsiNaredbu() {
-
-        //TODO: Autentifikacija korisnika?!
         switch (naredbe.get("naredba")) {
             case "START":
                 return registrirajGrupu();

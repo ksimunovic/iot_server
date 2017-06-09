@@ -33,7 +33,7 @@ import org.foi.nwtis.karsimuno.ejb.sb.SingletonSB;
 
 /**
  *
- * @author Administrator
+ * @author Karlo
  */
 public class ObradaMaila extends Thread {
 
@@ -135,7 +135,7 @@ public class ObradaMaila extends Thread {
     public synchronized void start() {
         super.start();
         konf = SingletonSB.konf;
-        brojPoruka = prebrojiJmsPoruke();
+//        brojPoruka = prebrojiJmsPoruke();
     }
 
     private void sendJMSMessageToNWTiS_karsimuno_1(Object messageData) throws JMSException, NamingException {
@@ -167,7 +167,7 @@ public class ObradaMaila extends Thread {
         }
     }
 
-    private int prebrojiJmsPoruke() {
+   /* private int prebrojiJmsPoruke() {
         int numMsgs = 0;
         try {
             InitialContext ctx = new InitialContext();
@@ -191,5 +191,5 @@ public class ObradaMaila extends Thread {
         } finally {
             return numMsgs;
         }
-    }
+    }*/
 }

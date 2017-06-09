@@ -21,5 +21,5 @@
     <entry key="mail.server">localhost</entry>
     <entry key="mail.subject">NWTiS poruka</entry>
     <entry key="mail.sender">karsimuno@nwtis.foi.hr</entry>
-    <entry key="mail.receiver">awwrrqhh@sharklasers.com</entry>
+    <entry key="mail.receiver">servis@nwtis.nastava.foi.hr</entry>
 </properties>

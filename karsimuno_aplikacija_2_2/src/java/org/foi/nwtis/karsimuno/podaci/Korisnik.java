@@ -8,7 +8,7 @@ import javax.json.JsonReader;
 
 /**
  *
- * @author Administrator
+ * @author Karlo
  */
 public class Korisnik {
 

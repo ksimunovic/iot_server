@@ -70,7 +70,7 @@ public class ObradaSocketNaredbi {
             PozadinskaDretva.preskociCiklus = true;
             return "OK 10;";
         }
-        return "ERROR 10; Server je vec u stanju pause.";
+        return "ERR 10; Server je vec u stanju pause.";
     }
 
     synchronized String pokreniServer() {
@@ -78,7 +78,7 @@ public class ObradaSocketNaredbi {
             PozadinskaDretva.preskociCiklus = false;
             return "OK 10;";
         }
-        return "ERROR 11; Server je vec pokrenut.";
+        return "ERR 11; Server je vec pokrenut.";
     }
 
     private String vratiStatus() {

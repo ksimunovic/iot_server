@@ -24,7 +24,7 @@ import org.foi.nwtis.karsimuno.slusaci.SlusacAplikacije;
  * openweathermap.org web servisa (u prilogu se nalazi opis postupka) za
  * izabrani skup IoT uređaja na bazi njihovih lokacijskih podataka
  *
- * @author Administrator
+ * @author Karlo
  */
 public class PozadinskaDretva extends Thread {
 
@@ -56,8 +56,7 @@ public class PozadinskaDretva extends Thread {
         super.run();
         owmk = new OWMKlijent(apikey);
 
-        int iter = 0;//XXX: temp -> Složiti sistem isključivanja pozadinske dretve kada se gasi i server
-        while (iter < 10) {//XXX: temp
+        while (!ServerDretva.zavrsiRadServera) {
             long trenutnoVrijeme = System.currentTimeMillis();
             System.out.println("Pozdrav iz pozadinske dretvee!");
 
@@ -74,7 +73,6 @@ public class PozadinskaDretva extends Thread {
             } catch (InterruptedException ex) {
                 Logger.getLogger(PozadinskaDretva.class.getName()).log(Level.SEVERE, null, ex);
             }
-            iter++; //XXX: temp
         }
     }
 

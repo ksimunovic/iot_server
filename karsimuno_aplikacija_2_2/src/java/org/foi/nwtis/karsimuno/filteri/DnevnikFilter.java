@@ -24,7 +24,7 @@ import org.foi.nwtis.karsimuno.ejb.sb.DnevnikFacade;
 
 /**
  *
- * @author Administrator
+ * @author Karlo
  */
 @WebFilter(filterName = "DnevnikFilter", urlPatterns = {"/*"})
 public class DnevnikFilter implements Filter {

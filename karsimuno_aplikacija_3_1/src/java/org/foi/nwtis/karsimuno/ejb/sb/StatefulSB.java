@@ -11,7 +11,7 @@ import org.foi.nwtis.karsimuno.rest.klijenti.KorisniciRESTResource;
 
 /**
  *
- * @author Administrator
+ * @author Karlo
  */
 @Stateful
 @LocalBean

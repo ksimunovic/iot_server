@@ -18,10 +18,10 @@
                         <h:outputLink style="float:right" value="logout.xhtml">Odjava</h:outputLink><br/>
                     </legend>
                     <h:form>
-                        <h:commandButton value="" action="#{jmsPogled.updateView()}">
+                        <h:commandButton value="" action="#{jmsPogled.updateView()}" class="hidden">
                             <f:ajax render="@form"/>
                         </h:commandButton>
-                        <h:commandButton value="" action="#{jmsPogled.clearMessages('mqtt')}">
+                        <h:commandButton value="Očisti" action="#{jmsPogled.clearMessages('mqtt')}">
                             <f:ajax render="@form"/>
                         </h:commandButton>
                         <h:dataTable value="#{jmsPogled.mailPoruke}" var="p" class="table table-striped">

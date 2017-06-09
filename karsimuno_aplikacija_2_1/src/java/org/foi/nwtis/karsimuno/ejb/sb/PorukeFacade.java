@@ -10,7 +10,7 @@ import org.foi.nwtis.karsimuno.ejb.eb.Poruke;
 
 /**
  *
- * @author Administrator
+ * @author Karlo
  */
 @Stateless
 public class PorukeFacade extends AbstractFacade<Poruke> {

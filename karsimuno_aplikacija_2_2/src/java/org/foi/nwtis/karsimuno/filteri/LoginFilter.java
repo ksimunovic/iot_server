@@ -18,9 +18,9 @@ import javax.servlet.http.HttpSession;
 
 /**
  *
- * @author Administrator
+ * @author Karlo
  */
-//@WebFilter(filterName = "FilterAplikacije", urlPatterns = {"/*"}) //FIXME: upali login app2
+@WebFilter(filterName = "FilterAplikacije", urlPatterns = {"/*"}) //FIXME: upali login app2
 public class LoginFilter implements Filter {
 
     private final boolean debug = false;

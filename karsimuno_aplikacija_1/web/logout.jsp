@@ -1,7 +1,7 @@
 <%-- 
     Document   : logout
     Created on : May 31, 2017, 9:54:51 AM
-    Author     : Administrator
+    Author     : Karlo
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>

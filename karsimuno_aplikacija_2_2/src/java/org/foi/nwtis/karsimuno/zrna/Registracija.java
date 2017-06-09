@@ -12,7 +12,7 @@ import org.foi.nwtis.karsimuno.ejb.sb.StatefulSB;
 
 /**
  *
- * @author Administrator
+ * @author Karlo
  */
 @Named(value = "registracija")
 @RequestScoped

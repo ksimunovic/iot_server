@@ -10,7 +10,7 @@ import org.foi.nwtis.karsimuno.ejb.eb.Dnevnik;
 
 /**
  *
- * @author Administrator
+ * @author Karlo
  */
 @Stateless
 public class DnevnikFacade extends AbstractFacade<Dnevnik> {

@@ -99,6 +99,7 @@ class RadnaDretva extends Thread {
         TestOpcija provjeriNaredbe = new TestOpcija();
         String[] args = new String[]{sb.toString()};
         String korisnik = "nepoznat";
+        Boolean mailNaredba = false;
 
         odgovor = "";
         naredbe = provjeriNaredbe.serverSocketNaredbe(args);
@@ -117,6 +118,7 @@ class RadnaDretva extends Thread {
                 cekajKrajServera = true;
                 odgovor = "OK 10;";
             }
+            mailNaredba = true;
         }
 
         naredbe = provjeriNaredbe.IoTMasterNaredbe(args);
@@ -146,12 +148,12 @@ class RadnaDretva extends Thread {
         }
 
         if (odgovor.isEmpty() && ServerDretva.zavrsiRadServera) {
-            odgovor = "ERROR 12; Server je u postupku prekida.";
+            odgovor = "ERR 12; Server je u postupku prekida.";
         } else if (odgovor.isEmpty()) {
-            odgovor = "ERROR 1000: Pogresna komanda"; //TODO: staviti pravi broj errora
+            odgovor = "ERR 1000: Pogresna komanda"; //TODO: staviti pravi broj errora
         }
 
-        if (!odgovor.contains("ERR")) {
+        if (!odgovor.contains("ERR") && mailNaredba) {
             posaljiMail();
         }
 
@@ -228,7 +230,7 @@ class RadnaDretva extends Thread {
     }
 
     /**
-     * TODO: Kreirati tablicu korisnici (id, korisnik, lozinka) i prema njoj
+     * Kreirati tablicu korisnici (id, korisnik, lozinka) i prema njoj
      * provjeriti korisnika
      */
     String provjeriKorisnika() {
@@ -253,7 +255,7 @@ class RadnaDretva extends Thread {
             if (rs.next()) {
                 prava = "OK;";
             } else {
-                prava = "ERROR 10; Ne postoji takav korisnik.";
+                prava = "ERR 10; Ne postoji takav korisnik.";
             }
         } catch (SQLException | ClassNotFoundException ex) {
             Logger.getLogger(PozadinskaDretva.class.getName()).log(Level.SEVERE, null, ex);

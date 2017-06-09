@@ -29,7 +29,7 @@ import org.foi.nwtis.karsimuno.BazaHelper;
 
 /**
  *
- * @author Administrator
+ * @author Karlo
  */
 @WebFilter(filterName = "ServisiFilter", urlPatterns = {"/*"})
 public class ServisiFilter implements Filter {

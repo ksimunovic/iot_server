@@ -16,7 +16,7 @@ import org.foi.nwtis.karsimuno.slusaci.SlusacAplikacije;
 
 /**
  *
- * @author Administrator
+ * @author Karlo
  */
 @Named(value = "dnevnikPogled")
 @RequestScoped
