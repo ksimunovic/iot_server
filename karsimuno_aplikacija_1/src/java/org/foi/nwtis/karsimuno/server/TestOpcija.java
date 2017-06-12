@@ -82,7 +82,7 @@ public class TestOpcija {
         StringBuilder sb = new StringBuilder();
         sb.append(String.join(" ", args));
 
-        String sintaksa1 = "^USER ([^\\s]+); PASSWD ([^\\s]+); IoT (\\d{1,6}) ((ADD) \\\"([^\\s]+)\\\" \\\"([^.]+)\\\"|WORK|WAIT|REMOVE|STATUS);$";
+        String sintaksa1 = "^USER ([^\\s]+); PASSWD ([^\\s]+); IoT (\\d{1,6}) ((ADD) \\\"(.+)\\\" \\\"(.+)\\\"|WORK|WAIT|REMOVE|STATUS);$";
 
         pattern = Pattern.compile(sintaksa1);
         m = pattern.matcher(sb);

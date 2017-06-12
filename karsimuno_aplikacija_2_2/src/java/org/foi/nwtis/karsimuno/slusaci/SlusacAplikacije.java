@@ -35,7 +35,7 @@ public class SlusacAplikacije implements ServletContextListener {
         ucitajKonfiguraciju();
 
         mqtt = new SlusacMqtt(Integer.parseInt(konf.dajPostavku("mqtt.slot")));
-//        mqtt.start(); //FIXME: pokreni mqtt dretvu
+        mqtt.start(); //FIXME: pokreni mqtt dretvu
     }
 
     @Override

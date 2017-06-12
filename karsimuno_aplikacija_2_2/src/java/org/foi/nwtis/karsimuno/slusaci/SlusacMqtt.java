@@ -149,7 +149,8 @@ class SlusacMqtt extends Thread {
                     Logger.getLogger(SlusacMqtt.class.getName()).log(Level.SEVERE, null, ex);
                 }
                 porukeFacade.create(new Poruke(null, jo.getInt("IoT"), ts, jo.getString("tekst"), Integer.parseInt(jo.getString("status"))));
-
+                tekstovi.add(jo.getString("tekst"));
+                
                 if (obradjenihPoruka >= slot) {
                     try {
                         JMSPorukaMqtt jmsPoruka = new JMSPorukaMqtt(count, pocetakObrade, System.currentTimeMillis(), obradjenihPoruka, tekstovi);

@@ -37,6 +37,7 @@ public class SingletonSB implements Serializable {
     public static String evidDatoteka;
     private static List<SlusacPoruke> slusaci = null;
 
+    
     private static SingletonSB instance = null;
 
     protected SingletonSB() {
@@ -52,7 +53,7 @@ public class SingletonSB implements Serializable {
     public void start() {
     }
 
-    public void dodajMqtt(JMSPorukaMqtt m) {
+    public synchronized void dodajMqtt(JMSPorukaMqtt m) {
         if (spremnikMqtt == null) {
             ucitajSpremnik();
         }
@@ -74,7 +75,7 @@ public class SingletonSB implements Serializable {
         }
     }
 
-    public void dodajMail(JMSPorukaMail m) {
+    public synchronized void dodajMail(JMSPorukaMail m) {
         if (spremnikMail == null) {
             ucitajSpremnik();
         }
@@ -130,7 +131,10 @@ public class SingletonSB implements Serializable {
             fos = new FileOutputStream(datoteka, false);
             oot = new ObjectOutputStream(fos);
 
-            oot.writeObject(this);
+            synchronized(this){
+                oot.writeObject(this);
+                this.notify();
+            }
         } catch (IOException ex) {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, null, ex);
         } finally {

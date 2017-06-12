@@ -28,5 +28,5 @@
     <entry key="mail.usernameThread">servis@nwtis.nastava.foi.hr</entry>
     <entry key="mail.passwordThread">123456</entry>
     <entry key="mail.folderNWTiS">NWTiS_Poruke</entry>
-    <entry key="mqtt.slot">1</entry>
+    <entry key="mqtt.slot">3</entry>
 </properties>
